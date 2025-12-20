@@ -117,12 +117,12 @@ const MyOrders = () => {
                           {order.shipmentStatus || 'PENDING'}
                         </div>
                         
-                        {/* Track Order Button */}
+                        {/* View Order Details */}
                         <Link
-                          href={`/track-order?trackingId=${order.customOrderId}`}
+                          href={`/my-orders`}
                           className="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition-colors text-center"
                         >
-                          Track Order
+                          View Details
                         </Link>
                         
                         {/* Direct tracking link if available */}

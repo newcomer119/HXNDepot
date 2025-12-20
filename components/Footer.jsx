@@ -71,7 +71,6 @@ export default function Footer() {
             <ul className="space-y-4 text-white/70 text-sm" style={{ fontFamily: "var(--font-lora)" }}>
               <li><Link href="/policies" className="hover:text-white transition-colors">Policies</Link></li>
               <li><Link href="/my-orders" className="hover:text-white transition-colors">My Orders</Link></li>
-              <li><Link href="/track-order" className="hover:text-white transition-colors">Track Order</Link></li>
             </ul>
           </div>
         </div>

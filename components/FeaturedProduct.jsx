@@ -27,12 +27,8 @@ const products = [
 const FeaturedProduct = () => {
   const router = useRouter();
 
-  const handleShopNow = (title) => {
-    if (title === 'Custom 3D Designs') {
-      router.push('/explore-collection');
-    } else {
-      router.push('/all-products');
-    }
+  const handleShopNow = () => {
+    router.push('/all-products');
   };
 
   return (
@@ -56,7 +52,7 @@ const FeaturedProduct = () => {
                 {description}
               </p>
               <button 
-                onClick={() => handleShopNow(title)}
+                onClick={handleShopNow}
                 className="flex items-center gap-1.5 bg-orange-600 px-4 py-2 rounded hover:bg-orange-700 transition"
               >
                 Shop Now <Image className="h-3 w-3" src={assets.redirect_icon} alt="Redirect Icon" />

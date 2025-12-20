@@ -10,7 +10,7 @@ export default function TrackingWidget({ className = '' }) {
     const handleTrack = (e) => {
         e.preventDefault();
         if (trackingId.trim()) {
-            router.push(`/track-order?trackingId=${encodeURIComponent(trackingId.trim())}`);
+            router.push(`/my-orders`);
         }
     };
 

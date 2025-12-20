@@ -52,10 +52,10 @@ const OrderPlaced = () => {
       <div className="flex flex-col sm:flex-row gap-4">
         {orderDetails && (
           <Link
-            href={`/track-order?trackingId=${orderDetails.customOrderId}`}
+            href={`/my-orders`}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
-            Track Your Order
+            View My Orders
           </Link>
         )}
         

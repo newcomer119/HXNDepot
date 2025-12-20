@@ -8,11 +8,7 @@ const HomeProducts = () => {
 
   const handleSeeMore = () => {
     setIsLoading(true);
-    if (selectedCategory === "3d-printed") {
-      router.push("/3d-printed-products");
-    } else {
-      router.push("/organic-products");
-    }
+    router.push("/all-products");
   };
 
   // Filter products based on selected category
