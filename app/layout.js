@@ -32,7 +32,7 @@ const lora = Lora({
 
 export const metadata = {
   title: "HXN Building Depot",
-  description: "Online Store For 3d Material ",
+  description: "Online Store For Real Estate Construction Materials ",
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
