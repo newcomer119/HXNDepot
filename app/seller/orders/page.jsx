@@ -9,6 +9,13 @@ import Loading from "@/components/Loading";
 import toast from "react-hot-toast";
 import axios from "axios";
 
+const colors = {
+  green: "#005a2b",
+  gold: "#d4af37",
+  goldLight: "#f4e4bc",
+  white: "#ffffff",
+};
+
 const Orders = () => {
   const { currency, getToken, user } = useAppContext();
   const router = useRouter();
@@ -101,7 +108,7 @@ const Orders = () => {
                       <span>
                         Date : {new Date(order.date).toLocaleDateString()}
                       </span>
-                      <span className={`font-medium ${order.paymentStatus === 'COMPLETED' ? 'text-green-600' : 'text-orange-600'}`}>
+                      <span className="font-medium" style={{ color: order.paymentStatus === 'COMPLETED' ? colors.green : colors.gold }}>
                         Payment : {order.paymentStatus}
                       </span>
                     </p>

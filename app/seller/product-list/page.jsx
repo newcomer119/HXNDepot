@@ -8,6 +8,13 @@ import Loading from "@/components/Loading";
 import toast from "react-hot-toast";
 import axios from "axios";
 
+const colors = {
+  green: "#005a2b",
+  gold: "#d4af37",
+  goldLight: "#f4e4bc",
+  white: "#ffffff",
+};
+
 const ProductList = () => {
   const { router, getToken, user } = useAppContext();
 
@@ -112,7 +119,8 @@ const ProductList = () => {
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => router.push(`/seller/edit-product/${product._id}`)}
-                          className="flex items-center gap-1 px-1 md:px-2 py-1.5 bg-blue-600 text-white rounded-md text-sm"
+                          className="flex items-center gap-1 px-1 md:px-2 py-1.5 text-white rounded-md text-sm transition-colors hover:opacity-90"
+                          style={{ backgroundColor: colors.gold }}
                         >
                           <span className="hidden md:block">Edit</span>
                           <svg
@@ -132,7 +140,8 @@ const ProductList = () => {
                         </button>
                         <button
                           onClick={() => handleDelete(product._id)}
-                          className="flex items-center gap-1 px-1 md:px-2 py-1.5 bg-red-600 text-white rounded-md text-sm"
+                          className="flex items-center gap-1 px-1 md:px-2 py-1.5 text-white rounded-md text-sm transition-colors hover:opacity-90"
+                          style={{ backgroundColor: colors.green }}
                         >
                           <span className="hidden md:block">Delete</span>
                           <svg

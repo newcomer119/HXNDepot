@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import { useAppContext } from '@/context/AppContext';
 import toast from 'react-hot-toast';
 
+const colors = {
+  green: "#005a2b",
+  gold: "#d4af37",
+  goldLight: "#f4e4bc",
+  white: "#ffffff",
+};
+
 const PDFUploadModal = ({ isOpen, onClose, onSend, order, loading }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('');
@@ -90,14 +97,15 @@ const PDFUploadModal = ({ isOpen, onClose, onSend, order, loading }) => {
             />
             <label
               htmlFor="pdf-upload"
-              className="cursor-pointer text-blue-600 hover:text-blue-700"
+              className="cursor-pointer transition-colors"
+              style={{ color: colors.green }}
             >
               {selectedFile ? (
                 <div>
-                  <svg className="mx-auto h-8 w-8 text-green-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="mx-auto h-8 w-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: colors.green }}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <p className="text-sm font-medium text-green-600">{fileName}</p>
+                  <p className="text-sm font-medium" style={{ color: colors.green }}>{fileName}</p>
                   <p className="text-xs text-gray-500">Click to change file</p>
                 </div>
               ) : (
@@ -105,7 +113,7 @@ const PDFUploadModal = ({ isOpen, onClose, onSend, order, loading }) => {
                   <svg className="mx-auto h-8 w-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
-                  <p className="text-sm font-medium text-blue-600">Click to upload PDF</p>
+                  <p className="text-sm font-medium" style={{ color: colors.green }}>Click to upload PDF</p>
                   <p className="text-xs text-gray-500">PDF files only, max 1MB</p>
                 </div>
               )}
@@ -124,7 +132,8 @@ const PDFUploadModal = ({ isOpen, onClose, onSend, order, loading }) => {
           <button
             onClick={handleSend}
             disabled={!selectedFile || loading}
-            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-2 text-white rounded-md transition-colors hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: colors.green }}
           >
             {loading ? 'Sending...' : 'Send Invoice'}
           </button>

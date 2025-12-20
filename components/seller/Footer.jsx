@@ -2,13 +2,20 @@ import React from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 
+const colors = {
+  green: "#005a2b",
+  gold: "#d4af37",
+  goldLight: "#f4e4bc",
+  white: "#ffffff",
+};
+
 const Footer = () => {
   return (
-    <div className="flex md:flex-row flex-col-reverse items-center justify-between text-left w-full px-10">
+    <div className="flex md:flex-row flex-col-reverse items-center justify-between text-left w-full px-10 py-4" style={{ borderTop: `1px solid ${colors.gold}40` }}>
       <div className="flex items-center gap-4">
         <Image className="hidden md:block" src={assets.logo} alt="logo" />
-        <div className="hidden md:block h-7 w-px bg-gray-500/60"></div>
-        <p className="py-4 text-center text-xs md:text-sm text-gray-500">
+        <div className="hidden md:block h-7 w-px" style={{ backgroundColor: colors.gold + '60' }}></div>
+        <p className="py-4 text-center text-xs md:text-sm" style={{ color: colors.green + 'CC' }}>
           Copyright 2025 Filament Freaks All Right Reserved.
         </p>
       </div>

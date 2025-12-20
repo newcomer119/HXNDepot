@@ -10,6 +10,13 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import PDFUploadModal from "@/components/seller/PDFUploadModal";
 
+const colors = {
+  green: "#005a2b",
+  gold: "#d4af37",
+  goldLight: "#f4e4bc",
+  white: "#ffffff",
+};
+
 const OrderDetails = () => {
   const { orderId } = useParams();
   const router = useRouter();
@@ -110,17 +117,18 @@ const OrderDetails = () => {
 
         {/* Customer Email - Prominent Display */}
         {order.userEmail && order.userEmail !== 'N/A' && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="rounded-lg p-4" style={{ backgroundColor: colors.goldLight + '40', border: `1px solid ${colors.gold}60` }}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-blue-600 font-medium">Customer Email</p>
-                <p className="text-lg font-semibold text-blue-800">{order.userEmail}</p>
+                <p className="text-sm font-medium" style={{ color: colors.green }}>Customer Email</p>
+                <p className="text-lg font-semibold" style={{ color: colors.green }}>{order.userEmail}</p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-blue-600">Ready for Invoice</p>
+                <p className="text-sm" style={{ color: colors.green }}>Ready for Invoice</p>
                 <button
                   onClick={() => setShowPDFModal(true)}
-                  className="mt-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm"
+                  className="mt-2 text-white px-4 py-2 rounded-md transition-colors hover:opacity-90 text-sm"
+                  style={{ backgroundColor: colors.gold }}
                 >
                   Send GST Invoice
                 </button>
@@ -137,9 +145,9 @@ const OrderDetails = () => {
               <div className="space-y-2">
                 <p><span className="font-medium">Order ID:</span> {order.customOrderId || order._id}</p>
                 <p><span className="font-medium">Date:</span> {new Date(order.date).toLocaleDateString()}</p>
-                <p><span className="font-medium">Status:</span> <span className="text-green-600 font-medium">{order.status}</span></p>
+                <p><span className="font-medium">Status:</span> <span className="font-medium" style={{ color: colors.green }}>{order.status}</span></p>
                 <p><span className="font-medium">Payment Method:</span> {order.paymentMethod}</p>
-                <p><span className="font-medium">Payment Status:</span> <span className={`font-medium ${order.paymentStatus === 'COMPLETED' ? 'text-green-600' : 'text-orange-600'}`}>{order.paymentStatus}</span></p>
+                <p><span className="font-medium">Payment Status:</span> <span className="font-medium" style={{ color: order.paymentStatus === 'COMPLETED' ? colors.green : colors.gold }}>{order.paymentStatus}</span></p>
               </div>
             </div>
             <div>
@@ -167,7 +175,7 @@ const OrderDetails = () => {
               <p><span className="font-medium">Customer Name:</span> {order.address?.fullName || 'N/A'}</p>
               <p><span className="font-medium">Account Name:</span> {order.userName || 'N/A'}</p>
               <p><span className="font-medium">Phone:</span> {order.address?.phoneNumber || 'N/A'}</p>
-              <p className="text-blue-600 font-medium"><span className="font-medium">Email:</span> {order.userEmail || 'N/A'}</p>
+              <p className="font-medium" style={{ color: colors.green }}><span className="font-medium">Email:</span> {order.userEmail || 'N/A'}</p>
             </div>
             <div>
               <p><span className="font-medium">Address:</span></p>

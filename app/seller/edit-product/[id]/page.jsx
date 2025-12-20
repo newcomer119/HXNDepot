@@ -8,6 +8,13 @@ import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
 
+const colors = {
+  green: "#005a2b",
+  gold: "#d4af37",
+  goldLight: "#f4e4bc",
+  white: "#ffffff",
+};
+
 const EditProduct = () => {
     const { id } = useParams();
     const router = useRouter();
@@ -25,15 +32,6 @@ const EditProduct = () => {
     const [existingImages, setExistingImages] = useState([]);
     const [existingColorImages, setExistingColorImages] = useState({});
 
-    const availableColors = [
-        'Pitch black', 'Pure white', 'Lemon yellow', 'Mauve purple', 'Nuclear red', 'Outrageous orange',
-        'Atomic pink', 'Royal blue', 'Light grey', 'Light blue', 'Grass green', 'Beige brown',
-        'Teal blue', 'Army green', 'Dark grey', 'Ivory white', 'Rust copper', 'Appricot',
-        'Lagoon blue', 'Forest green', 'Fluorescent orange', 'Fluorescent green', 'Transparent',
-        'Bhama yellow', 'Chocolate brown', 'Fluorescent yellow', 'Levender violet', 'Magenta',
-        'Military khaki', 'Ryobix green', 'Simply silver', 'Midnight grey', 'Thanos purple',
-        'Cool( lithopane ) white'
-    ];
 
     const availableFragrances = [
         'JASMINE',
@@ -69,11 +67,16 @@ const EditProduct = () => {
                     setExistingImages(product.image || []);
                     setExistingColorImages(product.colorImages || {});
                     
-                    const colorImages = {};
-                    product.colors.forEach(color => {
-                        colorImages[color] = product.colorImages[color] || null;
-                    });
-                    setSelectedColorImages(colorImages);
+                    // Only set color images if Organics category
+                    if (product.category === "Organics by Filament Freaks") {
+                        const colorImages = {};
+                        product.colors.forEach(color => {
+                            colorImages[color] = product.colorImages[color] || null;
+                        });
+                        setSelectedColorImages(colorImages);
+                    } else {
+                        setSelectedColorImages({});
+                    }
 
                 } else {
                     toast.error(data.message);
@@ -130,7 +133,12 @@ const EditProduct = () => {
         formData.append('category', category);
         formData.append('price', price);
         formData.append('offerPrice', offerPrice);
-        formData.append('colors', JSON.stringify(Object.keys(selectedColorImages)));
+        // Only append colors if Organics category (for fragrances)
+        if (category === "Organics by Filament Freaks") {
+            formData.append('colors', JSON.stringify(Object.keys(selectedColorImages)));
+        } else {
+            formData.append('colors', JSON.stringify([]));
+        }
         
         // Append new product images
         files.forEach((file) => {
@@ -139,12 +147,14 @@ const EditProduct = () => {
             }
         });
 
-        // Append new color images
-        Object.entries(selectedColorImages).forEach(([color, file]) => {
-            if (file instanceof File) {
-                formData.append(`colorImages[${color}]`, file);
-            }
-        });
+        // Append new color/fragrance images (only for Organics)
+        if (category === "Organics by Filament Freaks") {
+            Object.entries(selectedColorImages).forEach(([color, file]) => {
+                if (file instanceof File) {
+                    formData.append(`colorImages[${color}]`, file);
+                }
+            });
+        }
 
         try {
             const token = await getToken();
@@ -243,48 +253,52 @@ const EditProduct = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-col gap-1 max-w-md">
-                    <label className="text-base font-medium">
-                        {category === "Organics by Filament Freaks" ? "Available Fragrances" : "Available Colors"}
-                    </label>
-                    <div className="flex flex-wrap gap-3 mt-2">
-                        {(category === "Organics by Filament Freaks" ? availableFragrances : availableColors).map((item) => (
-                            <div key={item} className="flex flex-col items-start">
-                                <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedColorImages.hasOwnProperty(item)}
-                                        onChange={() => handleColorChange(item)}
-                                        className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
-                                    />
-                                    <span className="text-sm">{item}</span>
-                                </label>
-                                {selectedColorImages.hasOwnProperty(item) && (
-                                    <div className="mt-1">
+                {/* Fragrance Selection (only for Organics) */}
+                {category === "Organics by Filament Freaks" && (
+                    <div className="flex flex-col gap-1 max-w-md">
+                        <label className="text-base font-medium">
+                            Available Fragrances
+                        </label>
+                        <div className="flex flex-wrap gap-3 mt-2">
+                            {availableFragrances.map((item) => (
+                                <div key={item} className="flex flex-col items-start">
+                                    <label className="flex items-center gap-2 cursor-pointer">
                                         <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={e => handleColorImageChange(e, item)}
+                                            type="checkbox"
+                                            checked={selectedColorImages.hasOwnProperty(item)}
+                                            onChange={() => handleColorChange(item)}
+                                            className="w-4 h-4 border-gray-300 rounded focus:ring-2"
+                                            style={{ accentColor: colors.gold }}
                                         />
-                                        {(selectedColorImages[item] || existingColorImages[item]) && (
-                                            <img
-                                                src={
-                                                    selectedColorImages[item] instanceof File
-                                                        ? URL.createObjectURL(selectedColorImages[item])
-                                                        : existingColorImages[item]
-                                                }
-                                                alt={`${item} preview`}
-                                                className="w-16 h-16 object-cover mt-1"
+                                        <span className="text-sm">{item}</span>
+                                    </label>
+                                    {selectedColorImages.hasOwnProperty(item) && (
+                                        <div className="mt-1">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={e => handleColorImageChange(e, item)}
                                             />
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
+                                            {(selectedColorImages[item] || existingColorImages[item]) && (
+                                                <img
+                                                    src={
+                                                        selectedColorImages[item] instanceof File
+                                                            ? URL.createObjectURL(selectedColorImages[item])
+                                                            : existingColorImages[item]
+                                                    }
+                                                    alt={`${item} preview`}
+                                                    className="w-16 h-16 object-cover mt-1"
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
 
-                <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded">
+                <button type="submit" className="px-8 py-2.5 text-white font-medium rounded transition-colors hover:opacity-90" style={{ backgroundColor: colors.green }}>
                     Update Product
                 </button>
             </form>

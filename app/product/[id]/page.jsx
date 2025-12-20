@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { ShoppingCart, Plus, Minus, ArrowLeft, ZoomIn, Check } from "lucide-react";
+import { ShoppingCart, Plus, Minus, ArrowLeft, ZoomIn, Check, Home } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Loading from "@/components/Loading";
@@ -12,6 +12,7 @@ import { useAppContext } from "@/context/AppContext";
 import { useCart } from "@/context/CartContext";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import TilesViewModal from "@/components/TilesViewModal";
 
 const colors = {
   green: "#005a2b",
@@ -33,6 +34,7 @@ export default function Product() {
   const [selectedColorImage, setSelectedColorImage] = useState(null);
   const [zoomedImage, setZoomedImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [showTilesView, setShowTilesView] = useState(false);
 
   const fetchProductData = async () => {
     setIsProductLoading(true);
@@ -389,6 +391,18 @@ export default function Product() {
                 </table>
               </div>
 
+              {/* View in Your Room Button */}
+              <div className="pt-4">
+                <button
+                  onClick={() => setShowTilesView(true)}
+                  className="w-full py-4 border-2 text-base font-black uppercase tracking-widest rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3"
+                  style={{ borderColor: colors.gold, color: colors.gold, fontFamily: "var(--font-montserrat)" }}
+                >
+                  <Home className="w-5 h-5" />
+                  View in Your Room
+                </button>
+              </div>
+
               {/* Add to Cart / Buy Now */}
               <div className="space-y-4 pt-6">
                 {cartQuantity > 0 ? (
@@ -494,6 +508,9 @@ export default function Product() {
           </section>
         </div>
       </div>
+
+      {/* TilesView Modal */}
+      <TilesViewModal isOpen={showTilesView} onClose={() => setShowTilesView(false)} />
 
       <Footer />
     </div>
