@@ -127,16 +127,14 @@ const MyOrders = () => {
                         
                         {/* Direct tracking link if available */}
                         {order.trackingUrl && (
-                          {order.trackingUrl && (
-                            <a
-                              href={order.trackingUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="bg-purple-600 text-white px-3 py-1 rounded text-xs hover:bg-purple-700 transition-colors text-center"
-                            >
-                              Track Order
-                            </a>
-                          )}
+                          <a
+                            href={order.trackingUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-purple-600 text-white px-3 py-1 rounded text-xs hover:bg-purple-700 transition-colors text-center"
+                          >
+                            Track Order
+                          </a>
                         )}
                       </div>
                     </div>
