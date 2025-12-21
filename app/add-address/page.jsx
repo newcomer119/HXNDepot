@@ -7,6 +7,14 @@ import { useState } from "react";
 import { useAppContext } from "@/context/AppContext";
 import toast from "react-hot-toast";
 import axios from "axios";
+
+const colors = {
+  green: "#005a2b",
+  gold: "#d4af37",
+  goldLight: "#f4e4bc",
+  white: "#ffffff",
+};
+
 const AddAddress = () => {
 
     const {getToken , router} = useAppContext()
@@ -42,67 +50,135 @@ const AddAddress = () => {
     return (
         <>
             <Navbar />
-            <div className="px-6 md:px-16 lg:px-32 py-16 flex flex-col md:flex-row justify-between">
-                <form onSubmit={onSubmitHandler} className="w-full">
-                    <p className="text-2xl md:text-3xl text-gray-500">
-                        Add Shipping <span className="font-semibold text-orange-600">Address</span>
-                    </p>
-                    <div className="space-y-3 max-w-sm mt-10">
-                        <input
-                            className="px-2 py-2.5 focus:border-orange-500 transition border border-gray-500/30 rounded outline-none w-full text-gray-500"
-                            type="text"
-                            placeholder="Full name"
-                            onChange={(e) => setAddress({ ...address, fullName: e.target.value })}
-                            value={address.fullName}
-                        />
-                        <input
-                            className="px-2 py-2.5 focus:border-orange-500 transition border border-gray-500/30 rounded outline-none w-full text-gray-500"
-                            type="text"
-                            placeholder="Phone number"
-                            onChange={(e) => setAddress({ ...address, phoneNumber: e.target.value })}
-                            value={address.phoneNumber}
-                        />
-                        <input
-                            className="px-2 py-2.5 focus:border-orange-500 transition border border-gray-500/30 rounded outline-none w-full text-gray-500"
-                            type="text"
-                            placeholder="Pin code"
-                            onChange={(e) => setAddress({ ...address, pincode: e.target.value })}
-                            value={address.pincode}
-                        />
-                        <textarea
-                            className="px-2 py-2.5 focus:border-orange-500 transition border border-gray-500/30 rounded outline-none w-full text-gray-500 resize-none"
-                            type="text"
-                            rows={4}
-                            placeholder="Address (Area and Street)"
-                            onChange={(e) => setAddress({ ...address, area: e.target.value })}
-                            value={address.area}
-                        ></textarea>
-                        <div className="flex space-x-3">
-                            <input
-                                className="px-2 py-2.5 focus:border-orange-500 transition border border-gray-500/30 rounded outline-none w-full text-gray-500"
-                                type="text"
-                                placeholder="City/District/Town"
-                                onChange={(e) => setAddress({ ...address, city: e.target.value })}
-                                value={address.city}
-                            />
-                            <input
-                                className="px-2 py-2.5 focus:border-orange-500 transition border border-gray-500/30 rounded outline-none w-full text-gray-500"
-                                type="text"
-                                placeholder="State"
-                                onChange={(e) => setAddress({ ...address, state: e.target.value })}
-                                value={address.state}
+            <div className="min-h-screen bg-white pt-24 pb-20">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex flex-col md:flex-row gap-12 items-start justify-between">
+                        <form onSubmit={onSubmitHandler} className="w-full max-w-2xl">
+                            <div className="mb-8">
+                                <span className="text-xs font-black uppercase tracking-[0.3em] mb-2 block" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
+                                    Shipping Information
+                                </span>
+                                <h1 className="text-3xl md:text-4xl font-black" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                                    Add Shipping Address
+                                </h1>
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="text-sm font-black uppercase tracking-widest mb-2 block" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                                        Full Name
+                                    </label>
+                                    <input
+                                        className="w-full px-4 py-3 rounded-xl border-2 transition-all outline-none font-bold"
+                                        style={{ borderColor: colors.gold + '60', color: colors.green }}
+                                        onFocus={(e) => e.target.style.borderColor = colors.gold}
+                                        onBlur={(e) => e.target.style.borderColor = colors.gold + '60'}
+                                        type="text"
+                                        placeholder="Enter your full name"
+                                        onChange={(e) => setAddress({ ...address, fullName: e.target.value })}
+                                        value={address.fullName}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-sm font-black uppercase tracking-widest mb-2 block" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                                        Phone Number
+                                    </label>
+                                    <input
+                                        className="w-full px-4 py-3 rounded-xl border-2 transition-all outline-none font-bold"
+                                        style={{ borderColor: colors.gold + '60', color: colors.green }}
+                                        onFocus={(e) => e.target.style.borderColor = colors.gold}
+                                        onBlur={(e) => e.target.style.borderColor = colors.gold + '60'}
+                                        type="text"
+                                        placeholder="Enter your phone number"
+                                        onChange={(e) => setAddress({ ...address, phoneNumber: e.target.value })}
+                                        value={address.phoneNumber}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-sm font-black uppercase tracking-widest mb-2 block" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                                        Pin Code
+                                    </label>
+                                    <input
+                                        className="w-full px-4 py-3 rounded-xl border-2 transition-all outline-none font-bold"
+                                        style={{ borderColor: colors.gold + '60', color: colors.green }}
+                                        onFocus={(e) => e.target.style.borderColor = colors.gold}
+                                        onBlur={(e) => e.target.style.borderColor = colors.gold + '60'}
+                                        type="text"
+                                        placeholder="Enter pin code"
+                                        onChange={(e) => setAddress({ ...address, pincode: e.target.value })}
+                                        value={address.pincode}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-sm font-black uppercase tracking-widest mb-2 block" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                                        Address (Area and Street)
+                                    </label>
+                                    <textarea
+                                        className="w-full px-4 py-3 rounded-xl border-2 transition-all outline-none font-bold resize-none"
+                                        style={{ borderColor: colors.gold + '60', color: colors.green }}
+                                        onFocus={(e) => e.target.style.borderColor = colors.gold}
+                                        onBlur={(e) => e.target.style.borderColor = colors.gold + '60'}
+                                        rows={4}
+                                        placeholder="Enter your address"
+                                        onChange={(e) => setAddress({ ...address, area: e.target.value })}
+                                        value={address.area}
+                                        required
+                                    ></textarea>
+                                </div>
+                                <div className="flex space-x-4">
+                                    <div className="flex-1">
+                                        <label className="text-sm font-black uppercase tracking-widest mb-2 block" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                                            City/District/Town
+                                        </label>
+                                        <input
+                                            className="w-full px-4 py-3 rounded-xl border-2 transition-all outline-none font-bold"
+                                            style={{ borderColor: colors.gold + '60', color: colors.green }}
+                                            onFocus={(e) => e.target.style.borderColor = colors.gold}
+                                            onBlur={(e) => e.target.style.borderColor = colors.gold + '60'}
+                                            type="text"
+                                            placeholder="Enter city"
+                                            onChange={(e) => setAddress({ ...address, city: e.target.value })}
+                                            value={address.city}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        <label className="text-sm font-black uppercase tracking-widest mb-2 block" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                                            State
+                                        </label>
+                                        <input
+                                            className="w-full px-4 py-3 rounded-xl border-2 transition-all outline-none font-bold"
+                                            style={{ borderColor: colors.gold + '60', color: colors.green }}
+                                            onFocus={(e) => e.target.style.borderColor = colors.gold}
+                                            onBlur={(e) => e.target.style.borderColor = colors.gold + '60'}
+                                            type="text"
+                                            placeholder="Enter state"
+                                            onChange={(e) => setAddress({ ...address, state: e.target.value })}
+                                            value={address.state}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <button 
+                                type="submit" 
+                                className="w-full mt-8 py-4 text-white font-black uppercase tracking-widest rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                style={{ backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }}
+                            >
+                                Save Address
+                            </button>
+                        </form>
+                        <div className="hidden md:block flex-1 max-w-md">
+                            <Image
+                                className="w-full"
+                                src={assets.my_location_image}
+                                alt="my_location_image"
                             />
                         </div>
                     </div>
-                    <button type="submit" className="max-w-sm w-full mt-6 bg-orange-600 text-white py-3 hover:bg-orange-700 uppercase">
-                        Save address
-                    </button>
-                </form>
-                <Image
-                    className="md:mr-16 mt-16 md:mt-0"
-                    src={assets.my_location_image}
-                    alt="my_location_image"
-                />
+                </div>
             </div>
             <Footer />
         </>

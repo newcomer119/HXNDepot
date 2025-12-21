@@ -4,7 +4,15 @@ import { assets } from "@/assets/assets";
 import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { useAppContext } from "@/context/AppContext";
+
+const colors = {
+  green: "#005a2b",
+  gold: "#d4af37",
+  goldLight: "#f4e4bc",
+  white: "#ffffff",
+};
 
 const Cart = () => {
 
@@ -13,28 +21,35 @@ const Cart = () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col md:flex-row gap-10 px-6 md:px-16 lg:px-32 pt-14 mb-20">
+      <div className="min-h-screen bg-white pt-24 pb-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row gap-10 mb-10">
         <div className="flex-1">
-          <div className="flex items-center justify-between mb-8 border-b border-gray-500/30 pb-6">
-            <p className="text-2xl md:text-3xl text-gray-500">
-              Your <span className="font-medium text-orange-600">Cart</span>
-            </p>
-            <p className="text-lg md:text-xl text-gray-500/80">{getCartCount()} Items</p>
+          <div className="flex items-center justify-between mb-8 pb-6" style={{ borderBottom: `2px solid ${colors.gold}40` }}>
+            <div>
+              <span className="text-xs font-black uppercase tracking-[0.3em] mb-2 block" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
+                Shopping Cart
+              </span>
+              <h1 className="text-3xl md:text-4xl font-black" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                Your Cart
+              </h1>
+            </div>
+            <p className="text-lg md:text-xl font-bold" style={{ color: colors.green }}>{getCartCount()} Items</p>
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto rounded-2xl border-2" style={{ borderColor: colors.gold + '40' }}>
             <table className="min-w-full table-auto">
-              <thead className="text-left">
+              <thead className="text-left" style={{ backgroundColor: colors.goldLight + '30' }}>
                 <tr>
-                  <th className="text-nowrap pb-6 md:px-4 px-1 text-gray-600 font-medium">
+                  <th className="text-nowrap pb-6 md:px-4 px-1 font-black uppercase tracking-widest text-sm" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
                     Product Details
                   </th>
-                  <th className="pb-6 md:px-4 px-1 text-gray-600 font-medium">
+                  <th className="pb-6 md:px-4 px-1 font-black uppercase tracking-widest text-sm" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
                     Price
                   </th>
-                  <th className="pb-6 md:px-4 px-1 text-gray-600 font-medium">
+                  <th className="pb-6 md:px-4 px-1 font-black uppercase tracking-widest text-sm" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
                     Quantity
                   </th>
-                  <th className="pb-6 md:px-4 px-1 text-gray-600 font-medium">
+                  <th className="pb-6 md:px-4 px-1 font-black uppercase tracking-widest text-sm" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
                     Subtotal
                   </th>
                 </tr>
@@ -67,7 +82,8 @@ const Cart = () => {
                             />
                           </div>
                           <button
-                            className="md:hidden text-xs text-orange-600 mt-1"
+                            className="md:hidden text-xs font-medium mt-1 transition-colors hover:opacity-70"
+                            style={{ color: colors.green }}
                             onClick={() => updateCartQuantity(productId, 0, color)}
                           >
                             Remove
@@ -88,14 +104,15 @@ const Cart = () => {
                             </div>
                           )}
                           <button
-                            className="text-xs text-orange-600 mt-1"
+                            className="text-xs font-medium mt-1 transition-colors hover:opacity-70"
+                            style={{ color: colors.green }}
                             onClick={() => updateCartQuantity(productId, 0, color)}
                           >
                             Remove
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">₹{product.offerPrice}</td>
+                      <td className="py-4 md:px-4 px-1 font-bold" style={{ color: colors.green }}>₹{product.offerPrice}</td>
                       <td className="py-4 md:px-4 px-1">
                         <div className="flex items-center md:gap-2 gap-1">
                           <button onClick={() => updateCartQuantity(productId, quantity - 1, color)}>
@@ -109,7 +126,8 @@ const Cart = () => {
                             onChange={e => updateCartQuantity(productId, Number(e.target.value), color)} 
                             type="number" 
                             value={quantity} 
-                            className="w-8 border text-center appearance-none"
+                            className="w-8 border text-center appearance-none rounded"
+                            style={{ borderColor: colors.gold + '60' }}
                           />
                           <button onClick={() => updateCartQuantity(productId, quantity + 1, color)}>
                             <Image
@@ -120,16 +138,20 @@ const Cart = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">₹{(product.offerPrice * quantity).toFixed(2)}</td>
+                      <td className="py-4 md:px-4 px-1 font-bold" style={{ color: colors.green }}>₹{(product.offerPrice * quantity).toFixed(2)}</td>
                     </tr>
                   );
                 })}
               </tbody>
             </table>
           </div>
-          <button onClick={()=> router.push('/all-products')} className="group flex items-center mt-6 gap-2 text-orange-600">
+          <button 
+            onClick={()=> router.push('/all-products')} 
+            className="group flex items-center mt-6 gap-2 font-black uppercase tracking-widest text-sm transition-all hover:gap-4"
+            style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}
+          >
             <Image
-              className="group-hover:-translate-x-1 transition"
+              className="group-hover:-translate-x-1 transition-transform"
               src={assets.arrow_right_icon_colored}
               alt="arrow_right_icon_colored"
             />
@@ -137,7 +159,9 @@ const Cart = () => {
           </button>
         </div>
         <OrderSummary />
+        </div>
       </div>
+      <Footer />
     </>
   );
 };

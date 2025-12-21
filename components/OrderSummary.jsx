@@ -6,6 +6,13 @@ import toast from "react-hot-toast";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 
+const colors = {
+  green: "#005a2b",
+  gold: "#d4af37",
+  goldLight: "#f4e4bc",
+  white: "#ffffff",
+};
+
 const OrderSummary = () => {
   const {
     currency,
@@ -190,34 +197,42 @@ const OrderSummary = () => {
   }, [user]);
 
   return (
-    <div className="w-full md:w-96 bg-gray-500/5 p-5">
-      <h2 className="text-xl md:text-2xl font-medium text-gray-700">
+    <div className="w-full md:w-96 rounded-2xl border-2 p-6 shadow-lg" style={{ borderColor: colors.gold + '40', backgroundColor: colors.goldLight + '10' }}>
+      <h2 className="text-xl md:text-2xl font-black mb-6" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
         Order Summary
       </h2>
-      <hr className="border-gray-500/30 my-5" />
+      <div className="w-full h-0.5 mb-6" style={{ backgroundColor: colors.gold + '40' }}></div>
       <div className="space-y-6">
         <div>
-          <label className="text-base font-medium uppercase text-gray-600 block mb-2">
+          <label className="text-sm font-black uppercase tracking-widest block mb-3" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
             Select Address
           </label>
-          <div className="relative inline-block w-full text-sm border">
+          <div className="relative inline-block w-full">
             <button
-              className="peer w-full text-left px-4 pr-2 py-2 bg-white text-gray-700 focus:outline-none"
+              className="w-full text-left px-4 pr-10 py-3 rounded-xl border-2 transition-all font-bold"
+              style={{ 
+                borderColor: colors.gold + '60', 
+                color: colors.green,
+                backgroundColor: 'white'
+              }}
+              onMouseEnter={(e) => e.target.style.borderColor = colors.gold}
+              onMouseLeave={(e) => e.target.style.borderColor = colors.gold + '60'}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
-              <span>
+              <span className="block truncate">
                 {selectedAddress
                   ? `${selectedAddress.fullName}, ${selectedAddress.area}, ${selectedAddress.city}, ${selectedAddress.state}`
                   : "Select Address"}
               </span>
               <svg
-                className={`w-5 h-5 inline float-right transition-transform duration-200 ${
-                  isDropdownOpen ? "rotate-0" : "-rotate-90"
+                className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-transform duration-200 ${
+                  isDropdownOpen ? "rotate-180" : "rotate-0"
                 }`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="#6B7280"
+                style={{ color: colors.gold }}
+                stroke="currentColor"
               >
                 <path
                   strokeLinecap="round"
@@ -229,11 +244,17 @@ const OrderSummary = () => {
             </button>
 
             {isDropdownOpen && (
-              <ul className="absolute w-full bg-white border shadow-md mt-1 z-10 py-1.5">
+              <ul className="absolute w-full bg-white border-2 shadow-xl mt-2 z-20 rounded-xl overflow-hidden" style={{ borderColor: colors.gold }}>
                 {userAddresses.map((address, index) => (
                   <li
                     key={index}
-                    className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer"
+                    className="px-4 py-3 cursor-pointer transition-colors font-bold border-b last:border-b-0"
+                    style={{ 
+                      color: colors.green,
+                      borderColor: colors.gold + '30'
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = colors.goldLight + '30'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                     onClick={() => handleAddressSelect(address)}
                   >
                     {address.fullName}, {address.area}, {address.city},{" "}
@@ -242,7 +263,13 @@ const OrderSummary = () => {
                 ))}
                 <li
                   onClick={() => router.push("/add-address")}
-                  className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer text-center"
+                  className="px-4 py-3 cursor-pointer text-center font-black uppercase tracking-widest transition-colors"
+                  style={{ 
+                    color: colors.gold,
+                    backgroundColor: colors.goldLight + '20'
+                  }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = colors.goldLight + '40'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = colors.goldLight + '20'}
                 >
                   + Add New Address
                 </li>
@@ -251,27 +278,26 @@ const OrderSummary = () => {
           </div>
         </div>
 
-
-        <hr className="border-gray-500/30 my-5" />
+        <div className="w-full h-0.5" style={{ backgroundColor: colors.gold + '40' }}></div>
 
         <div className="space-y-4">
-          <div className="flex justify-between text-base font-medium">
-            <p className="uppercase text-gray-600">Items {getCartCount()}</p>
-            <p className="text-gray-800">
+          <div className="flex justify-between text-base font-bold">
+            <p className="uppercase tracking-widest text-sm" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>Items {getCartCount()}</p>
+            <p style={{ color: colors.green }}>
               {currency}
               {getCartAmount()}
             </p>
           </div>
           <div className="flex justify-between">
-            <p className="text-gray-600">Shipping Fee</p>
-            <p className="font-medium text-gray-800">Free</p>
+            <p className="font-bold" style={{ color: colors.green }}>Shipping Fee</p>
+            <p className="font-bold" style={{ color: colors.gold }}>Free</p>
           </div>
           
           {/* Discount line - Moved here below shipping fees */}
           {appliedCoupon && (
-            <div className="flex justify-between text-green-600">
-              <p>Discount ({appliedCoupon.discount}%)</p>
-              <p className="font-medium">
+            <div className="flex justify-between font-bold">
+              <p style={{ color: colors.green }}>Discount ({appliedCoupon.discount}%)</p>
+              <p style={{ color: colors.green }}>
                 -{currency}
                 {calculateDiscount()}
               </p>
@@ -279,16 +305,16 @@ const OrderSummary = () => {
           )}
           
           <div className="flex justify-between">
-            <p className="text-gray-600">GST</p>
-            <p className="font-medium text-gray-800">
+            <p className="font-bold" style={{ color: colors.green }}>GST</p>
+            <p className="font-bold" style={{ color: colors.green }}>
               {currency}
               {computeGst()}
             </p>
           </div>
           
           {/* Promo Code Section - Moved here after GST */}
-          <div className="border-t pt-4">
-            <label className="text-base font-medium uppercase text-gray-600 block mb-2">
+          <div className="pt-4 border-t-2" style={{ borderColor: colors.gold + '40' }}>
+            <label className="text-sm font-black uppercase tracking-widest block mb-3" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
               Promo Code
             </label>
             <div className="flex flex-col items-start gap-3">
@@ -297,27 +323,31 @@ const OrderSummary = () => {
                 placeholder="Enter promo code"
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
-                className="flex-grow w-full outline-none p-2.5 text-gray-600 border"
+                className="w-full px-4 py-3 rounded-xl border-2 outline-none font-bold transition-all"
+                style={{ borderColor: colors.gold + '60', color: colors.green }}
+                onFocus={(e) => e.target.style.borderColor = colors.gold}
+                onBlur={(e) => e.target.style.borderColor = colors.gold + '60'}
               />
               <button 
                 onClick={handleApplyCoupon}
-                className="bg-orange-600 text-white px-9 py-2 hover:bg-orange-700"
+                className="px-8 py-3 font-black uppercase tracking-widest rounded-xl transition-all hover:scale-105 active:scale-95"
+                style={{ backgroundColor: colors.gold, color: colors.green, fontFamily: "var(--font-montserrat)" }}
               >
                 Apply
               </button>
             </div>
             {appliedCoupon && (
-              <div className="mt-2 p-2 bg-green-100 border border-green-300 rounded">
-                <p className="text-green-800 text-sm">
+              <div className="mt-3 p-3 rounded-xl border-2" style={{ backgroundColor: colors.goldLight + '30', borderColor: colors.gold }}>
+                <p className="text-sm font-bold" style={{ color: colors.green }}>
                   Coupon "{appliedCoupon.code}" applied! {appliedCoupon.discount}% off
                 </p>
               </div>
             )}
           </div>
           
-          <div className="flex justify-between text-lg md:text-xl font-medium border-t pt-3">
-            <p>Total</p>
-            <p>
+          <div className="flex justify-between text-lg md:text-xl font-black border-t-2 pt-4" style={{ borderColor: colors.gold + '40' }}>
+            <p style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>Total</p>
+            <p style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
               {currency}
               {getFinalAmount()}
             </p>
@@ -327,7 +357,8 @@ const OrderSummary = () => {
 
       <button
         onClick={createOrder}
-        className="w-full bg-orange-600 text-white py-3 mt-5 hover:bg-orange-700"
+        className="w-full py-4 text-white font-black uppercase tracking-widest rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] mt-6"
+        style={{ backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }}
       >
         Place Order
       </button>
