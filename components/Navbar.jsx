@@ -207,7 +207,7 @@ export default function Navbar() {
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              className="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white z-[70] shadow-2xl flex flex-col"
+              className="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white z-[70] shadow-2xl flex flex-col h-full"
             >
               <div className="p-6 border-b border-slate-100 flex items-center justify-between">
                 <h2 className="text-xl font-black" style={{ color: colors.green }}>Your Cart</h2>
@@ -235,11 +235,11 @@ export default function Navbar() {
                 ) : (
                   cart.map((item) => (
                     <div key={item.id} className="flex gap-4 group">
-                      <div className="w-28 h-max rounded-xl bg-slate-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                      <div className="w-24 h-24 rounded-xl bg-slate-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
                         <img 
                           src={item.image} 
                           alt={item.title} 
-                          className="max-w-full max-h-full object-contain" 
+                          className="w-full h-full object-contain" 
                         />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -275,7 +275,7 @@ export default function Navbar() {
               </div>
 
               {cart.length > 0 && (
-                <div className="p-6 border-t border-slate-100 bg-slate-50 space-y-4">
+                <div className="mt-auto p-6 border-t border-slate-100 bg-slate-50 space-y-4">
                   <div className="flex justify-between items-center text-lg">
                     <span className="font-bold text-slate-500">Total</span>
                     <span className="text-2xl font-black" style={{ color: colors.green }}>₹{totalAmount.toLocaleString()}</span>
