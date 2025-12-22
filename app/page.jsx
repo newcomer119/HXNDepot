@@ -82,7 +82,7 @@ export default function Home() {
 
             <div className="w-24 h-1.5 mb-8" style={{ backgroundColor: colors.gold }} />
 
-            <p className="text-slate-600 text-lg md:text-xl mb-10 max-w-xl leading-relaxed font-bold">
+            <p className="text-lg md:text-xl mb-10 max-w-xl leading-relaxed font-bold" style={{ color: colors.green }}>
               Elevate your architectural vision with our world-class porcelain collections and bespoke bathroom fixtures.
             </p>
 
@@ -161,7 +161,7 @@ export default function Home() {
               <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight" style={{ fontFamily: "var(--font-montserrat)" }}>
                 Crafting <span style={{ color: colors.green }}>Elegance</span> In Every <span style={{ color: colors.gold }}>Surface</span>
               </h2>
-              <p className="text-slate-700 text-lg leading-relaxed mb-8 font-bold">
+              <p className="text-lg leading-relaxed mb-8 font-bold" style={{ color: colors.green }}>
                 HXN Building Depot stands at the forefront of architectural surfaces. We curate the finest porcelain tiles and bathroom fixtures that blend timeless artistry with cutting-edge durability.
               </p>
               <Link
@@ -213,7 +213,7 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                     <p className="text-white text-sm font-bold mb-2">{product.description}</p>
-                    <Link href="/all-products" className="block w-full py-3 bg-white text-slate-900 text-center text-xs font-black uppercase tracking-widest rounded-lg">
+                    <Link href="/all-products" className="block w-full py-3 bg-white text-center text-xs font-black uppercase tracking-widest rounded-lg" style={{ color: colors.green }}>
                       View Detail
                     </Link>
                   </div>
@@ -247,7 +247,7 @@ export default function Home() {
                     <Phone className="w-6 h-6" style={{ color: colors.green }} />
                   </div>
                   <div>
-                    <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Direct Line</p>
+                    <p className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: colors.green }}>Direct Line</p>
                     <p className="text-2xl font-black" style={{ color: colors.green }}>+1 (555) HXN-BUILD</p>
                   </div>
                 </div>
@@ -257,7 +257,7 @@ export default function Home() {
                     <Mail className="w-6 h-6" style={{ color: colors.green }} />
                   </div>
                   <div>
-                    <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Email Inquiry</p>
+                    <p className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: colors.green }}>Email Inquiry</p>
                     <p className="text-2xl font-black" style={{ color: colors.green }}>hello@hxnbuild.com</p>
                   </div>
                 </div>
@@ -272,7 +272,7 @@ export default function Home() {
             >
               <form className="space-y-6 bg-slate-50 p-10 rounded-3xl shadow-inner border border-slate-100">
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Project Message</label>
+                  <label className="block text-xs font-black uppercase tracking-widest mb-2" style={{ color: colors.green }}>Project Message</label>
                   <textarea
                     rows={4}
                     className="w-full bg-white border border-slate-200 px-5 py-4 focus:outline-none focus:ring-2 rounded-xl transition-all resize-none"

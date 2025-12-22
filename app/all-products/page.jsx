@@ -110,7 +110,7 @@ export default function ProductsPage() {
               <span style={{ color: colors.green }}>Premium </span>
               <span style={{ color: colors.gold }}>Products</span>
             </h1>
-            <p className="text-lg md:text-xl text-slate-600 font-bold leading-relaxed">
+            <p className="text-lg md:text-xl font-bold leading-relaxed" style={{ color: colors.green }}>
               Discover our curated selection of premium tiles and bathroom fixtures.
             </p>
           </motion.div>
@@ -141,12 +141,12 @@ export default function ProductsPage() {
                   className={`px-6 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${
                     selectedCategory === category
                       ? "text-white shadow-lg"
-                      : "border-2 text-slate-600 hover:bg-slate-50"
+                      : "border-2 hover:bg-slate-50"
                   }`}
                   style={
                     selectedCategory === category
                       ? { backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }
-                      : { borderColor: colors.gold, fontFamily: "var(--font-montserrat)" }
+                      : { borderColor: colors.gold, color: colors.green, fontFamily: "var(--font-montserrat)" }
                   }
                 >
                   {category === "all" ? "All Products" : category.split(" - ")[1] || category}

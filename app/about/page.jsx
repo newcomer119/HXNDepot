@@ -66,7 +66,7 @@ export default function AboutPage() {
               <span style={{ color: colors.gold }}>Luxury</span>
               <span style={{ color: colors.green }}> In Surfaces</span>
             </h1>
-            <p className="text-lg md:text-xl text-slate-600 font-bold leading-relaxed">
+            <p className="text-lg md:text-xl font-bold leading-relaxed" style={{ color: colors.green }}>
               HXN Building Depot has been the cornerstone of premium architectural materials since 2009, delivering excellence to over 100,000 homes.
             </p>
           </motion.div>
@@ -111,20 +111,20 @@ export default function AboutPage() {
                 <span style={{ color: colors.gold }}>Innovation</span>
                 <span style={{ color: colors.green }}> and Trust</span>
               </h2>
-              <p className="text-lg text-slate-700 font-bold leading-relaxed">
+              <p className="text-lg font-bold leading-relaxed" style={{ color: colors.green }}>
                 Founded with a vision to bring world-class porcelain and bathroom solutions to the local market, HXN Building Depot has grown from a small family business into a leading industry distributor.
               </p>
-              <p className="text-lg text-slate-700 font-bold leading-relaxed">
+              <p className="text-lg font-bold leading-relaxed" style={{ color: colors.green }}>
                 Our journey is built on the belief that every space deserves the finest materials. We don't just sell tiles; we provide the foundation for your most cherished memories.
               </p>
               <div className="pt-6 grid grid-cols-2 gap-8">
                 <div>
                   <div className="text-4xl font-black mb-1" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>15+</div>
-                  <div className="text-xs font-black uppercase tracking-widest text-slate-500" style={{ fontFamily: "var(--font-montserrat)" }}>Years of Excellence</div>
+                  <div className="text-xs font-black uppercase tracking-widest" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>Years of Excellence</div>
                 </div>
                 <div>
                   <div className="text-4xl font-black mb-1" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>100K+</div>
-                  <div className="text-xs font-black uppercase tracking-widest text-slate-500" style={{ fontFamily: "var(--font-montserrat)" }}>Dreams Delivered</div>
+                  <div className="text-xs font-black uppercase tracking-widest" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>Dreams Delivered</div>
                 </div>
               </div>
             </motion.div>
@@ -157,7 +157,7 @@ export default function AboutPage() {
                   <div style={{ color: colors.green }}>{value.icon}</div>
                 </div>
                 <h3 className="text-xl font-black mb-4" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>{value.title}</h3>
-                <p className="text-slate-600 font-bold leading-relaxed">{value.description}</p>
+                <p className="font-bold leading-relaxed" style={{ color: colors.green }}>{value.description}</p>
               </motion.div>
             ))}
           </div>
