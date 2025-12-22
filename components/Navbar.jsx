@@ -235,8 +235,12 @@ export default function Navbar() {
                 ) : (
                   cart.map((item) => (
                     <div key={item.id} className="flex gap-4 group">
-                      <div className="w-24 h-24 relative rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
-                        <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                      <div className="w-28 h-max rounded-xl bg-slate-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                        <img 
+                          src={item.image} 
+                          alt={item.title} 
+                          className="max-w-full max-h-full object-contain" 
+                        />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-black truncate mb-1" style={{ color: colors.green }}>{item.title}</h3>
