@@ -8,7 +8,7 @@ import { useAppContext } from "@/context/AppContext";
 import { useCart } from "@/context/CartContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { ShoppingCart, Plus, Minus } from "lucide-react";
+import { ShoppingCart, Plus, Minus, ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
 
 const colors = {
@@ -23,46 +23,65 @@ export default function ProductsPage() {
   const { updateQuantity, cart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [openDropdown, setOpenDropdown] = useState(null);
 
-  // Define all available categories
-  const allCategories = [
-    "all",
-    "Bathroom Products - Toilets",
-    "Bathroom Products - Floating Vanities",
-    "Bathroom Products - Free Standing Vanities",
-    "Bathroom Products - Plain & LED Mirrors",
-    "Bathroom Products - Faucets",
-    "Bathroom Products - Towel Bar Sets",
-    "Bathroom Products - Free Standing Tubs",
-    "Bathroom Products - Tub Faucets",
-    "Bathroom Products - Shower Glass",
-    "Bathroom Products - Shower Drains",
-    "Bathroom Products - Shower Faucets",
-    "Bathroom Products - Tile Edges",
-    "Floorings - Solid/HardWood Floorings",
-    "Floorings - Engineering Wood Floorings",
-    "Floorings - Vinyl Floorings",
-    "Floorings - Laminate Floorings",
-    "Tiles - Porcelain Tiles",
-    "Tiles - Mosaic Tiles",
-    "Kitchens - Melamine Cabinets",
-    "Kitchens - MDF Laminates Cabinets",
-    "Kitchens - MDF Painted Cabinets",
-    "Kitchens - Solid Wood Painted Cabinets",
-    "Countertops - Quartz Countertop",
-    "Countertops - Granite Countertop",
-    "Countertops - Porcelain Countertop",
-    "Lightning - Potlights",
-    "Lightning - Chandeliers",
-    "Lightning - Lamps",
-    "Lightning - Vanity Lights",
-    "Lightning - LED Mirrors",
-    "Lightning - Island Lights"
-  ];
-  
+  // Define category structure with main categories and subcategories
+  const categoryStructure = {
+    "Bathroom Products": [
+      "Toilets",
+      "Floating Vanities",
+      "Free Standing Vanities",
+      "Plain & LED Mirrors",
+      "Faucets",
+      "Towel Bar Sets",
+      "Free Standing Tubs",
+      "Tub Faucets",
+      "Shower Glass",
+      "Shower Drains",
+      "Shower Faucets",
+      "Tile Edges"
+    ],
+    "Floorings": [
+      "Solid/HardWood Floorings",
+      "Engineering Wood Floorings",
+      "Vinyl Floorings",
+      "Laminate Floorings"
+    ],
+    "Tiles": [
+      "Porcelain Tiles",
+      "Mosaic Tiles"
+    ],
+    "Kitchens": [
+      "Melamine Cabinets",
+      "MDF Laminates Cabinets",
+      "MDF Painted Cabinets",
+      "Solid Wood Painted Cabinets"
+    ],
+    "Countertops": [
+      "Quartz Countertop",
+      "Granite Countertop",
+      "Porcelain Countertop"
+    ],
+    "Lightning": [
+      "Potlights",
+      "Chandeliers",
+      "Lamps",
+      "Vanity Lights",
+      "LED Mirrors",
+      "Island Lights"
+    ]
+  };
+
   // Get categories that have products
   const categoriesWithProducts = new Set(products.map(p => p.category).filter(Boolean));
-  const categories = allCategories.filter(cat => cat === "all" || categoriesWithProducts.has(cat));
+  
+  // Filter main categories to only show those that have products
+  const mainCategories = Object.keys(categoryStructure).filter(mainCat => {
+    return categoryStructure[mainCat].some(subCat => {
+      const fullCategory = `${mainCat} - ${subCat}`;
+      return categoriesWithProducts.has(fullCategory);
+    });
+  });
 
   // Filter products
   const filteredProducts = products.filter(product => {
@@ -72,6 +91,29 @@ export default function ProductsPage() {
       (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesSearch;
   });
+
+  const toggleDropdown = (mainCategory) => {
+    setOpenDropdown(openDropdown === mainCategory ? null : mainCategory);
+  };
+
+  const handleCategorySelect = (fullCategory) => {
+    setSelectedCategory(fullCategory);
+    setOpenDropdown(null);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (openDropdown && !event.target.closest('.category-dropdown')) {
+        setOpenDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [openDropdown]);
 
   const handleAddToCart = (product) => {
     addToCart(product._id);
@@ -133,25 +175,88 @@ export default function ProductsPage() {
             </div>
 
             {/* Category Filter */}
-            <div className="flex flex-wrap gap-3">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-6 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${
-                    selectedCategory === category
-                      ? "text-white shadow-lg"
-                      : "border-2 hover:bg-slate-50"
-                  }`}
-                  style={
-                    selectedCategory === category
-                      ? { backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }
-                      : { borderColor: colors.gold, color: colors.green, fontFamily: "var(--font-montserrat)" }
-                  }
-                >
-                  {category === "all" ? "All Products" : category.split(" - ")[1] || category}
-                </button>
-              ))}
+            <div className="flex flex-wrap gap-3 items-center">
+              {/* All Products Button */}
+              <button
+                onClick={() => {
+                  setSelectedCategory("all");
+                  setOpenDropdown(null);
+                }}
+                className={`px-6 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${
+                  selectedCategory === "all"
+                    ? "text-white shadow-lg"
+                    : "border-2 hover:bg-slate-50"
+                }`}
+                style={
+                  selectedCategory === "all"
+                    ? { backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }
+                    : { borderColor: colors.gold, color: colors.green, fontFamily: "var(--font-montserrat)" }
+                }
+              >
+                All Products
+              </button>
+
+              {/* Main Category Dropdowns */}
+              {mainCategories.map((mainCategory) => {
+                const subcategories = categoryStructure[mainCategory];
+                const isOpen = openDropdown === mainCategory;
+                const hasSelectedSubcategory = selectedCategory.startsWith(mainCategory + " - ");
+                
+                return (
+                  <div key={mainCategory} className="relative category-dropdown">
+                    <button
+                      onClick={() => toggleDropdown(mainCategory)}
+                      className={`px-6 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all flex items-center gap-2 ${
+                        hasSelectedSubcategory
+                          ? "text-white shadow-lg"
+                          : "border-2 hover:bg-slate-50"
+                      }`}
+                      style={
+                        hasSelectedSubcategory
+                          ? { backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }
+                          : { borderColor: colors.gold, color: colors.green, fontFamily: "var(--font-montserrat)" }
+                      }
+                    >
+                      {mainCategory}
+                      <ChevronDown 
+                        className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`} 
+                      />
+                    </button>
+                    
+                    {isOpen && (
+                      <div className="absolute top-full left-0 mt-2 bg-white border-2 rounded-xl shadow-xl z-50 min-w-[250px] max-h-[400px] overflow-y-auto"
+                        style={{ borderColor: colors.gold }}>
+                        {subcategories.map((subcategory) => {
+                          const fullCategory = `${mainCategory} - ${subcategory}`;
+                          const hasProducts = categoriesWithProducts.has(fullCategory);
+                          const isSelected = selectedCategory === fullCategory;
+                          
+                          if (!hasProducts) return null;
+                          
+                          return (
+                            <button
+                              key={subcategory}
+                              onClick={() => handleCategorySelect(fullCategory)}
+                              className={`w-full text-left px-6 py-3 text-sm font-black uppercase tracking-widest transition-all border-b last:border-b-0 ${
+                                isSelected
+                                  ? "text-white"
+                                  : "hover:bg-slate-50"
+                              }`}
+                              style={
+                                isSelected
+                                  ? { backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }
+                                  : { color: colors.green, fontFamily: "var(--font-montserrat)", borderColor: colors.goldLight }
+                              }
+                            >
+                              {subcategory}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
