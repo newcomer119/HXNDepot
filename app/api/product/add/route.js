@@ -54,7 +54,7 @@ export async function POST(request) {
         // Parse colors from JSON string
         let colors = [];
         try {
-            colors = JSON.parse(colorsJson);
+            colors = JSON.parse(colorsJson || '[]');
         } catch (error) {
             console.log("Error parsing colors JSON"); // Debug log
             return NextResponse.json({ 
@@ -64,12 +64,26 @@ export async function POST(request) {
         }
 
         // Validate required fields
-        if (!name || !description || !category || !colors || colors.length === 0 || !price || !offerPrice) {
+        if (!name || !description || !category || !price || !offerPrice) {
             console.log("Missing required fields"); // Debug log
             return NextResponse.json({ 
                 success: false, 
-                message: "All fields are required and at least one color must be selected" 
+                message: "All required fields must be filled" 
             }, { status: 400 });
+        }
+
+        // For Organics category, require at least one color (fragrance)
+        if (category === "Organics by Filament Freaks" && (!colors || colors.length === 0)) {
+            console.log("Organics category requires at least one fragrance"); // Debug log
+            return NextResponse.json({ 
+                success: false, 
+                message: "At least one fragrance must be selected for Organics products" 
+            }, { status: 400 });
+        }
+
+        // Ensure colors is an array (default to empty array if not provided)
+        if (!Array.isArray(colors)) {
+            colors = [];
         }
 
         console.log("Uploading files to Cloudinary..."); // Debug log
