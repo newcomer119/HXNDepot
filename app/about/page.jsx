@@ -67,7 +67,7 @@ export default function AboutPage() {
               <span style={{ color: colors.green }}> In Surfaces</span>
             </h1>
             <p className="text-lg md:text-xl font-bold leading-relaxed" style={{ color: colors.green }}>
-              HXN Building Depot has been the cornerstone of premium architectural materials since 2009, delivering excellence to over 100,000 homes.
+              HXN Building Depot stands at the forefront of architectural surfaces. We curate the finest flooring, tiles, & Bathroom fixtures.
             </p>
           </motion.div>
         </div>

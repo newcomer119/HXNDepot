@@ -39,56 +39,58 @@ export default function ProductsPage() {
       "Shower Glass",
       "Shower Drains",
       "Shower Faucets",
-      "Tile Edges"
+      "Tile Edges",
     ],
-    "Floorings": [
+    Floorings: [
       "Solid/HardWood Floorings",
       "Engineering Wood Floorings",
       "Vinyl Floorings",
-      "Laminate Floorings"
+      "Laminate Floorings",
     ],
-    "Tiles": [
-      "Porcelain Tiles",
-      "Mosaic Tiles"
-    ],
-    "Kitchens": [
+    Tiles: ["Porcelain Tiles", "Mosaic Tiles"],
+    Kitchens: [
       "Melamine Cabinets",
       "MDF Laminates Cabinets",
       "MDF Painted Cabinets",
-      "Solid Wood Painted Cabinets"
+      "Solid Wood Painted Cabinets",
     ],
-    "Countertops": [
+    Countertops: [
       "Quartz Countertop",
       "Granite Countertop",
-      "Porcelain Countertop"
+      "Porcelain Countertop",
     ],
-    "Lightning": [
+    Lightning: [
       "Potlights",
       "Chandeliers",
       "Lamps",
       "Vanity Lights",
       "LED Mirrors",
-      "Island Lights"
-    ]
+      "Island Lights",
+    ],
   };
 
   // Get categories that have products
-  const categoriesWithProducts = new Set(products.map(p => p.category).filter(Boolean));
-  
+  const categoriesWithProducts = new Set(
+    products.map((p) => p.category).filter(Boolean)
+  );
+
   // Filter main categories to only show those that have products
-  const mainCategories = Object.keys(categoryStructure).filter(mainCat => {
-    return categoryStructure[mainCat].some(subCat => {
+  const mainCategories = Object.keys(categoryStructure).filter((mainCat) => {
+    return categoryStructure[mainCat].some((subCat) => {
       const fullCategory = `${mainCat} - ${subCat}`;
       return categoriesWithProducts.has(fullCategory);
     });
   });
 
   // Filter products
-  const filteredProducts = products.filter(product => {
-    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
-    const matchesSearch = !searchQuery || 
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      selectedCategory === "all" || product.category === selectedCategory;
+    const matchesSearch =
+      !searchQuery ||
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase()));
+      (product.description &&
+        product.description.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesSearch;
   });
 
@@ -104,14 +106,14 @@ export default function ProductsPage() {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (openDropdown && !event.target.closest('.category-dropdown')) {
+      if (openDropdown && !event.target.closest(".category-dropdown")) {
         setOpenDropdown(null);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openDropdown]);
 
@@ -121,7 +123,7 @@ export default function ProductsPage() {
   };
 
   const getCartQuantity = (productId) => {
-    const cartItem = cart.find(item => item.productId === productId);
+    const cartItem = cart.find((item) => item.productId === productId);
     return cartItem ? cartItem.quantity : 0;
   };
 
@@ -138,22 +140,35 @@ export default function ProductsPage() {
             className="object-cover opacity-5 grayscale"
           />
         </div>
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <span className="text-sm font-black tracking-[0.4em] uppercase mb-4 block" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
+            <span
+              className="text-sm font-black tracking-[0.4em] uppercase mb-4 block"
+              style={{
+                color: colors.gold,
+                fontFamily: "var(--font-montserrat)",
+              }}
+            >
               Our Collection
             </span>
-            <h1 className="text-5xl md:text-7xl font-black mb-8 leading-tight" style={{ fontFamily: "var(--font-montserrat)" }}>
+            <h1
+              className="text-5xl md:text-7xl font-black mb-8 leading-tight"
+              style={{ fontFamily: "var(--font-montserrat)" }}
+            >
               <span style={{ color: colors.green }}>Premium </span>
               <span style={{ color: colors.gold }}>Products</span>
             </h1>
-            <p className="text-lg md:text-xl font-bold leading-relaxed" style={{ color: colors.green }}>
-              Discover our curated selection of premium tiles and bathroom fixtures.
+            <p
+              className="text-lg md:text-xl font-bold leading-relaxed"
+              style={{ color: colors.green }}
+            >
+              Elevate your architectural vision with our world class collections
+              and fixtures.
             </p>
           </motion.div>
         </div>
@@ -189,8 +204,15 @@ export default function ProductsPage() {
                 }`}
                 style={
                   selectedCategory === "all"
-                    ? { backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }
-                    : { borderColor: colors.gold, color: colors.green, fontFamily: "var(--font-montserrat)" }
+                    ? {
+                        backgroundColor: colors.green,
+                        fontFamily: "var(--font-montserrat)",
+                      }
+                    : {
+                        borderColor: colors.gold,
+                        color: colors.green,
+                        fontFamily: "var(--font-montserrat)",
+                      }
                 }
               >
                 All Products
@@ -200,10 +222,15 @@ export default function ProductsPage() {
               {mainCategories.map((mainCategory) => {
                 const subcategories = categoryStructure[mainCategory];
                 const isOpen = openDropdown === mainCategory;
-                const hasSelectedSubcategory = selectedCategory.startsWith(mainCategory + " - ");
-                
+                const hasSelectedSubcategory = selectedCategory.startsWith(
+                  mainCategory + " - "
+                );
+
                 return (
-                  <div key={mainCategory} className="relative category-dropdown">
+                  <div
+                    key={mainCategory}
+                    className="relative category-dropdown"
+                  >
                     <button
                       onClick={() => toggleDropdown(mainCategory)}
                       className={`px-6 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all flex items-center gap-2 ${
@@ -213,39 +240,54 @@ export default function ProductsPage() {
                       }`}
                       style={
                         hasSelectedSubcategory
-                          ? { backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }
-                          : { borderColor: colors.gold, color: colors.green, fontFamily: "var(--font-montserrat)" }
+                          ? {
+                              backgroundColor: colors.green,
+                              fontFamily: "var(--font-montserrat)",
+                            }
+                          : {
+                              borderColor: colors.gold,
+                              color: colors.green,
+                              fontFamily: "var(--font-montserrat)",
+                            }
                       }
                     >
                       {mainCategory}
-                      <ChevronDown 
-                        className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`} 
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
                       />
                     </button>
-                    
+
                     {isOpen && (
-                      <div className="absolute top-full left-0 mt-2 bg-white border-2 rounded-xl shadow-xl z-50 min-w-[250px] max-h-[400px] overflow-y-auto"
-                        style={{ borderColor: colors.gold }}>
+                      <div
+                        className="absolute top-full left-0 mt-2 bg-white border-2 rounded-xl shadow-xl z-50 min-w-[250px] max-h-[400px] overflow-y-auto"
+                        style={{ borderColor: colors.gold }}
+                      >
                         {subcategories.map((subcategory) => {
                           const fullCategory = `${mainCategory} - ${subcategory}`;
-                          const hasProducts = categoriesWithProducts.has(fullCategory);
+                          const hasProducts =
+                            categoriesWithProducts.has(fullCategory);
                           const isSelected = selectedCategory === fullCategory;
-                          
+
                           if (!hasProducts) return null;
-                          
+
                           return (
                             <button
                               key={subcategory}
                               onClick={() => handleCategorySelect(fullCategory)}
                               className={`w-full text-left px-6 py-3 text-sm font-black uppercase tracking-widest transition-all border-b last:border-b-0 ${
-                                isSelected
-                                  ? "text-white"
-                                  : "hover:bg-slate-50"
+                                isSelected ? "text-white" : "hover:bg-slate-50"
                               }`}
                               style={
                                 isSelected
-                                  ? { backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }
-                                  : { color: colors.green, fontFamily: "var(--font-montserrat)", borderColor: colors.goldLight }
+                                  ? {
+                                      backgroundColor: colors.green,
+                                      fontFamily: "var(--font-montserrat)",
+                                    }
+                                  : {
+                                      color: colors.green,
+                                      fontFamily: "var(--font-montserrat)",
+                                      borderColor: colors.goldLight,
+                                    }
                               }
                             >
                               {subcategory}
@@ -267,15 +309,23 @@ export default function ProductsPage() {
           {isLoading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="aspect-[4/5] bg-slate-200 animate-pulse rounded-2xl" />
+                <div
+                  key={i}
+                  className="aspect-[4/5] bg-slate-200 animate-pulse rounded-2xl"
+                />
               ))}
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-2xl font-black text-slate-400 mb-4" style={{ fontFamily: "var(--font-montserrat)" }}>
+              <p
+                className="text-2xl font-black text-slate-400 mb-4"
+                style={{ fontFamily: "var(--font-montserrat)" }}
+              >
                 No products found
               </p>
-              <p className="text-slate-500">Try adjusting your search or category filter.</p>
+              <p className="text-slate-500">
+                Try adjusting your search or category filter.
+              </p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -301,39 +351,65 @@ export default function ProductsPage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </div>
                     </Link>
-                    
+
                     <div className="space-y-3">
                       <Link href={`/product/${product._id}`}>
-                        <h3 className="text-xl font-black mb-1 hover:opacity-70 transition-opacity" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                        <h3
+                          className="text-xl font-black mb-1 hover:opacity-70 transition-opacity"
+                          style={{
+                            color: colors.green,
+                            fontFamily: "var(--font-montserrat)",
+                          }}
+                        >
                           {product.name}
                         </h3>
                       </Link>
-                      
+
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-2xl font-black" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
-                            {currency}{product.offerPrice}
+                          <p
+                            className="text-2xl font-black"
+                            style={{
+                              color: colors.gold,
+                              fontFamily: "var(--font-montserrat)",
+                            }}
+                          >
+                            {currency}
+                            {product.offerPrice}
                           </p>
                           {product.price > product.offerPrice && (
                             <p className="text-sm text-slate-400 line-through">
-                              {currency}{product.price}
+                              {currency}
+                              {product.price}
                             </p>
                           )}
                         </div>
                       </div>
 
                       {cartQuantity > 0 ? (
-                        <div className="flex items-center justify-between border-2 rounded-xl p-2" style={{ borderColor: colors.gold }}>
+                        <div
+                          className="flex items-center justify-between border-2 rounded-xl p-2"
+                          style={{ borderColor: colors.gold }}
+                        >
                           <button
-                            onClick={() => updateQuantity(`${product._id}`, cartQuantity - 1)}
+                            onClick={() =>
+                              updateQuantity(`${product._id}`, cartQuantity - 1)
+                            }
                             className="p-2 hover:bg-slate-50 rounded-lg transition-colors"
                             style={{ color: colors.green }}
                           >
                             <Minus className="w-4 h-4" />
                           </button>
-                          <span className="text-sm font-black" style={{ color: colors.green }}>{cartQuantity}</span>
+                          <span
+                            className="text-sm font-black"
+                            style={{ color: colors.green }}
+                          >
+                            {cartQuantity}
+                          </span>
                           <button
-                            onClick={() => updateQuantity(`${product._id}`, cartQuantity + 1)}
+                            onClick={() =>
+                              updateQuantity(`${product._id}`, cartQuantity + 1)
+                            }
                             className="p-2 hover:bg-slate-50 rounded-lg transition-colors"
                             style={{ color: colors.green }}
                           >
@@ -344,14 +420,20 @@ export default function ProductsPage() {
                         <button
                           onClick={() => handleAddToCart(product)}
                           className="w-full py-3 text-white text-sm font-black uppercase tracking-widest rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
-                          style={{ backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }}
+                          style={{
+                            backgroundColor: colors.green,
+                            fontFamily: "var(--font-montserrat)",
+                          }}
                         >
                           <ShoppingCart className="w-4 h-4" />
                           Add to Cart
                         </button>
                       )}
-                      
-                      <div className="w-8 h-1 transition-all group-hover:w-16" style={{ backgroundColor: colors.gold }} />
+
+                      <div
+                        className="w-8 h-1 transition-all group-hover:w-16"
+                        style={{ backgroundColor: colors.gold }}
+                      />
                     </div>
                   </motion.div>
                 );

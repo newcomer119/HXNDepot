@@ -1,18 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ChevronDown, Phone, Mail, MapPin, ArrowRight, Menu, X, CheckCircle, Store, TrendingUp, Eye, Users, Zap } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SellerRegistrationModal from "@/components/SellerRegistrationModal";
 
 const stats = [
-  { number: "15+", label: "Years Excellence" },
-  { number: "250+", label: "Unique Designs" },
-  { number: "10K", label: "Cartons Daily" },
-  { number: "100K", label: "Dreams Delivered" },
+  { number: "15+", label: "Years of Excellence", subtitle: "Industry Experience" },
+  { number: "250+", label: "Curated Designs", subtitle: "World-Class Collections" },
+  { number: "10,000+", label: "Cartons Shipped" },
+  { number: "100,000+", label: "Dreams Delivered" },
 ];
 
 const products = [
@@ -46,10 +47,109 @@ const colors = {
   white: "#ffffff",
 };
 
+// Animated number component
+function AnimatedNumber({ value, duration = 2000 }) {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          
+          // Parse the number (handle "15+", "250+", "10,000+", "100,000+")
+          const numStr = value.replace(/,/g, '').replace('+', '');
+          const target = parseInt(numStr, 10);
+          
+          const startTime = Date.now();
+          const animate = () => {
+            const now = Date.now();
+            const progress = Math.min((now - startTime) / duration, 1);
+            
+            // Easing function for smooth animation
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const current = Math.floor(easeOutQuart * target);
+            
+            setCount(current);
+            
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              setCount(target);
+            }
+          };
+          
+          requestAnimationFrame(animate);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, [value, duration, hasAnimated]);
+
+  // Format number with commas and add "+" if original had it
+  const formatNumber = (num) => {
+    const formatted = num.toLocaleString();
+    return value.includes('+') ? `${formatted}+` : formatted;
+  };
+
+  return (
+    <span ref={ref}>{formatNumber(count)}</span>
+  );
+}
+
+const categories = [
+  {
+    title: "Premium Tiles",
+    description: "Porcelain & Mosaic collections for every space",
+    image: "https://images.unsplash.com/photo-1615971677499-5467cbab01c0?w=800&q=80",
+    link: "/all-products?category=Tiles",
+    linkText: "Explore Tiles"
+  },
+  {
+    title: "Luxury Flooring",
+    description: "Hardwood, Vinyl & Laminate solutions",
+    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80",
+    link: "/all-products?category=Floorings",
+    linkText: "Explore Flooring"
+  },
+  {
+    title: "Kitchen Systems",
+    description: "Cabinets, Countertops & Complete Solutions",
+    image: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=800&q=80",
+    link: "/all-products?category=Kitchens",
+    linkText: "Explore Kitchens"
+  },
+  {
+    title: "Bathroom Products",
+    description: "Vanities, Faucets & Complete Bathroom Solutions",
+    image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80",
+    link: "/all-products?category=Bathroom Products",
+    linkText: "View Collection"
+  }
+];
+
 export default function Home() {
+  const [isSellerModalOpen, setIsSellerModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-white text-slate-800">
       <Navbar />
+      <SellerRegistrationModal 
+        isOpen={isSellerModalOpen} 
+        onClose={() => setIsSellerModalOpen(false)} 
+      />
 
       <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-white">
         <div className="absolute inset-0">
@@ -76,9 +176,11 @@ export default function Home() {
 
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-black leading-[0.85] mb-8" style={{ fontFamily: "var(--font-montserrat)" }}>
               <span className="block" style={{ color: colors.gold }}>PREMIUM</span>
-              <span className="block" style={{ color: colors.green }}>TILES &</span>
-              <span className="block" style={{ color: colors.gold }}>BATHS</span>
+              <span className="block" style={{ color: colors.green }}>SURFACES</span>
             </h1>
+            <p className="text-2xl md:text-3xl font-black mb-8 tracking-wide" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+              Tiles • Flooring • Kitchen Systems
+            </p>
 
             <div className="w-24 h-1.5 mb-8" style={{ backgroundColor: colors.gold }} />
 
@@ -107,6 +209,49 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="py-32 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {categories.map((category, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="group relative overflow-hidden rounded-3xl shadow-2xl"
+              >
+                <div className="aspect-[4/5] relative">
+                  <Image
+                    src={category.image}
+                    alt={category.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                    <h3 className="text-2xl md:text-3xl font-black mb-2 text-white" style={{ fontFamily: "var(--font-montserrat)" }}>
+                      {category.title}
+                    </h3>
+                    <p className="text-white/90 font-bold mb-4 text-sm md:text-base">
+                      {category.description}
+                    </p>
+                    <Link
+                      href={category.link}
+                      className="inline-flex items-center gap-2 text-white border-2 border-white/30 px-5 py-2.5 rounded-xl font-black uppercase text-xs tracking-widest transition-all hover:bg-white/10 hover:border-white/50"
+                      style={{ fontFamily: "var(--font-montserrat)" }}
+                    >
+                      {category.linkText}
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="py-24 bg-white border-y border-slate-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
@@ -120,11 +265,16 @@ export default function Home() {
                 className="text-center"
               >
                 <div className="text-5xl md:text-6xl font-black mb-2" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
-                  {stat.number}
+                  <AnimatedNumber value={stat.number} duration={2000} />
                 </div>
-                <div className="text-sm tracking-[0.2em] font-black uppercase" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                <div className="text-sm tracking-[0.2em] font-black uppercase mb-1" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
                   {stat.label}
                 </div>
+                {stat.subtitle && (
+                  <div className="text-xs tracking-[0.1em] font-bold uppercase opacity-70" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                    {stat.subtitle}
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>
@@ -156,13 +306,12 @@ export default function Home() {
               viewport={{ once: true }}
             >
               <span className="text-sm font-black tracking-[0.4em] uppercase mb-4 block" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
-                Since 2009
               </span>
               <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight" style={{ fontFamily: "var(--font-montserrat)" }}>
                 Crafting <span style={{ color: colors.green }}>Elegance</span> In Every <span style={{ color: colors.gold }}>Surface</span>
               </h2>
               <p className="text-lg leading-relaxed mb-8 font-bold" style={{ color: colors.green }}>
-                HXN Building Depot stands at the forefront of architectural surfaces. We curate the finest porcelain tiles and bathroom fixtures that blend timeless artistry with cutting-edge durability.
+              HXN Building Depot stands at the forefront of architectural surfaces. We curate the finest flooring, tiles, & Bathroom fixtures.
               </p>
               <Link
                 href="/about"
@@ -359,14 +508,14 @@ export default function Home() {
                 <p className="text-lg font-bold mb-8" style={{ color: colors.green }}>
                   Ready to expand your reach and grow your business?
                 </p>
-                <Link
-                  href="/seller"
+                <button
+                  onClick={() => setIsSellerModalOpen(true)}
                   className="inline-flex items-center gap-3 text-white px-10 py-5 text-base font-black transition-all duration-300 group rounded shadow-xl hover:translate-y-[-2px]"
                   style={{ backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }}
                 >
                   Become a Seller
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </button>
               </div>
             </div>
           </div>
