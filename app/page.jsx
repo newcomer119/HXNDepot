@@ -221,31 +221,16 @@ export default function Home() {
                 viewport={{ once: true }}
                 className="group relative overflow-hidden rounded-3xl shadow-2xl"
               >
-                <div className="aspect-[4/5] relative">
-                  <Image
-                    src={category.image}
-                    alt={category.title}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                    <h3 className="text-2xl md:text-3xl font-black mb-2 text-white" style={{ fontFamily: "var(--font-montserrat)" }}>
-                      {category.title}
-                    </h3>
-                    <p className="text-white/90 font-bold mb-4 text-sm md:text-base">
-                      {category.description}
-                    </p>
-                    <Link
-                      href={category.link}
-                      className="inline-flex items-center gap-2 text-white border-2 border-white/30 px-5 py-2.5 rounded-xl font-black uppercase text-xs tracking-widest transition-all hover:bg-white/10 hover:border-white/50"
-                      style={{ fontFamily: "var(--font-montserrat)" }}
-                    >
-                      {category.linkText}
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
+                <Link href={category.link}>
+                  <div className="aspect-[4/5] relative">
+                    <Image
+                      src={category.image}
+                      alt={category.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
                   </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </div>
