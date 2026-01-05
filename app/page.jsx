@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ChevronDown, Phone, Mail, MapPin, ArrowRight, Menu, X } from "lucide-react";
+import { ChevronDown, Phone, Mail, MapPin, ArrowRight, Menu, X, CheckCircle, Store, TrendingUp, Eye, Users, Zap } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -222,6 +222,153 @@ export default function Home() {
                 <div className="w-8 h-1 transition-all group-hover:w-16" style={{ backgroundColor: colors.gold }} />
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="sellers" className="py-32 bg-gradient-to-b from-white to-slate-50 border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-sm font-black tracking-[0.4em] uppercase mb-4 block" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
+              For Sellers
+            </span>
+            <h2 className="text-5xl md:text-6xl font-black mb-6 leading-tight" style={{ fontFamily: "var(--font-montserrat)" }}>
+              Join Our <span style={{ color: colors.green }}>Platform</span> & <span style={{ color: colors.gold }}>Grow</span> Your Business
+            </h2>
+            <p className="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-bold" style={{ color: colors.green }}>
+              Connect with thousands of customers looking for premium real estate products. List your tiles, bathroom fixtures, and more on our trusted marketplace.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-16 items-center mb-16">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="relative"
+            >
+              <div className="aspect-[4/3] relative overflow-hidden rounded-2xl shadow-2xl">
+                <Image
+                  src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&q=80"
+                  alt="Seller Dashboard"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
+                <div className="absolute bottom-8 left-8 right-8">
+                  <div className="bg-white/95 backdrop-blur-sm rounded-xl p-6">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Eye className="w-6 h-6" style={{ color: colors.gold }} />
+                      <h3 className="text-xl font-black" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                        TilesView Support
+                      </h3>
+                    </div>
+                    <p className="text-sm font-bold" style={{ color: colors.green }}>
+                      Visualize your products in real rooms. Customers can see exactly how your tiles and fixtures will look in their space before purchasing.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-8"
+            >
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 flex items-center justify-center rounded-xl flex-shrink-0" style={{ backgroundColor: colors.goldLight }}>
+                    <Users className="w-6 h-6" style={{ color: colors.green }} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black mb-2" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                      Reach More Customers
+                    </h3>
+                    <p className="text-base leading-relaxed font-bold" style={{ color: colors.green }}>
+                      Access a growing community of homeowners, contractors, and designers actively searching for quality products.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 flex items-center justify-center rounded-xl flex-shrink-0" style={{ backgroundColor: colors.goldLight }}>
+                    <TrendingUp className="w-6 h-6" style={{ color: colors.green }} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black mb-2" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                      Boost Your Sales
+                    </h3>
+                    <p className="text-base leading-relaxed font-bold" style={{ color: colors.green }}>
+                      Increase visibility and sales with our optimized platform designed to showcase your products to the right audience.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 flex items-center justify-center rounded-xl flex-shrink-0" style={{ backgroundColor: colors.goldLight }}>
+                    <Zap className="w-6 h-6" style={{ color: colors.green }} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black mb-2" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                      Easy Management
+                    </h3>
+                    <p className="text-base leading-relaxed font-bold" style={{ color: colors.green }}>
+                      Simple dashboard to manage your inventory, track orders, and update product listings with ease.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="bg-gradient-to-r from-slate-50 to-white rounded-3xl p-12 border-2 shadow-xl" style={{ borderColor: colors.gold }}>
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <h3 className="text-3xl md:text-4xl font-black mb-6 leading-tight" style={{ fontFamily: "var(--font-montserrat)" }}>
+                  Why Choose <span style={{ color: colors.green }}>HXN Building Depot</span>?
+                </h3>
+                <div className="space-y-4">
+                  {[
+                    "Zero setup fees - Start selling immediately",
+                    "TilesView AR visualization for better customer engagement",
+                    "Dedicated seller support team",
+                    "Secure payment processing",
+                    "Real-time inventory management",
+                    "Marketing tools to promote your products"
+                  ].map((benefit, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="flex items-center gap-3"
+                    >
+                      <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: colors.gold }} />
+                      <span className="text-base font-bold" style={{ color: colors.green }}>{benefit}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="inline-block p-8 rounded-2xl mb-6" style={{ backgroundColor: colors.goldLight }}>
+                  <Store className="w-16 h-16 mx-auto mb-4" style={{ color: colors.green }} />
+                </div>
+                <p className="text-lg font-bold mb-8" style={{ color: colors.green }}>
+                  Ready to expand your reach and grow your business?
+                </p>
+                <Link
+                  href="/seller"
+                  className="inline-flex items-center gap-3 text-white px-10 py-5 text-base font-black transition-all duration-300 group rounded shadow-xl hover:translate-y-[-2px]"
+                  style={{ backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }}
+                >
+                  Become a Seller
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
