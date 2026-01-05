@@ -15,6 +15,53 @@ const colors = {
   white: "#ffffff",
 };
 
+// Define category structure with main categories and subcategories
+const categoryStructure = {
+  "Bathroom Products": [
+    "Toilets",
+    "Floating Vanities",
+    "Free Standing Vanities",
+    "Plain & LED Mirrors",
+    "Faucets",
+    "Towel Bar Sets",
+    "Free Standing Tubs",
+    "Tub Faucets",
+    "Shower Glass",
+    "Shower Drains",
+    "Shower Faucets",
+    "Tile Edges"
+  ],
+  "Floorings": [
+    "Solid/HardWood Floorings",
+    "Engineering Wood Floorings",
+    "Vinyl Floorings",
+    "Laminate Floorings"
+  ],
+  "Tiles": [
+    "Porcelain Tiles",
+    "Mosaic Tiles"
+  ],
+  "Kitchens": [
+    "Melamine Cabinets",
+    "MDF Laminates Cabinets",
+    "MDF Painted Cabinets",
+    "Solid Wood Painted Cabinets"
+  ],
+  "Countertops": [
+    "Quartz Countertop",
+    "Granite Countertop",
+    "Porcelain Countertop"
+  ],
+  "Lightning": [
+    "Potlights",
+    "Chandeliers",
+    "Lamps",
+    "Vanity Lights",
+    "LED Mirrors",
+    "Island Lights"
+  ]
+};
+
 const EditProduct = () => {
     const { id } = useParams();
     const router = useRouter();
@@ -25,25 +72,11 @@ const EditProduct = () => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [additionalInfo, setAdditionalInfo] = useState('');
-    const [category, setCategory] = useState('');
-    const [selectedColorImages, setSelectedColorImages] = useState({});
+    const [mainCategory, setMainCategory] = useState('Bathroom Products');
+    const [subCategory, setSubCategory] = useState('');
     const [price, setPrice] = useState('');
     const [offerPrice, setOfferPrice] = useState('');
     const [existingImages, setExistingImages] = useState([]);
-    const [existingColorImages, setExistingColorImages] = useState({});
-
-
-    const availableFragrances = [
-        'JASMINE',
-        'ASHTAGANDHA',
-        'KESAR CHANDAN',
-        'LAVENDER',
-        'MOGRA',
-        'GULAB',
-        'LOBHAN',
-        'KAPOOR',
-        'GUGAL'
-    ];
 
     useEffect(() => {
         const fetchProductData = async () => {
@@ -61,21 +94,28 @@ const EditProduct = () => {
                     setName(product.name);
                     setDescription(product.description);
                     setAdditionalInfo(product.additionalInfo || '');
-                    setCategory(product.category);
                     setPrice(product.price);
                     setOfferPrice(product.offerPrice);
                     setExistingImages(product.image || []);
-                    setExistingColorImages(product.colorImages || {});
                     
-                    // Only set color images if Organics category
-                    if (product.category === "Organics by Filament Freaks") {
-                        const colorImages = {};
-                        product.colors.forEach(color => {
-                            colorImages[color] = product.colorImages[color] || null;
-                        });
-                        setSelectedColorImages(colorImages);
+                    // Parse category to extract main and sub category
+                    if (product.category && product.category.includes(' - ')) {
+                        const [main, ...subParts] = product.category.split(' - ');
+                        const sub = subParts.join(' - ');
+                        setMainCategory(main);
+                        setSubCategory(sub);
                     } else {
-                        setSelectedColorImages({});
+                        // Fallback: try to find matching main category
+                        const mainCat = Object.keys(categoryStructure).find(cat => 
+                            product.category?.startsWith(cat)
+                        );
+                        if (mainCat) {
+                            setMainCategory(mainCat);
+                            const subcats = categoryStructure[mainCat];
+                            if (subcats && subcats.length > 0) {
+                                setSubCategory(subcats[0]);
+                            }
+                        }
                     }
 
                 } else {
@@ -93,16 +133,17 @@ const EditProduct = () => {
         fetchProductData();
     }, [id, getToken, setIsLoading, router]);
 
-    const handleColorChange = (color) => {
-        setSelectedColorImages(prev => {
-            const updated = { ...prev };
-            if (updated.hasOwnProperty(color)) {
-                delete updated[color];
-            } else {
-                updated[color] = existingColorImages[color] || null;
-            }
-            return updated;
-        });
+    // Update subcategory when main category changes
+    const handleMainCategoryChange = (e) => {
+        const newMainCategory = e.target.value;
+        setMainCategory(newMainCategory);
+        // Reset subcategory and set to first available subcategory
+        const subcategories = categoryStructure[newMainCategory];
+        if (subcategories && subcategories.length > 0) {
+            setSubCategory(subcategories[0]);
+        } else {
+            setSubCategory('');
+        }
     };
     
     const handleImageChange = (e, index) => {
@@ -113,32 +154,28 @@ const EditProduct = () => {
         }
     };
 
-    const handleColorImageChange = (e, color) => {
-        if (e.target.files[0]) {
-            setSelectedColorImages(prev => ({
-                ...prev,
-                [color]: e.target.files[0]
-            }));
-        }
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Check if subcategory is selected
+        if (!subCategory) {
+            toast.error("Please select a subcategory");
+            return;
+        }
+
         setIsLoading(true);
+
+        // Combine main category and subcategory
+        const fullCategory = `${mainCategory} - ${subCategory}`;
 
         const formData = new FormData();
         formData.append('name', name);
         formData.append('description', description);
         formData.append('additionalInfo', additionalInfo);
-        formData.append('category', category);
+        formData.append('category', fullCategory);
+        formData.append('colors', JSON.stringify([])); // Empty colors array for real estate products
         formData.append('price', price);
         formData.append('offerPrice', offerPrice);
-        // Only append colors if Organics category (for fragrances)
-        if (category === "Organics by Filament Freaks") {
-            formData.append('colors', JSON.stringify(Object.keys(selectedColorImages)));
-        } else {
-            formData.append('colors', JSON.stringify([]));
-        }
         
         // Append new product images
         files.forEach((file) => {
@@ -146,15 +183,6 @@ const EditProduct = () => {
                 formData.append('images', file);
             }
         });
-
-        // Append new color/fragrance images (only for Organics)
-        if (category === "Organics by Filament Freaks") {
-            Object.entries(selectedColorImages).forEach(([color, file]) => {
-                if (file instanceof File) {
-                    formData.append(`colorImages[${color}]`, file);
-                }
-            });
-        }
 
         try {
             const token = await getToken();
@@ -230,17 +258,36 @@ const EditProduct = () => {
                 </div>
                 
                 <div className="flex items-center gap-5 flex-wrap">
-                    <div className="flex flex-col gap-1 w-32">
-                        <label className="text-base font-medium" htmlFor="category">Category</label>
-                        <select id="category" value={category} onChange={(e) => setCategory(e.target.value)} className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40">
-                            <option value="Earphone">Earphone</option>
-                            <option value="Headphone">Headphone</option>
-                            <option value="Watch">Watch</option>
-                            <option value="Smartphone">Smartphone</option>
-                            <option value="Laptop">Laptop</option>
-                            <option value="Camera">Camera</option>
-                            <option value="Accessories">Accessories</option>
-                            <option value="Organics by Filament Freaks">Organics by Filament Freaks</option>
+                    <div className="flex flex-col gap-1 w-48">
+                        <label className="text-base font-medium" htmlFor="main-category">
+                            Main Category
+                        </label>
+                        <select
+                            id="main-category"
+                            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+                            onChange={handleMainCategoryChange}
+                            value={mainCategory}
+                            required
+                        >
+                            {Object.keys(categoryStructure).map((cat) => (
+                                <option key={cat} value={cat}>{cat}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="flex flex-col gap-1 w-48">
+                        <label className="text-base font-medium" htmlFor="sub-category">
+                            Sub Category
+                        </label>
+                        <select
+                            id="sub-category"
+                            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+                            onChange={(e) => setSubCategory(e.target.value)}
+                            value={subCategory}
+                            required
+                        >
+                            {categoryStructure[mainCategory]?.map((subCat) => (
+                                <option key={subCat} value={subCat}>{subCat}</option>
+                            ))}
                         </select>
                     </div>
                     <div className="flex flex-col gap-1 w-32">
@@ -252,51 +299,6 @@ const EditProduct = () => {
                         <input id="offer-price" type="number" value={offerPrice} onChange={(e) => setOfferPrice(e.target.value)} className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required />
                     </div>
                 </div>
-
-                {/* Fragrance Selection (only for Organics) */}
-                {category === "Organics by Filament Freaks" && (
-                    <div className="flex flex-col gap-1 max-w-md">
-                        <label className="text-base font-medium">
-                            Available Fragrances
-                        </label>
-                        <div className="flex flex-wrap gap-3 mt-2">
-                            {availableFragrances.map((item) => (
-                                <div key={item} className="flex flex-col items-start">
-                                    <label className="flex items-center gap-2 cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedColorImages.hasOwnProperty(item)}
-                                            onChange={() => handleColorChange(item)}
-                                            className="w-4 h-4 border-gray-300 rounded focus:ring-2"
-                                            style={{ accentColor: colors.gold }}
-                                        />
-                                        <span className="text-sm">{item}</span>
-                                    </label>
-                                    {selectedColorImages.hasOwnProperty(item) && (
-                                        <div className="mt-1">
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={e => handleColorImageChange(e, item)}
-                                            />
-                                            {(selectedColorImages[item] || existingColorImages[item]) && (
-                                                <img
-                                                    src={
-                                                        selectedColorImages[item] instanceof File
-                                                            ? URL.createObjectURL(selectedColorImages[item])
-                                                            : existingColorImages[item]
-                                                    }
-                                                    alt={`${item} preview`}
-                                                    className="w-16 h-16 object-cover mt-1"
-                                                />
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
 
                 <button type="submit" className="px-8 py-2.5 text-white font-medium rounded transition-colors hover:opacity-90" style={{ backgroundColor: colors.green }}>
                     Update Product
