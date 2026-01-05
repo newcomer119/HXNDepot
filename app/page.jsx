@@ -142,6 +142,18 @@ const categories = [
 
 export default function Home() {
   const [isSellerModalOpen, setIsSellerModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  // Close modal on ESC key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && selectedImage) {
+        setSelectedImage(null);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [selectedImage]);
 
   return (
     <div className="min-h-screen bg-white text-slate-800">
@@ -219,21 +231,65 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="group relative overflow-hidden rounded-3xl shadow-2xl"
+                className="group relative overflow-hidden rounded-3xl shadow-2xl cursor-pointer"
+                onClick={() => setSelectedImage(category)}
               >
-                <Link href={category.link}>
-                  <div className="aspect-[4/5] relative">
-                    <Image
-                      src={category.image}
-                      alt={category.title}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                  </div>
-                </Link>
+                <div className="aspect-[4/5] relative">
+                  <Image
+                    src={category.image}
+                    alt={category.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                </div>
               </motion.div>
             ))}
           </div>
+
+          {/* Image Zoom Modal */}
+          {selectedImage && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
+              onClick={() => setSelectedImage(null)}
+            >
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-all z-10"
+                aria-label="Close"
+              >
+                <X className="w-6 h-6 text-white" />
+              </button>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3 }}
+                className="relative max-w-7xl max-h-[90vh] w-full h-full"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <Image
+                    src={selectedImage.image}
+                    alt={selectedImage.title}
+                    fill
+                    className="object-contain"
+                    sizes="90vw"
+                  />
+                </div>
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center">
+                  <Link
+                    href={selectedImage.link}
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-2 text-white border-2 border-white/30 px-6 py-3 rounded-xl font-black uppercase text-sm tracking-widest transition-all hover:bg-white/10 hover:border-white/50 bg-black/50 backdrop-blur-sm"
+                    style={{ fontFamily: "var(--font-montserrat)" }}
+                  >
+                    {selectedImage.linkText}
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
+          )}
         </div>
       </section>
 
