@@ -6,48 +6,82 @@ import { useAppContext } from "@/context/AppContext";
 import toast from "react-hot-toast";
 import axios from "axios";
 
+// Define category structure with main categories and subcategories
+const categoryStructure = {
+    "Bathroom Products": [
+      "Toilets",
+      "Floating Vanities",
+      "Free Standing Vanities",
+      "Plain & LED Mirrors",
+      "Faucets",
+      "Towel Bar Sets",
+      "Free Standing Tubs",
+      "Tub Faucets",
+      "Shower Glass",
+      "Shower Drains",
+      "Shower Faucets",
+      "Tile Edges"
+    ],
+    "Floorings": [
+      "Solid/HardWood Floorings",
+      "Engineering Wood Floorings",
+      "Vinyl Floorings",
+      "Laminate Floorings"
+    ],
+    "Tiles": [
+      "Porcelain Tiles",
+      "Mosaic Tiles"
+    ],
+    "Kitchens": [
+      "Melamine Cabinets",
+      "MDF Laminates Cabinets",
+      "MDF Painted Cabinets",
+      "Solid Wood Painted Cabinets"
+    ],
+    "Countertops": [
+      "Quartz Countertop",
+      "Granite Countertop",
+      "Porcelain Countertop"
+    ],
+    "Lightning": [
+      "Potlights",
+      "Chandeliers",
+      "Lamps",
+      "Vanity Lights",
+      "LED Mirrors",
+      "Island Lights"
+    ]
+};
+
 const AddProduct = () => {
   const {getToken, setIsLoading} = useAppContext()
   const [files, setFiles] = useState([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
-  const [category, setCategory] = useState('Earphone');
-  const [selectedColorImages, setSelectedColorImages] = useState({});
+  const [mainCategory, setMainCategory] = useState('Bathroom Products');
+  const [subCategory, setSubCategory] = useState(categoryStructure['Bathroom Products'][0]);
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
 
-const colors = {
-  green: "#005a2b",
-  gold: "#d4af37",
-  goldLight: "#f4e4bc",
-  white: "#ffffff",
-};
+  const colors = {
+    green: "#005a2b",
+    gold: "#d4af37",
+    goldLight: "#f4e4bc",
+    white: "#ffffff",
+  };
 
-  const availableFragrances = [
-    'JASMINE',
-    'ASHTAGANDHA',
-    'KESAR CHANDAN',
-    'LAVENDER',
-    'MOGRA',
-    'GULAB',
-    'LOBHAN',
-    'KAPOOR',
-    'GUGAL'
-  ];
-
-  const handleColorChange = (color) => {
-    setSelectedColorImages(prev => {
-      if (prev[color] !== undefined) {
-        // Deselect: remove color
-        const updated = { ...prev };
-        delete updated[color];
-        return updated;
-      } else {
-        // Select: add color with no image yet
-        return { ...prev, [color]: null };
-      }
-    });
+  // Update subcategory when main category changes
+  const handleMainCategoryChange = (e) => {
+    const newMainCategory = e.target.value;
+    setMainCategory(newMainCategory);
+    // Reset subcategory and set to first available subcategory
+    const subcategories = categoryStructure[newMainCategory];
+    if (subcategories && subcategories.length > 0) {
+      setSubCategory(subcategories[0]);
+    } else {
+      setSubCategory('');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -59,32 +93,21 @@ const colors = {
       return;
     }
 
-    // Check if at least one fragrance is selected (only for Organics)
-    if (category === "Organics by Filament Freaks" && Object.keys(selectedColorImages).length === 0) {
-      toast.error("Please select at least one fragrance");
+    // Check if subcategory is selected
+    if (!subCategory) {
+      toast.error("Please select a subcategory");
       return;
     }
 
-    // Check if every selected fragrance has an image (only for Organics)
-    if (category === "Organics by Filament Freaks") {
-      const missingImage = Object.entries(selectedColorImages).some(([item, file]) => !file);
-      if (missingImage) {
-        toast.error("Please upload an image for each selected fragrance");
-        return;
-      }
-    }
+    // Combine main category and subcategory
+    const fullCategory = `${mainCategory} - ${subCategory}`;
 
     const formData = new FormData();
     formData.append('name', name);
     formData.append('description', description);
     formData.append('additionalInfo', additionalInfo);
-    formData.append('category', category);
-    // Only append colors if Organics category (for fragrances)
-    if (category === "Organics by Filament Freaks") {
-      formData.append('colors', JSON.stringify(Object.keys(selectedColorImages)));
-    } else {
-      formData.append('colors', JSON.stringify([]));
-    }
+    formData.append('category', fullCategory);
+    formData.append('colors', JSON.stringify([])); // Empty colors array for real estate products
     formData.append('price', price);
     formData.append('offerPrice', offerPrice);
 
@@ -94,15 +117,6 @@ const colors = {
         formData.append('images', file);
       }
     });
-
-    // Append each color/fragrance image (only for Organics)
-    if (category === "Organics by Filament Freaks") {
-      Object.entries(selectedColorImages).forEach(([color, file]) => {
-        if (file) {
-          formData.append(`colorImages[${color}]`, file);
-        }
-      });
-    }
 
     try {
       setIsLoading(true); // Start loading
@@ -126,8 +140,9 @@ const colors = {
         setName('');
         setDescription('');
         setAdditionalInfo('');
-        setCategory('Earphone');
-        setSelectedColorImages({});
+        setMainCategory('Bathroom Products');
+        const subcategories = categoryStructure['Bathroom Products'];
+        setSubCategory(subcategories && subcategories.length > 0 ? subcategories[0] : '');
         setPrice('');
         setOfferPrice('');
       } else {
@@ -221,24 +236,36 @@ const colors = {
           ></textarea>
         </div>
         <div className="flex items-center gap-5 flex-wrap">
-          <div className="flex flex-col gap-1 w-32">
-            <label className="text-base font-medium" htmlFor="category">
-              Category
+          <div className="flex flex-col gap-1 w-48">
+            <label className="text-base font-medium" htmlFor="main-category">
+              Main Category
             </label>
             <select
-              id="category"
+              id="main-category"
               className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-              onChange={(e) => setCategory(e.target.value)}
-              value={category}
+              onChange={handleMainCategoryChange}
+              value={mainCategory}
+              required
             >
-              <option value="Earphone">Earphone</option>
-              <option value="Headphone">Headphone</option>
-              <option value="Watch">Watch</option>
-              <option value="Smartphone">Smartphone</option>
-              <option value="Laptop">Laptop</option>
-              <option value="Camera">Camera</option>
-              <option value="Accessories">Accessories</option>
-              <option value="Organics by Filament Freaks">Organics by Filament Freaks</option>
+              {Object.keys(categoryStructure).map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1 w-48">
+            <label className="text-base font-medium" htmlFor="sub-category">
+              Sub Category
+            </label>
+            <select
+              id="sub-category"
+              className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+              onChange={(e) => setSubCategory(e.target.value)}
+              value={subCategory}
+              required
+            >
+              {categoryStructure[mainCategory]?.map((subCat) => (
+                <option key={subCat} value={subCat}>{subCat}</option>
+              ))}
             </select>
           </div>
           <div className="flex flex-col gap-1 w-32">
@@ -271,57 +298,6 @@ const colors = {
           </div>
         </div>
 
-        {/* Fragrance Selection (only for Organics) */}
-        {category === "Organics by Filament Freaks" && (
-          <div className="flex flex-col gap-1 max-w-md">
-            <label className="text-base font-medium">
-              Available Fragrances
-            </label>
-            <div className="flex flex-wrap gap-3 mt-2">
-              {availableFragrances.map((item) => (
-                <div key={item} className="flex flex-col items-start">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedColorImages[item] !== undefined}
-                      onChange={() => handleColorChange(item)}
-                      className="w-4 h-4 border-gray-300 rounded focus:ring-2"
-                      style={{ accentColor: colors.gold }}
-                    />
-                    <span className="text-sm">{item}</span>
-                  </label>
-                  {selectedColorImages[item] !== undefined && (
-                    <div className="mt-1">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={e => {
-                          const file = e.target.files[0];
-                          setSelectedColorImages(prev => ({
-                            ...prev,
-                            [item]: file || null
-                          }));
-                        }}
-                      />
-                      {selectedColorImages[item] && (
-                        <img
-                          src={URL.createObjectURL(selectedColorImages[item])}
-                          alt={`${item} preview`}
-                          className="w-16 h-16 object-cover mt-1"
-                        />
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-            {Object.keys(selectedColorImages).length > 0 && (
-              <p className="text-xs text-gray-500 mt-1">
-                Selected: {Object.keys(selectedColorImages).join(', ')}
-              </p>
-            )}
-          </div>
-        )}
 
         <button type="submit" className="px-8 py-2.5 text-white font-medium rounded transition-colors hover:opacity-90" style={{ backgroundColor: colors.green }}>
           ADD
