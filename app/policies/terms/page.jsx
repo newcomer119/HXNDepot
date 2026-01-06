@@ -13,7 +13,7 @@ const TermsAndConditions = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-8">Terms & Conditions</h1>
             <div className="space-y-6 text-gray-700">
               <section>
-                <p>For the purpose of these Terms and Conditions, the terms "we," "us," or "our" shall refer to FILAMENT FREAKS, whose registered/operational office is located at 532 SECTOR 19, CHOPASNI HOUSING BOARD, JODHPUR, RAJASTHAN 342008. The terms "you," "your," "user," or "visitor" shall refer to any natural or legal person accessing our website and/or purchasing products or services from us.</p>
+                <p>For the purpose of these Terms and Conditions, the terms "we," "us," or "our" shall refer to FILAMENT FREAKS, whose registered/operational office is located at Unit.5, 1734 Orangebrook Ct, Pickering, ON L1W 3G8. The terms "you," "your," "user," or "visitor" shall refer to any natural or legal person accessing our website and/or purchasing products or services from us.</p>
                 <p>Your use of this website and/or your purchases from us are governed by the following Terms and Conditions:</p>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>The content published on this website is subject to change at any time without prior notice.</li>

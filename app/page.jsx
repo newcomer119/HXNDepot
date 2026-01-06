@@ -585,7 +585,7 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: colors.green }}>Direct Line</p>
-                    <p className="text-2xl font-black" style={{ color: colors.green }}>+1 (555) HXN-BUILD</p>
+                    <p className="text-2xl font-black" style={{ color: colors.green }}>+1 (519) 706-6111</p>
                   </div>
                 </div>
 
@@ -595,7 +595,17 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: colors.green }}>Email Inquiry</p>
-                    <p className="text-2xl font-black" style={{ color: colors.green }}>hello@hxnbuild.com</p>
+                    <p className="text-2xl font-black" style={{ color: colors.green }}>sagarsuryasetia@hxngroup.com</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-6">
+                  <div className="w-16 h-16 flex items-center justify-center rounded-2xl shadow-lg flex-shrink-0" style={{ backgroundColor: colors.goldLight }}>
+                    <MapPin className="w-6 h-6" style={{ color: colors.green }} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: colors.green }}>Location</p>
+                    <p className="text-xl font-black leading-tight" style={{ color: colors.green }}>Unit.5, 1734 Orangebrook Ct<br />Pickering, ON L1W 3G8</p>
                   </div>
                 </div>
               </div>

@@ -67,7 +67,7 @@ const Policies = () => {
                   <div className="prose max-w-none space-y-4">
                     <p className="text-gray-600">
                       For the purpose of these Terms and Conditions, the terms "we," "us," or "our" shall refer to FILAMENT FREAKS, 
-                      whose registered/operational office is located at 532 SECTOR 19, CHOPASNI HOUSING BOARD, JODHPUR, RAJASTHAN 342008. 
+                      whose registered/operational office is located at Unit.5, 1734 Orangebrook Ct, Pickering, ON L1W 3G8. 
                       The terms "you," "your," "user," or "visitor" shall refer to any natural or legal person accessing our website 
                       and/or purchasing products or services from us.
                     </p>
@@ -133,7 +133,7 @@ const Policies = () => {
                       <li>Our responsibility is limited to ensuring the consignment is handed over to the courier or postal service within 0 to 7 days of order and payment, or as per the mutually agreed schedule at the time of order placement.</li>
                       <li>All orders will be delivered to the shipping address provided by the buyer at the time of registration.</li>
                       <li>Order and delivery confirmations will be sent to the buyer via the email address submitted during registration.</li>
-                      <li>For any issues or support regarding our services, customers can contact us at 8005833266 or email freaksfilament@gmail.com.</li>
+                      <li>For any issues or support regarding our services, customers can contact us at +1 (519) 706-6111 or email sagarsuryasetia@hxngroup.com.</li>
                     </ul>
                   </div>
                 </div>
@@ -238,8 +238,8 @@ const Policies = () => {
                         <h3 className="font-semibold text-gray-900 mb-2">Contact Information</h3>
                         <p className="text-gray-600">For any privacy-related concerns, complaints, or requests, customers may contact our support team at:</p>
                         <ul className="list-disc pl-6 mt-2 space-y-1 text-gray-600">
-                          <li>📧 Email: freaksfilament@gmail.com</li>
-                          <li>📞 Phone: +91-8005833266</li>
+                          <li>📧 Email: sagarsuryasetia@hxngroup.com</li>
+                          <li>📞 Phone: +1 (519) 706-6111</li>
                         </ul>
                       </div>
                     </div>

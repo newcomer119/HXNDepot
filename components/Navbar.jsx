@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Menu, X, ShoppingCart, Trash2, Plus, Minus } from "lucide-react";
@@ -44,21 +45,14 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex flex-col items-start leading-none group">
-            <div className="flex items-center gap-2">
-              <span 
-                className="text-xl md:text-2xl font-black tracking-tighter"
-                style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}
-              >
-                HXN BUILDING DEPOT
-              </span>
-            </div>
-            <span 
-              className="text-[10px] md:text-xs italic font-bold tracking-[0.2em] mt-1"
-              style={{ color: colors.green, fontFamily: "var(--font-inter)" }}
-            >
-              Materials & Constructions
-            </span>
+          <Link href="/" className="flex items-center group">
+            <Image
+              src="/android-chrome-192x192.png"
+              alt="HXN Building Depot"
+              width={80}
+              height={80}
+              className="w-16 h-16 md:w-20 md:h-20"
+            />
           </Link>
 
           <div className="hidden lg:flex items-center gap-8">

@@ -30,21 +30,21 @@ export default function ContactPage() {
               <FaMapMarkerAlt className="text-pink-600 text-2xl mt-1" />
               <div>
                 <span className="font-bold">Address</span>
-                <div>532, Sector 19,<br />Chopasni Housing Board, Jodhpur, Rajasthan - 324008, INDIA</div>
+                <div>Unit.5, 1734 Orangebrook Ct,<br />Pickering, ON L1W 3G8</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <FaPhoneAlt className="text-pink-600 text-2xl" />
               <div>
                 <span className="font-bold">Customer Support</span><br />
-                +91-89698119911
+                +1 (519) 706-6111
               </div>
             </div>
             <div className="flex items-center gap-3">
               <FaEnvelope className="text-pink-600 text-2xl" />
               <div>
                 <span className="font-bold">Email</span><br />
-                freaksfilament@gmail.com
+                sagarsuryasetia@hxngroup.com
               </div>
             </div>
           </div>
