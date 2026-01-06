@@ -12,7 +12,7 @@ import SellerRegistrationModal from "@/components/SellerRegistrationModal";
 const stats = [
   { number: "15+", label: "Years of Excellence", subtitle: "Industry Experience" },
   { number: "250+", label: "Curated Designs", subtitle: "World-Class Collections" },
-  { number: "10,000+", label: "Cartons Shipped" },
+  { number: "10,000+", label: "Tiles Manufactured" },
   { number: "100,000+", label: "Dreams Delivered" },
 ];
 

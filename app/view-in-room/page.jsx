@@ -10,7 +10,7 @@ import Link from "next/link";
 
 const colors = {
   green: "#005a2b",
-  gold: "#d4af37",
+  gold: "#D4AF37",
   goldLight: "#f4e4bc",
   white: "#ffffff",
 };
