@@ -56,12 +56,12 @@ export default function Navbar() {
             />
           </Link>
 
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-8 flex-1 justify-center">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-sm font-black transition-all flex items-center gap-1 hover:opacity-70 relative py-1"
+                className="text-sm font-black transition-all flex items-center gap-1 hover:opacity-70 relative py-1 whitespace-nowrap"
                 style={{ 
                   color: isActiveLink(link.href) ? colors.gold : colors.green,
                   fontFamily: "var(--font-montserrat)"
@@ -80,7 +80,7 @@ export default function Navbar() {
             {isSeller && (
               <Link
                 href="/seller"
-                className="text-sm font-black transition-all hover:opacity-70"
+                className="text-sm font-black transition-all hover:opacity-70 whitespace-nowrap"
                 style={{ 
                   color: colors.green,
                   fontFamily: "var(--font-montserrat)"
@@ -91,39 +91,33 @@ export default function Navbar() {
             )}
           </div>
 
-          <div className="flex items-center gap-6">
-            <button 
-              onClick={() => setCartOpen(true)}
-              className="relative p-2 group"
-              style={{ color: colors.green }}
-            >
-              <ShoppingCart className="w-6 h-6 transition-transform group-hover:scale-110" />
-              {cartCount > 0 && (
-                <span 
-                  className="absolute top-0 right-0 w-5 h-5 flex items-center justify-center text-[10px] font-bold rounded-full text-white"
-                  style={{ backgroundColor: colors.gold }}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center justify-center min-w-[40px] h-10">
+              {user ? (
+                <UserButton>
+                  <UserButton.MenuItems>
+                    <UserButton.Action
+                      label={`Cart ${cartCount > 0 ? `(${cartCount})` : ''}`}
+                      labelIcon={<ShoppingCart className="w-4 h-4" />}
+                      onClick={() => setCartOpen(true)}
+                    />
+                  </UserButton.MenuItems>
+                </UserButton>
+              ) : (
+                <button
+                  onClick={openSignIn}
+                  className="text-sm font-black transition-all hover:opacity-70 whitespace-nowrap"
+                  style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}
                 >
-                  {cartCount}
-                </span>
+                  Account
+                </button>
               )}
-            </button>
+            </div>
 
-            {user ? (
-              <UserButton />
-            ) : (
-              <button
-                onClick={openSignIn}
-                className="text-sm font-black transition-all hover:opacity-70"
-                style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}
-              >
-                Account
-              </button>
-            )}
-
-            <div className="hidden lg:block">
+            <div className="hidden lg:block flex-shrink-0">
               <Link
                 href="/#contact"
-                className="px-6 py-3 text-white text-xs font-black uppercase tracking-widest transition-all duration-300 rounded shadow-lg hover:scale-105 active:scale-95"
+                className="px-6 py-3 text-white text-xs font-black uppercase tracking-widest transition-all duration-300 rounded shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap"
                 style={{ backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }}
               >
                 Project Enquiry
@@ -131,7 +125,7 @@ export default function Navbar() {
             </div>
 
             <button
-              className="lg:hidden p-2"
+              className="lg:hidden p-2 flex-shrink-0"
               style={{ color: colors.green }}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
