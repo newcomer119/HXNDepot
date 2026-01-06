@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ChevronDown, Phone, Mail, MapPin, ArrowRight, Menu, X, CheckCircle, Store, TrendingUp, Eye, Users, Zap } from "lucide-react";
+import { ChevronDown, Phone, Mail, MapPin, ArrowRight, Menu, X, CheckCircle, Store, TrendingUp, Eye, Users, Zap, ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SellerRegistrationModal from "@/components/SellerRegistrationModal";
@@ -113,28 +113,28 @@ const categories = [
   {
     title: "Premium Tiles",
     description: "Porcelain & Mosaic collections for every space",
-    image: "https://images.unsplash.com/photo-1615971677499-5467cbab01c0?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1615971677499-5467cbab01c0?w=2400&q=100&auto=format&fit=crop",
     link: "/all-products?category=Tiles",
     linkText: "Explore Tiles"
   },
   {
     title: "Luxury Flooring",
     description: "Hardwood, Vinyl & Laminate solutions",
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=2400&q=100&auto=format&fit=crop",
     link: "/all-products?category=Floorings",
     linkText: "Explore Flooring"
   },
   {
     title: "Kitchen Systems",
     description: "Cabinets, Countertops & Complete Solutions",
-    image: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=2400&q=100&auto=format&fit=crop",
     link: "/all-products?category=Kitchens",
     linkText: "Explore Kitchens"
   },
   {
     title: "Bathroom Products",
     description: "Vanities, Faucets & Complete Bathroom Solutions",
-    image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=2400&q=100&auto=format&fit=crop",
     link: "/all-products?category=Bathroom Products",
     linkText: "View Collection"
   }
@@ -142,18 +142,20 @@ const categories = [
 
 export default function Home() {
   const [isSellerModalOpen, setIsSellerModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Close modal on ESC key
+  // Auto-slide functionality for background images
   useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape' && selectedImage) {
-        setSelectedImage(null);
-      }
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [selectedImage]);
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % categories.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
 
   return (
     <div className="min-h-screen bg-white text-slate-800">
@@ -164,18 +166,35 @@ export default function Home() {
       />
 
       <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-white">
+        {/* Background Image Slider */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-100/50 via-white to-white opacity-70" />
-          <Image
-            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80"
-            alt="Porcelain showroom"
-            fill
-            className="object-cover opacity-10 grayscale-[0.5]"
-            priority
-          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-100/20 via-white/70 to-white/85 opacity-50 z-10" />
+          {categories.map((category, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0 }}
+              animate={{ 
+                opacity: currentSlide === index ? 0.5 : 0,
+                scale: currentSlide === index ? 1 : 1.05
+              }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={category.image}
+                alt={category.title}
+                fill
+                className="object-cover grayscale-[0.15]"
+                priority={index === 0}
+                quality={100}
+                sizes="100vw"
+              />
+            </motion.div>
+          ))}
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 py-32 w-full">
+        {/* Text Content Overlay */}
+        <div className="relative max-w-7xl mx-auto px-6 py-32 w-full z-20">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -191,7 +210,7 @@ export default function Home() {
               <span className="block" style={{ color: colors.green }}>SURFACES</span>
             </h1>
             <p className="text-2xl md:text-3xl font-black mb-8 tracking-wide" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
-              Tiles • Flooring • Kitchen Systems
+              Bathrooms • Flooring • Tiles • Kitchens • Countertops • Lighting
             </p>
 
             <div className="w-24 h-1.5 mb-8" style={{ backgroundColor: colors.gold }} />
@@ -218,78 +237,22 @@ export default function Home() {
               </Link>
             </div>
           </motion.div>
-        </div>
-      </section>
 
-      <section className="py-32 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {categories.map((category, index) => (
-              <motion.div
+          {/* Slider Dots Navigation */}
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-3 z-30">
+            {categories.map((_, index) => (
+              <button
                 key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="group relative overflow-hidden rounded-3xl shadow-2xl cursor-pointer"
-                onClick={() => setSelectedImage(category)}
-              >
-                <div className="aspect-[4/5] relative">
-                  <Image
-                    src={category.image}
-                    alt={category.title}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                </div>
-              </motion.div>
+                onClick={() => goToSlide(index)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  currentSlide === index 
+                    ? 'w-8 bg-white' 
+                    : 'w-2 bg-white/50 hover:bg-white/75'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
             ))}
           </div>
-
-          {/* Image Zoom Modal */}
-          {selectedImage && (
-            <div
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
-              onClick={() => setSelectedImage(null)}
-            >
-              <button
-                onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-all z-10"
-                aria-label="Close"
-              >
-                <X className="w-6 h-6 text-white" />
-              </button>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.3 }}
-                className="relative max-w-7xl max-h-[90vh] w-full h-full"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="relative w-full h-full flex items-center justify-center">
-                  <Image
-                    src={selectedImage.image}
-                    alt={selectedImage.title}
-                    fill
-                    className="object-contain"
-                    sizes="90vw"
-                  />
-                </div>
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center">
-                  <Link
-                    href={selectedImage.link}
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-2 text-white border-2 border-white/30 px-6 py-3 rounded-xl font-black uppercase text-sm tracking-widest transition-all hover:bg-white/10 hover:border-white/50 bg-black/50 backdrop-blur-sm"
-                    style={{ fontFamily: "var(--font-montserrat)" }}
-                  >
-                    {selectedImage.linkText}
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </motion.div>
-            </div>
-          )}
         </div>
       </section>
 
