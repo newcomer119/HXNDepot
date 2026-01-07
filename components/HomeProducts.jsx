@@ -62,7 +62,14 @@ const HomeProducts = () => {
               ))}
       </div>
       {filteredProducts.length === 0 && !isLoading && (
-        <p className="text-gray-500">No products found in this category.</p>
+        <div className="text-center py-12 w-full">
+          <p className="text-xl font-semibold text-gray-700 mb-2">
+            Products Coming Soon
+          </p>
+          <p className="text-gray-500">
+            We're currently preparing our product catalog. Products will be uploaded soon.
+          </p>
+        </div>
       )}
       {filteredProducts.length > 10 && (
         <button

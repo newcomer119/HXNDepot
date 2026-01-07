@@ -318,13 +318,20 @@ export default function ProductsPage() {
           ) : filteredProducts.length === 0 ? (
             <div className="text-center py-20">
               <p
-                className="text-2xl font-black text-slate-400 mb-4"
+                className="text-3xl md:text-4xl font-black mb-6"
+                style={{ 
+                  color: colors.green,
+                  fontFamily: "var(--font-montserrat)" 
+                }}
+              >
+                Products Coming Soon
+              </p>
+              <p 
+                className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto"
                 style={{ fontFamily: "var(--font-montserrat)" }}
               >
-                No products found
-              </p>
-              <p className="text-slate-500">
-                Try adjusting your search or category filter.
+                We're currently preparing our product catalog. Products will be uploaded soon. 
+                Please check back later or contact us for more information.
               </p>
             </div>
           ) : (
