@@ -1,6 +1,7 @@
 import React from 'react'
 import { assets } from '@/assets/assets'
 import Image from 'next/image';
+import Link from 'next/link';
 import { useAppContext } from '@/context/AppContext';
 import toast from 'react-hot-toast';
 
@@ -105,7 +106,17 @@ const ProductCard = ({ product }) => {
                         }</p>
                     )}
                     {product.offerPrice === 0 || product.price === 0 ? (
-                      <p className="text-sm font-medium mt-1 text-gray-700">Contact the store</p>
+                      <Link
+                        href="/#contact"
+                        className="inline-block px-3 py-1 text-xs font-semibold rounded-lg transition-colors hover:opacity-90 mt-1"
+                        style={{
+                          backgroundColor: "#005a2b",
+                          color: "#ffffff",
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Contact for Pricing
+                      </Link>
                     ) : (
                       <p className="text-base font-medium mt-1">{currency}{product.offerPrice}</p>
                     )}

@@ -375,15 +375,17 @@ export default function ProductsPage() {
                       <div className="flex items-center justify-between">
                         <div>
                           {product.offerPrice === 0 || product.price === 0 ? (
-                            <p
-                              className="text-lg font-black"
+                            <Link
+                              href="/#contact"
+                              className="inline-block px-4 py-2 text-sm font-semibold rounded-lg transition-colors hover:opacity-90"
                               style={{
-                                color: colors.green,
+                                backgroundColor: colors.green,
+                                color: colors.white,
                                 fontFamily: "var(--font-montserrat)",
                               }}
                             >
-                              Contact the store
-                            </p>
+                              Contact for Pricing
+                            </Link>
                           ) : (
                             <>
                               <p

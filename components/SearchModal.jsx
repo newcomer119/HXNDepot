@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { assets } from '@/assets/assets';
 
 const SearchModal = () => {
@@ -97,7 +98,17 @@ const SearchModal = () => {
                   <div>
                     <h3 className="font-medium text-sm text-gray-800">{product.name}</h3>
                     {product.price === 0 || product.offerPrice === 0 ? (
-                      <p className="text-xs text-gray-600">Contact the store</p>
+                      <Link
+                        href="/#contact"
+                        className="inline-block px-2 py-1 text-xs font-semibold rounded transition-colors hover:opacity-90"
+                        style={{
+                          backgroundColor: "#005a2b",
+                          color: "#ffffff",
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Contact for Pricing
+                      </Link>
                     ) : (
                       <p className="text-xs text-gray-600">₹{product.offerPrice || product.price}</p>
                     )}

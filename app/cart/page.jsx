@@ -3,6 +3,7 @@ import React from "react";
 import { assets } from "@/assets/assets";
 import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAppContext } from "@/context/AppContext";
@@ -163,7 +164,17 @@ const Cart = () => {
                             style={{ color: colors.green }}
                           >
                             {product.offerPrice === 0 || product.price === 0 ? (
-                              <span className="text-sm">Contact the store</span>
+                              <Link
+                                href="/#contact"
+                                className="inline-block px-3 py-1 text-xs font-semibold rounded-lg transition-colors hover:opacity-90"
+                                style={{
+                                  backgroundColor: colors.green,
+                                  color: colors.white,
+                                  fontFamily: "var(--font-montserrat)",
+                                }}
+                              >
+                                Contact for Pricing
+                              </Link>
                             ) : (
                               `₹${product.offerPrice}`
                             )}
@@ -212,7 +223,17 @@ const Cart = () => {
                             style={{ color: colors.green }}
                           >
                             {product.offerPrice === 0 || product.price === 0 ? (
-                              <span className="text-sm">Contact the store</span>
+                              <Link
+                                href="/#contact"
+                                className="inline-block px-3 py-1 text-xs font-semibold rounded-lg transition-colors hover:opacity-90"
+                                style={{
+                                  backgroundColor: colors.green,
+                                  color: colors.white,
+                                  fontFamily: "var(--font-montserrat)",
+                                }}
+                              >
+                                Contact for Pricing
+                              </Link>
                             ) : (
                               `₹${(product.offerPrice * quantity).toFixed(2)}`
                             )}

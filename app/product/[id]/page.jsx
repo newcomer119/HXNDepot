@@ -285,24 +285,18 @@ export default function Product() {
               </div>
 
               {/* Price */}
-              <div className="flex items-baseline gap-4">
-                {productData.offerPrice === 0 || productData.price === 0 ? (
-                  <span className="text-3xl font-black" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
-                    Contact the store
+              {!(productData.offerPrice === 0 || productData.price === 0) && (
+                <div className="flex items-baseline gap-4">
+                  <span className="text-5xl font-black" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                    {currency}{productData.offerPrice?.toLocaleString()}
                   </span>
-                ) : (
-                  <>
-                    <span className="text-5xl font-black" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
-                      {currency}{productData.offerPrice?.toLocaleString()}
+                  {productData.price > productData.offerPrice && (
+                    <span className="text-2xl text-slate-400 line-through font-bold">
+                      {currency}{productData.price?.toLocaleString()}
                     </span>
-                    {productData.price > productData.offerPrice && (
-                      <span className="text-2xl text-slate-400 line-through font-bold">
-                        {currency}{productData.price?.toLocaleString()}
-                      </span>
-                    )}
-                  </>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
 
               <div className="w-24 h-1" style={{ backgroundColor: colors.gold }} />
 
@@ -398,6 +392,23 @@ export default function Product() {
                   </tbody>
                 </table>
               </div>
+
+              {/* Contact for Prices Button */}
+              {(productData.offerPrice === 0 || productData.price === 0) && (
+                <div className="pt-4">
+                  <Link
+                    href="/#contact"
+                    className="w-full py-3 px-6 text-base font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+                    style={{
+                      backgroundColor: colors.green,
+                      color: colors.white,
+                      fontFamily: "var(--font-montserrat)",
+                    }}
+                  >
+                    Contact for Pricing
+                  </Link>
+                </div>
+              )}
 
               {/* View in Your Room Button */}
               <div className="pt-4">
@@ -507,9 +518,17 @@ export default function Product() {
                       {product.name}
                     </h3>
                     {product.offerPrice === 0 || product.price === 0 ? (
-                      <p className="text-base font-black mb-4" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
-                        Contact the store
-                      </p>
+                      <Link
+                        href="/#contact"
+                        className="inline-block px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors hover:opacity-90 mb-4"
+                        style={{
+                          backgroundColor: colors.green,
+                          color: colors.white,
+                          fontFamily: "var(--font-montserrat)",
+                        }}
+                      >
+                        Contact for Pricing
+                      </Link>
                     ) : (
                       <p className="text-xl font-black mb-4" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
                         {currency}{product.offerPrice?.toLocaleString()}
