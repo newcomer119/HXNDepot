@@ -162,7 +162,11 @@ const Cart = () => {
                             className="py-4 md:px-4 px-1 font-bold"
                             style={{ color: colors.green }}
                           >
-                            ₹{product.offerPrice}
+                            {product.offerPrice === 0 || product.price === 0 ? (
+                              <span className="text-sm">Contact the store</span>
+                            ) : (
+                              `₹${product.offerPrice}`
+                            )}
                           </td>
                           <td className="py-4 md:px-4 px-1">
                             <div className="flex items-center md:gap-2 gap-1">
@@ -207,7 +211,11 @@ const Cart = () => {
                             className="py-4 md:px-4 px-1 font-bold"
                             style={{ color: colors.green }}
                           >
-                            ₹{(product.offerPrice * quantity).toFixed(2)}
+                            {product.offerPrice === 0 || product.price === 0 ? (
+                              <span className="text-sm">Contact the store</span>
+                            ) : (
+                              `₹${(product.offerPrice * quantity).toFixed(2)}`
+                            )}
                           </td>
                         </tr>
                       );

@@ -286,13 +286,21 @@ export default function Product() {
 
               {/* Price */}
               <div className="flex items-baseline gap-4">
-                <span className="text-5xl font-black" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
-                  {currency}{productData.offerPrice?.toLocaleString()}
-                </span>
-                {productData.price > productData.offerPrice && (
-                  <span className="text-2xl text-slate-400 line-through font-bold">
-                    {currency}{productData.price?.toLocaleString()}
+                {productData.offerPrice === 0 || productData.price === 0 ? (
+                  <span className="text-3xl font-black" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                    Contact the store
                   </span>
+                ) : (
+                  <>
+                    <span className="text-5xl font-black" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                      {currency}{productData.offerPrice?.toLocaleString()}
+                    </span>
+                    {productData.price > productData.offerPrice && (
+                      <span className="text-2xl text-slate-400 line-through font-bold">
+                        {currency}{productData.price?.toLocaleString()}
+                      </span>
+                    )}
+                  </>
                 )}
               </div>
 
@@ -498,9 +506,15 @@ export default function Product() {
                     <h3 className="text-lg font-black mb-2 hover:opacity-70 transition-opacity" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
                       {product.name}
                     </h3>
-                    <p className="text-xl font-black mb-4" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
-                      {currency}{product.offerPrice?.toLocaleString()}
-                    </p>
+                    {product.offerPrice === 0 || product.price === 0 ? (
+                      <p className="text-base font-black mb-4" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                        Contact the store
+                      </p>
+                    ) : (
+                      <p className="text-xl font-black mb-4" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
+                        {currency}{product.offerPrice?.toLocaleString()}
+                      </p>
+                    )}
                     <div className="w-8 h-1 transition-all group-hover:w-16" style={{ backgroundColor: colors.gold }} />
                   </motion.div>
                 ))}

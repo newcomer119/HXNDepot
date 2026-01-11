@@ -374,21 +374,35 @@ export default function ProductsPage() {
 
                       <div className="flex items-center justify-between">
                         <div>
-                          <p
-                            className="text-2xl font-black"
-                            style={{
-                              color: colors.gold,
-                              fontFamily: "var(--font-montserrat)",
-                            }}
-                          >
-                            {currency}
-                            {product.offerPrice}
-                          </p>
-                          {product.price > product.offerPrice && (
-                            <p className="text-sm text-slate-400 line-through">
-                              {currency}
-                              {product.price}
+                          {product.offerPrice === 0 || product.price === 0 ? (
+                            <p
+                              className="text-lg font-black"
+                              style={{
+                                color: colors.green,
+                                fontFamily: "var(--font-montserrat)",
+                              }}
+                            >
+                              Contact the store
                             </p>
+                          ) : (
+                            <>
+                              <p
+                                className="text-2xl font-black"
+                                style={{
+                                  color: colors.gold,
+                                  fontFamily: "var(--font-montserrat)",
+                                }}
+                              >
+                                {currency}
+                                {product.offerPrice}
+                              </p>
+                              {product.price > product.offerPrice && (
+                                <p className="text-sm text-slate-400 line-through">
+                                  {currency}
+                                  {product.price}
+                                </p>
+                              )}
+                            </>
                           )}
                         </div>
                       </div>

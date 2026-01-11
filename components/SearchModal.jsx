@@ -96,7 +96,11 @@ const SearchModal = () => {
                   )}
                   <div>
                     <h3 className="font-medium text-sm text-gray-800">{product.name}</h3>
-                    <p className="text-xs text-gray-600">₹{product.price}</p>
+                    {product.price === 0 || product.offerPrice === 0 ? (
+                      <p className="text-xs text-gray-600">Contact the store</p>
+                    ) : (
+                      <p className="text-xs text-gray-600">₹{product.offerPrice || product.price}</p>
+                    )}
                   </div>
                 </div>
               ))}

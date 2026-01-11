@@ -104,7 +104,11 @@ const ProductCard = ({ product }) => {
                             : product.additionalInfo
                         }</p>
                     )}
-                    <p className="text-base font-medium mt-1">{currency}{product.offerPrice}</p>
+                    {product.offerPrice === 0 || product.price === 0 ? (
+                      <p className="text-sm font-medium mt-1 text-gray-700">Contact the store</p>
+                    ) : (
+                      <p className="text-base font-medium mt-1">{currency}{product.offerPrice}</p>
+                    )}
                 </div>
                 <button 
                     onClick={handleBuyNow}
