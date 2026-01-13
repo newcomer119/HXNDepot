@@ -22,8 +22,8 @@ export async function GET(request, context) {
             return NextResponse.json({ success: false, message: "Not authenticated" });
         }
 
-        const isSeller = await authSeller(userId);
-        if (!isSeller) {
+        const sellerAuth = await authSeller(userId);
+        if (!sellerAuth.isSeller) {
             return NextResponse.json({ success: false, message: "Not Authorized" });
         }
 

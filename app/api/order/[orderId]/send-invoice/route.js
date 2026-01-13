@@ -8,9 +8,9 @@ import { NextResponse } from "next/server";
 export async function POST(request, { params }) {
     try {
         const { userId } = getAuth(request);
-        const isSeller = await authSeller(userId);
+        const sellerAuth = await authSeller(userId);
 
-        if (!isSeller) {
+        if (!sellerAuth.isSeller) {
             return NextResponse.json({ success: false, message: "Not authorized" });
         }
 

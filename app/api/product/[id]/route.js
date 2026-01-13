@@ -49,8 +49,8 @@ export async function PUT(request, { params }) {
     if (!userId) {
         return NextResponse.json({ success: false, message: "Not authenticated" }, { status: 401 });
     }
-    const isSeller = await authSeller(userId);
-    if (!isSeller) {
+    const sellerAuth = await authSeller(userId);
+    if (!sellerAuth.isSeller) {
         return NextResponse.json({ success: false, message: "Not Authorized" }, { status: 403 });
     }
 
@@ -60,8 +60,8 @@ export async function PUT(request, { params }) {
         return NextResponse.json({ success: false, message: "Product not found" }, { status: 404 });
     }
 
-    // Ensure the seller owns the product
-    if (product.userId.toString() !== userId) {
+    // Ensure the seller owns the product, unless they are an admin-seller
+    if (!sellerAuth.isAdminSeller && product.userId.toString() !== userId) {
         return NextResponse.json({ success: false, message: "Not authorized to edit this product" }, { status: 403 });
     }
 
@@ -127,9 +127,9 @@ export async function DELETE(request, { params }) {
             return NextResponse.json({ success: false, message: "Not authenticated" });
         }
 
-        const isSeller = await authSeller(userId);
+        const sellerAuth = await authSeller(userId);
 
-        if (!isSeller) {
+        if (!sellerAuth.isSeller) {
             return NextResponse.json({ success: false, message: "Not Authorized" });
         }
 
@@ -140,8 +140,8 @@ export async function DELETE(request, { params }) {
             return NextResponse.json({ success: false, message: "Product not found" });
         }
         
-        // Optional: Verify that the user deleting the product is the one who created it
-        if (product.userId.toString() !== userId) {
+        // Verify that the user deleting the product is the one who created it, unless they are an admin-seller
+        if (!sellerAuth.isAdminSeller && product.userId.toString() !== userId) {
             return NextResponse.json({ success: false, message: "Not authorized to delete this product" });
         }
         

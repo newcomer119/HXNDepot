@@ -23,10 +23,10 @@ export async function POST(request) {
             return NextResponse.json({ success: false, message: "Not authenticated" });
         }
 
-        const isSeller = await authSeller(userId);
-        console.log("Is seller:", isSeller); // Debug log
+        const sellerAuth = await authSeller(userId);
+        console.log("Is seller:", sellerAuth.isSeller); // Debug log
 
-        if (!isSeller) {
+        if (!sellerAuth.isSeller) {
             console.log("User is not a seller"); // Debug log
             return NextResponse.json({ success: false, message: "Not Authorized" });
         }

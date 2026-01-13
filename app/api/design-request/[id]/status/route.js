@@ -14,8 +14,8 @@ export async function PUT(request, { params }) {
             return NextResponse.json({ success: false, message: "Not authenticated" });
         }
 
-        const isSeller = await authSeller(userId);
-        if (!isSeller) {
+        const sellerAuth = await authSeller(userId);
+        if (!sellerAuth.isSeller) {
             return NextResponse.json({ success: false, message: "Not Authorized" });
         }
 
