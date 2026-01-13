@@ -4,10 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ChevronDown, Phone, Mail, MapPin, ArrowRight, Menu, X, CheckCircle, Store, TrendingUp, Eye, Users, Zap, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ArrowRight, Menu, X, CheckCircle, Store, TrendingUp, Eye, Users, Zap, ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SellerRegistrationModal from "@/components/SellerRegistrationModal";
+import ContactSection from "@/app/contact/ContactSection";
 
 const stats = [
   { number: "15+", label: "Years of Excellence", subtitle: "Industry Experience" },
@@ -526,81 +527,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="contact" className="py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-24">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <span className="text-sm font-black tracking-[0.4em] uppercase mb-4 block" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
-                Connect
-              </span>
-              <h2 className="text-5xl md:text-6xl font-black mb-12 leading-tight" style={{ fontFamily: "var(--font-montserrat)" }}>
-                Let&apos;s Build <span style={{ color: colors.green }}>Together</span>
-              </h2>
-
-              <div className="space-y-10">
-                <div className="flex items-start gap-6">
-                  <div className="w-16 h-16 flex items-center justify-center rounded-2xl shadow-lg flex-shrink-0" style={{ backgroundColor: colors.goldLight }}>
-                    <Phone className="w-6 h-6" style={{ color: colors.green }} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: colors.green }}>Direct Line</p>
-                    <p className="text-2xl font-black" style={{ color: colors.green }}>+1 (519) 706-6111</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-6">
-                  <div className="w-16 h-16 flex items-center justify-center rounded-2xl shadow-lg flex-shrink-0" style={{ backgroundColor: colors.goldLight }}>
-                    <Mail className="w-6 h-6" style={{ color: colors.green }} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: colors.green }}>Email Inquiry</p>
-                    <p className="text-2xl font-black" style={{ color: colors.green }}>sagarsuryasetia@hxngroup.com</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-6">
-                  <div className="w-16 h-16 flex items-center justify-center rounded-2xl shadow-lg flex-shrink-0" style={{ backgroundColor: colors.goldLight }}>
-                    <MapPin className="w-6 h-6" style={{ color: colors.green }} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: colors.green }}>Location</p>
-                    <p className="text-xl font-black leading-tight" style={{ color: colors.green }}>Unit.5, 1734 Orangebrook Ct<br />Pickering, ON L1W 3G8</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <form className="space-y-6 bg-slate-50 p-10 rounded-3xl shadow-inner border border-slate-100">
-                <div>
-                  <label className="block text-xs font-black uppercase tracking-widest mb-2" style={{ color: colors.green }}>Project Message</label>
-                  <textarea
-                    rows={4}
-                    className="w-full bg-white border border-slate-200 px-5 py-4 focus:outline-none focus:ring-2 rounded-xl transition-all resize-none"
-                    style={{ "--tw-ring-color": colors.gold }}
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full text-white py-6 text-base font-black uppercase tracking-[0.2em] transition-all duration-300 rounded-xl shadow-xl hover:scale-[1.02] active:scale-[0.98]"
-                  style={{ backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }}
-                >
-                  Send Inquiry
-                </button>
-              </form>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      <ContactSection />
 
       <Footer />
     </div>
