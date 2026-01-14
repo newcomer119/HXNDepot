@@ -262,12 +262,23 @@ export default function Product() {
               animate={{ opacity: 1, x: 0 }}
               className="space-y-8"
             >
-              {/* Category Badge */}
+              {/* Brand and Category */}
               <div>
-                <span className="text-xs font-black uppercase tracking-[0.3em] mb-4 block" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
-                  {productData.category?.split(" - ")[0] || "Product"}
-                </span>
-                <h1 className="text-4xl md:text-5xl font-black mb-6 leading-tight" style={{ fontFamily: "var(--font-montserrat)" }}>
+                <div className="flex items-center gap-3 mb-3">
+                  {(() => {
+                    const brandMatch = productData.name.match(/^([A-Z]+)\s/);
+                    const brand = brandMatch ? brandMatch[1] : productData.category?.split(" - ")[0]?.split(" ")[0] || "";
+                    return brand ? (
+                      <span className="text-xs font-black uppercase tracking-widest px-3 py-1 rounded" style={{ backgroundColor: colors.goldLight, color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                        {brand}
+                      </span>
+                    ) : null;
+                  })()}
+                  <span className="text-xs font-black uppercase tracking-[0.3em]" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
+                    {productData.category?.split(" - ")[0] || "Product"}
+                  </span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight" style={{ fontFamily: "var(--font-montserrat)", color: colors.green }}>
                   {productData.name}
                 </h1>
               </div>
@@ -284,19 +295,41 @@ export default function Product() {
                 <span className="text-slate-600 font-bold">(4.5)</span>
               </div>
 
-              {/* Price */}
-              {!(productData.offerPrice === 0 || productData.price === 0) && (
-                <div className="flex items-baseline gap-4">
-                  <span className="text-5xl font-black" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
-                    {currency}{productData.offerPrice?.toLocaleString()}
-                  </span>
-                  {productData.price > productData.offerPrice && (
-                    <span className="text-2xl text-slate-400 line-through font-bold">
-                      {currency}{productData.price?.toLocaleString()}
+              {/* Price and Size */}
+              <div className="space-y-3">
+                {!(productData.offerPrice === 0 || productData.price === 0) && (
+                  <div className="flex items-baseline gap-4">
+                    <span className="text-5xl font-black" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
+                      {currency}{productData.offerPrice?.toLocaleString()}
                     </span>
-                  )}
-                </div>
-              )}
+                    {productData.price > productData.offerPrice && (
+                      <span className="text-2xl text-slate-400 line-through font-bold">
+                        {currency}{productData.price?.toLocaleString()}
+                      </span>
+                    )}
+                    <span className="text-lg font-bold text-slate-600">
+                      / {(() => {
+                        const isFlooring = productData.category?.includes("Flooring") || productData.category?.includes("Vinyl") || productData.category?.includes("Laminate");
+                        return isFlooring ? "sqft" : "piece";
+                      })()}
+                    </span>
+                  </div>
+                )}
+                {(() => {
+                  const sizeMatch = productData.additionalInfo?.match(/Size[:\s]+([^\n]+)/i);
+                  const size = sizeMatch ? sizeMatch[1].trim() : "";
+                  return size ? (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-black uppercase tracking-widest" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                        Size:
+                      </span>
+                      <span className="text-base font-bold text-slate-700">
+                        {size}
+                      </span>
+                    </div>
+                  ) : null;
+                })()}
+              </div>
 
               <div className="w-24 h-1" style={{ backgroundColor: colors.gold }} />
 
@@ -368,11 +401,14 @@ export default function Product() {
               )}
 
               {/* Product Details Table */}
-              <div className="border-t border-slate-200 pt-6">
+              <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
+                <h3 className="text-sm font-black uppercase tracking-widest mb-4" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                  Product Details
+                </h3>
                 <table className="w-full">
-                  <tbody className="space-y-4">
-                    <tr>
-                      <td className="text-sm font-black uppercase tracking-widest text-slate-500 py-2" style={{ fontFamily: "var(--font-montserrat)" }}>
+                  <tbody className="space-y-3">
+                    <tr className="border-b border-slate-200">
+                      <td className="text-sm font-black uppercase tracking-widest text-slate-500 py-3" style={{ fontFamily: "var(--font-montserrat)" }}>
                         Category
                       </td>
                       <td className="text-right font-bold text-slate-700">
@@ -380,8 +416,8 @@ export default function Product() {
                       </td>
                     </tr>
                     {productData.colors && (
-                      <tr>
-                        <td className="text-sm font-black uppercase tracking-widest text-slate-500 py-2" style={{ fontFamily: "var(--font-montserrat)" }}>
+                      <tr className="border-b border-slate-200">
+                        <td className="text-sm font-black uppercase tracking-widest text-slate-500 py-3" style={{ fontFamily: "var(--font-montserrat)" }}>
                           Colors Available
                         </td>
                         <td className="text-right font-bold text-slate-700">
@@ -492,51 +528,70 @@ export default function Product() {
               </Link>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {products
                 .filter(product => product._id !== id)
                 .slice(0, 4)
-                .map((product, index) => (
-                  <motion.div
-                    key={product._id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    onClick={() => router.push(`/product/${product._id}`)}
-                    className="group cursor-pointer"
-                  >
-                    <div className="aspect-[4/5] relative overflow-hidden rounded-2xl mb-4 shadow-lg">
-                      <Image
-                        src={product.image?.[0] || "/placeholder.jpg"}
-                        alt={product.name}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                    </div>
-                    <h3 className="text-lg font-black mb-2 hover:opacity-70 transition-opacity" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
-                      {product.name}
-                    </h3>
-                    {product.offerPrice === 0 || product.price === 0 ? (
-                      <Link
-                        href="/#contact"
-                        className="inline-block px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors hover:opacity-90 mb-4"
-                        style={{
-                          backgroundColor: colors.green,
-                          color: colors.white,
-                          fontFamily: "var(--font-montserrat)",
-                        }}
-                      >
-                        Contact for Pricing
-                      </Link>
-                    ) : (
-                      <p className="text-xl font-black mb-4" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
-                        {currency}{product.offerPrice?.toLocaleString()}
-                      </p>
-                    )}
-                    <div className="w-8 h-1 transition-all group-hover:w-16" style={{ backgroundColor: colors.gold }} />
-                  </motion.div>
-                ))}
+                .map((product, index) => {
+                  const brandMatch = product.name.match(/^([A-Z]+)\s/);
+                  const brand = brandMatch ? brandMatch[1] : product.category?.split(" - ")[0]?.split(" ")[0] || "";
+                  const sizeMatch = product.additionalInfo?.match(/Size[:\s]+([^\n]+)/i);
+                  const size = sizeMatch ? sizeMatch[1].trim() : "";
+                  const priceUnit = product.category?.includes("Flooring") || product.category?.includes("Vinyl") || product.category?.includes("Laminate") ? "sqft" : "piece";
+                  
+                  return (
+                    <motion.div
+                      key={product._id}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      onClick={() => router.push(`/product/${product._id}`)}
+                      className="group cursor-pointer bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
+                    >
+                      <div className="aspect-[4/5] relative overflow-hidden bg-slate-100">
+                        <Image
+                          src={product.image?.[0] || "/placeholder.jpg"}
+                          alt={product.name}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                      </div>
+                      <div className="p-5 space-y-3">
+                        {brand && (
+                          <p className="text-xs font-bold uppercase tracking-widest" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                            {brand}
+                          </p>
+                        )}
+                        <h3 className="text-base font-black leading-tight hover:opacity-70 transition-opacity line-clamp-2" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                          {product.name}
+                        </h3>
+                        {product.offerPrice === 0 || product.price === 0 ? (
+                          <Link
+                            href="/#contact"
+                            className="inline-block px-3 py-1.5 text-xs font-semibold rounded transition-colors hover:opacity-90"
+                            style={{
+                              backgroundColor: colors.green,
+                              color: colors.white,
+                              fontFamily: "var(--font-montserrat)",
+                            }}
+                          >
+                            Contact for Pricing
+                          </Link>
+                        ) : (
+                          <p className="text-lg font-black" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
+                            {currency}{product.offerPrice?.toLocaleString()} / {priceUnit}
+                          </p>
+                        )}
+                        {size && (
+                          <p className="text-xs font-bold text-slate-600" style={{ fontFamily: "var(--font-montserrat)" }}>
+                            Size: {size}
+                          </p>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })}
             </div>
           </section>
         </div>

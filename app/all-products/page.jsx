@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAppContext } from "@/context/AppContext";
 import { useCart } from "@/context/CartContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { ShoppingCart, Plus, Minus, ChevronDown } from "lucide-react";
+import { ShoppingCart, Plus, Minus, ChevronDown, Eye, X } from "lucide-react";
 import toast from "react-hot-toast";
 
 const colors = {
@@ -24,6 +24,7 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [quickViewProduct, setQuickViewProduct] = useState(null);
 
   // Define category structure with main categories and subcategories
   const categoryStructure = {
@@ -335,9 +336,18 @@ export default function ProductsPage() {
               </p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredProducts.map((product, index) => {
                 const cartQuantity = getCartQuantity(product._id);
+                // Extract brand from product name or category
+                const brandMatch = product.name.match(/^([A-Z]+)\s/);
+                const brand = brandMatch ? brandMatch[1] : product.category?.split(" - ")[0]?.split(" ")[0] || "";
+                // Extract size from additionalInfo if available
+                const sizeMatch = product.additionalInfo?.match(/Size[:\s]+([^\n]+)/i);
+                const size = sizeMatch ? sizeMatch[1].trim() : "";
+                // Determine price unit
+                const priceUnit = product.category?.includes("Flooring") || product.category?.includes("Vinyl") || product.category?.includes("Laminate") ? "sqft" : "piece";
+                
                 return (
                   <motion.div
                     key={product._id}
@@ -345,24 +355,45 @@ export default function ProductsPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
                     viewport={{ once: true }}
-                    className="group relative"
+                    className="group relative bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
                   >
-                    <Link href={`/product/${product._id}`}>
-                      <div className="aspect-[4/5] relative overflow-hidden rounded-2xl mb-6 shadow-lg">
+                    {/* Product Image */}
+                    <div className="relative aspect-[4/5] overflow-hidden bg-slate-100">
+                      <Link href={`/product/${product._id}`}>
                         <Image
                           src={product.image?.[0] || "/placeholder.jpg"}
                           alt={product.name}
                           fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                          className="object-cover transition-transform duration-500 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </Link>
+                      
+                      {/* Quick View Overlay */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <button
+                          onClick={() => setQuickViewProduct(product)}
+                          className="px-6 py-3 bg-white text-sm font-black uppercase tracking-widest rounded-lg transition-all hover:scale-105"
+                          style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}
+                        >
+                          <Eye className="w-4 h-4 inline mr-2" />
+                          Quick View
+                        </button>
                       </div>
-                    </Link>
+                    </div>
 
-                    <div className="space-y-3">
+                    {/* Product Info */}
+                    <div className="p-5 space-y-3">
+                      {/* Brand */}
+                      {brand && (
+                        <p className="text-xs font-bold uppercase tracking-widest" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                          {brand}
+                        </p>
+                      )}
+                      
+                      {/* Product Name */}
                       <Link href={`/product/${product._id}`}>
                         <h3
-                          className="text-xl font-black mb-1 hover:opacity-70 transition-opacity"
+                          className="text-base font-black leading-tight hover:opacity-70 transition-opacity line-clamp-2"
                           style={{
                             color: colors.green,
                             fontFamily: "var(--font-montserrat)",
@@ -372,59 +403,57 @@ export default function ProductsPage() {
                         </h3>
                       </Link>
 
-                      <div className="flex items-center justify-between">
-                        <div>
-                          {product.offerPrice === 0 || product.price === 0 ? (
-                            <Link
-                              href="/#contact"
-                              className="inline-block px-4 py-2 text-sm font-semibold rounded-lg transition-colors hover:opacity-90"
-                              style={{
-                                backgroundColor: colors.green,
-                                color: colors.white,
-                                fontFamily: "var(--font-montserrat)",
-                              }}
-                            >
-                              Contact for Pricing
-                            </Link>
-                          ) : (
-                            <>
-                              <p
-                                className="text-2xl font-black"
-                                style={{
-                                  color: colors.gold,
-                                  fontFamily: "var(--font-montserrat)",
-                                }}
-                              >
-                                {currency}
-                                {product.offerPrice}
-                              </p>
-                              {product.price > product.offerPrice && (
-                                <p className="text-sm text-slate-400 line-through">
-                                  {currency}
-                                  {product.price}
-                                </p>
-                              )}
-                            </>
-                          )}
-                        </div>
+                      {/* Price */}
+                      <div>
+                        {product.offerPrice === 0 || product.price === 0 ? (
+                          <Link
+                            href="/#contact"
+                            className="inline-block px-3 py-1.5 text-xs font-semibold rounded transition-colors hover:opacity-90"
+                            style={{
+                              backgroundColor: colors.green,
+                              color: colors.white,
+                              fontFamily: "var(--font-montserrat)",
+                            }}
+                          >
+                            Contact for Pricing
+                          </Link>
+                        ) : (
+                          <p
+                            className="text-lg font-black"
+                            style={{
+                              color: colors.gold,
+                              fontFamily: "var(--font-montserrat)",
+                            }}
+                          >
+                            {currency}{product.offerPrice?.toLocaleString()} / {priceUnit}
+                          </p>
+                        )}
                       </div>
 
+                      {/* Size */}
+                      {size && (
+                        <p className="text-xs font-bold text-slate-600" style={{ fontFamily: "var(--font-montserrat)" }}>
+                          Size: {size}
+                        </p>
+                      )}
+
+                      {/* Add to Cart / Quantity Controls */}
                       {cartQuantity > 0 ? (
                         <div
-                          className="flex items-center justify-between border-2 rounded-xl p-2"
+                          className="flex items-center justify-between border-2 rounded-lg p-2"
                           style={{ borderColor: colors.gold }}
                         >
                           <button
                             onClick={() =>
                               updateQuantity(`${product._id}`, cartQuantity - 1)
                             }
-                            className="p-2 hover:bg-slate-50 rounded-lg transition-colors"
+                            className="p-1.5 hover:bg-slate-50 rounded transition-colors"
                             style={{ color: colors.green }}
                           >
                             <Minus className="w-4 h-4" />
                           </button>
                           <span
-                            className="text-sm font-black"
+                            className="text-sm font-black px-2"
                             style={{ color: colors.green }}
                           >
                             {cartQuantity}
@@ -433,7 +462,7 @@ export default function ProductsPage() {
                             onClick={() =>
                               updateQuantity(`${product._id}`, cartQuantity + 1)
                             }
-                            className="p-2 hover:bg-slate-50 rounded-lg transition-colors"
+                            className="p-1.5 hover:bg-slate-50 rounded transition-colors"
                             style={{ color: colors.green }}
                           >
                             <Plus className="w-4 h-4" />
@@ -442,21 +471,16 @@ export default function ProductsPage() {
                       ) : (
                         <button
                           onClick={() => handleAddToCart(product)}
-                          className="w-full py-3 text-white text-sm font-black uppercase tracking-widest rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+                          className="w-full py-2.5 text-white text-xs font-black uppercase tracking-widest rounded-lg shadow-md transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
                           style={{
                             backgroundColor: colors.green,
                             fontFamily: "var(--font-montserrat)",
                           }}
                         >
-                          <ShoppingCart className="w-4 h-4" />
+                          <Plus className="w-4 h-4" />
                           Add to Cart
                         </button>
                       )}
-
-                      <div
-                        className="w-8 h-1 transition-all group-hover:w-16"
-                        style={{ backgroundColor: colors.gold }}
-                      />
                     </div>
                   </motion.div>
                 );
@@ -465,6 +489,101 @@ export default function ProductsPage() {
           )}
         </div>
       </section>
+
+      {/* Quick View Modal */}
+      <AnimatePresence>
+        {quickViewProduct && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            onClick={() => setQuickViewProduct(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+            >
+            <div className="grid md:grid-cols-2 gap-6 p-6">
+              <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-100">
+                <Image
+                  src={quickViewProduct.image?.[0] || "/placeholder.jpg"}
+                  alt={quickViewProduct.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-black mb-2" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>
+                      {quickViewProduct.name}
+                    </h2>
+                    {quickViewProduct.offerPrice === 0 || quickViewProduct.price === 0 ? (
+                      <Link
+                        href="/#contact"
+                        className="inline-block px-4 py-2 text-sm font-semibold rounded-lg transition-colors hover:opacity-90"
+                        style={{
+                          backgroundColor: colors.green,
+                          color: colors.white,
+                          fontFamily: "var(--font-montserrat)",
+                        }}
+                      >
+                        Contact for Pricing
+                      </Link>
+                    ) : (
+                      <p className="text-3xl font-black" style={{ color: colors.gold, fontFamily: "var(--font-montserrat)" }}>
+                        {currency}{quickViewProduct.offerPrice?.toLocaleString()}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => setQuickViewProduct(null)}
+                    className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors"
+                    style={{ color: colors.green }}
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+                <p className="text-slate-600 font-bold leading-relaxed">
+                  {quickViewProduct.description}
+                </p>
+                <div className="flex gap-3 pt-4">
+                  <Link
+                    href={`/product/${quickViewProduct._id}`}
+                    className="flex-1 py-3 text-white text-sm font-black uppercase tracking-widest rounded-lg shadow-lg transition-all hover:scale-[1.02] text-center"
+                    style={{
+                      backgroundColor: colors.green,
+                      fontFamily: "var(--font-montserrat)",
+                    }}
+                  >
+                    View Details
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleAddToCart(quickViewProduct);
+                      setQuickViewProduct(null);
+                    }}
+                    className="flex-1 py-3 border-2 text-sm font-black uppercase tracking-widest rounded-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
+                    style={{
+                      borderColor: colors.gold,
+                      color: colors.gold,
+                      fontFamily: "var(--font-montserrat)",
+                    }}
+                  >
+                    <ShoppingCart className="w-4 h-4" />
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </div>
