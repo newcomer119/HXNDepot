@@ -11,7 +11,7 @@ const colors = {
   white: "#ffffff",
 };
 
-const TILESVIEW_TOKEN = "NTE4MjYxdGlsZXNwcmV2aWV3XzE5OTQ=";
+const TILESVIEW_TOKEN = "NTE4NTE3dGlsZXNwcmV2aWV3XzE5OTQ=";
 
 const TilesViewModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
