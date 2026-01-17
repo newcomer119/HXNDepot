@@ -30,6 +30,11 @@ const AuthScreen = () => {
 
     try {
       if (isSignUp) {
+        if (!signUp) {
+          setError("Sign up is not available");
+          setIsLoading(false);
+          return;
+        }
         // Sign up
         const result = await signUp.create({
           emailAddress: email,

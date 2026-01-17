@@ -213,7 +213,7 @@ const ProductDetailScreen = () => {
               </TouchableOpacity>
             ) : (
               <View className="flex-row items-center gap-3">
-                {hasOfferPrice ? (
+                {hasOfferPrice && product.offerPrice ? (
                   <>
                     <Text className="text-text-secondary text-xl line-through">
                       ₹{product.price.toLocaleString()}
@@ -338,7 +338,7 @@ const ProductDetailScreen = () => {
             <View className="flex-1">
               <Text className="text-text-secondary text-xs mb-1 uppercase tracking-wide">Total Price</Text>
               <Text className="text-primary text-2xl font-black">
-                ₹{((hasOfferPrice ? product.offerPrice : product.price) * quantity).toLocaleString()}
+                ₹{((hasOfferPrice && product.offerPrice ? product.offerPrice : product.price) * quantity).toLocaleString()}
               </Text>
             </View>
             <TouchableOpacity
