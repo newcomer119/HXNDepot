@@ -2,6 +2,11 @@ import connectDb from "@/config/db";
 import User from "@/models/Users";
 import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { addCorsHeaders, handleOptions } from "@/lib/cors";
+
+export async function OPTIONS(request) {
+    return handleOptions(request);
+}
 
 export async function GET(request){
     try{
@@ -42,14 +47,16 @@ export async function GET(request){
             user = await User.create(userData);
         }
 
-        return NextResponse.json({success: true, user})
+        const response = NextResponse.json({success: true, user})
+        return addCorsHeaders(response, request)
 
     }catch(error){
         console.error("Error in user data route:", error);
-        return NextResponse.json({
+        const response = NextResponse.json({
             success: false, 
             message: "Failed to fetch user data",
             error: error.message
         }, { status: 500 });
+        return addCorsHeaders(response, request)
     }
 }

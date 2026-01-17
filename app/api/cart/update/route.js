@@ -2,6 +2,11 @@ import connectDb from "@/config/db";
 import User from "@/models/Users";
 import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { addCorsHeaders, handleOptions } from "@/lib/cors";
+
+export async function OPTIONS(request) {
+    return handleOptions(request);
+}
 
 export async function POST(request) {
     try{
@@ -14,10 +19,12 @@ export async function POST(request) {
         user.cartItems = cartData
         await user.save()
 
-        return NextResponse.json({ success : true})
+        const response = NextResponse.json({ success : true})
+        return addCorsHeaders(response, request)
 
 
     }catch(error){
-        return NextResponse.json({ success: false, message : error.message})
+        const response = NextResponse.json({ success: false, message : error.message})
+        return addCorsHeaders(response, request)
     }
 }

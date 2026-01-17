@@ -4,6 +4,7 @@ import Product from "@/models/Product";
 import { getAuth } from "@clerk/nextjs/server";
 import { v2 as cloudinary } from "cloudinary";
 import { NextResponse } from "next/server";
+import { addCorsHeaders, handleOptions } from "@/lib/cors";
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -28,19 +29,26 @@ const uploadToCloudinary = (buffer) => {
     });
 };
 
+export async function OPTIONS(request) {
+    return handleOptions(request);
+}
+
 export async function GET(request, { params }) {
     try {
         await connectDb();
         const product = await Product.findById(params.id);
 
         if (!product) {
-            return NextResponse.json({ success: false, message: "Product not found" }, { status: 404 });
+            const response = NextResponse.json({ success: false, message: "Product not found" }, { status: 404 });
+            return addCorsHeaders(response, request);
         }
 
-        return NextResponse.json({ success: true, product });
+        const response = NextResponse.json({ success: true, product });
+        return addCorsHeaders(response, request);
     } catch (error) {
         console.error("Error fetching product:", error);
-        return NextResponse.json({ success: false, message: "Error fetching product" }, { status: 500 });
+        const response = NextResponse.json({ success: false, message: "Error fetching product" }, { status: 500 });
+        return addCorsHeaders(response, request);
     }
 }
 
