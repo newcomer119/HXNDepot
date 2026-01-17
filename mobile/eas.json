@@ -13,9 +13,6 @@
       "android": {
         "buildType": "apk",
         "node": "20.11.0"
-      },
-      "env": {
-        "NODE_ENV": "production"
       }
     },
     "production": {
@@ -23,9 +20,6 @@
       "android": {
         "buildType": "apk",
         "node": "20.11.0"
-      },
-      "env": {
-        "NODE_ENV": "production"
       }
     }
   },
