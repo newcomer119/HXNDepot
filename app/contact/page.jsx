@@ -46,7 +46,7 @@ export default function ContactPage() {
               <FaEnvelope className="text-2xl" style={{ color: colors.green }} />
               <div>
                 <span className="font-bold" style={{ color: colors.green }}>Email</span><br />
-                <span style={{ color: colors.green }}>info@hxnbuildingdepot.caa</span>
+                <span style={{ color: colors.green }}>info@hxnbuildingdepot.ca</span>
               </div>
             </div>
           </div>

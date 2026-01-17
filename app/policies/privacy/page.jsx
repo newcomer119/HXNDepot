@@ -53,7 +53,7 @@ const PrivacyPolicy = () => {
                 <h2 className="text-xl font-semibold text-gray-900 mt-6 mb-2">Contact Information</h2>
                 <p>For any privacy-related concerns, complaints, or requests, customers may contact our support team at:</p>
                 <div className="mt-3 p-4 bg-gray-50 rounded-lg">
-                  <p>📧 Email: info@hxnbuildingdepot.caa</p>
+                  <p>📧 Email: info@hxnbuildingdepot.ca</p>
                   <p>📞 Phone: +1 (519) 706-6111</p>
                 </div>
               </section>

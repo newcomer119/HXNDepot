@@ -1,81 +1,6 @@
 import { useAuth } from "@clerk/clerk-expo";
 import axios from "axios";
 import { useEffect } from "react";
-import { Platform } from "react-native";
-import Constants from "expo-constants";
-
-// Get the local IP address from Expo constants (works for physical devices)
-const getLocalIP = () => {
-  try {
-    // Method 1: Check manifest2 (newer Expo versions)
-    const manifest2 = Constants.manifest2;
-    if (manifest2) {
-      // Try debuggerHost first
-      const debuggerHost = manifest2.extra?.expoGo?.debuggerHost;
-      if (debuggerHost) {
-        const ip = debuggerHost.split(':')[0];
-        if (ip && ip !== 'localhost' && ip !== '127.0.0.1') {
-          console.log("Found IP from manifest2.debuggerHost:", ip);
-          return ip;
-        }
-      }
-      
-      // Try hostUri
-      const hostUri = manifest2.hostUri;
-      if (hostUri) {
-        const ip = hostUri.split(':')[0];
-        if (ip && ip !== 'localhost' && ip !== '127.0.0.1') {
-          console.log("Found IP from manifest2.hostUri:", ip);
-          return ip;
-        }
-      }
-    }
-    
-    // Method 2: Check legacy manifest
-    const manifest = Constants.manifest;
-    if (manifest) {
-      const hostUri = manifest.hostUri;
-      if (hostUri) {
-        const ip = hostUri.split(':')[0];
-        if (ip && ip !== 'localhost' && ip !== '127.0.0.1') {
-          console.log("Found IP from manifest.hostUri:", ip);
-          return ip;
-        }
-      }
-    }
-    
-    // Method 3: Check expoConfig
-    const expoConfig = Constants.expoConfig;
-    if (expoConfig?.hostUri) {
-      const ip = expoConfig.hostUri.split(':')[0];
-      if (ip && ip !== 'localhost' && ip !== '127.0.0.1') {
-        console.log("Found IP from expoConfig.hostUri:", ip);
-        return ip;
-      }
-    }
-    
-    // Method 4: Try to get from the connection (for physical devices)
-    // When connected via QR code, Expo sets this
-    const debuggerHost = Constants.expoConfig?.hostUri || Constants.manifest?.hostUri;
-    if (debuggerHost) {
-      const parts = debuggerHost.split(':');
-      if (parts.length > 0) {
-        const ip = parts[0];
-        if (ip && ip !== 'localhost' && ip !== '127.0.0.1' && !ip.includes('.')) {
-          // If it's not a valid IP format, skip it
-        } else if (ip && ip !== 'localhost' && ip !== '127.0.0.1') {
-          console.log("Found IP from debuggerHost:", ip);
-          return ip;
-        }
-      }
-    }
-  } catch (error) {
-    console.warn("Could not get local IP:", error);
-  }
-  
-  console.warn("⚠️ Could not auto-detect IP address. You may need to set EXPO_PUBLIC_API_URL manually.");
-  return null;
-};
 
 // Use the hosted website URL for API calls
 const getApiUrl = () => {
@@ -103,21 +28,27 @@ const api = axios.create({
 });
 
 export const useApi = () => {
+  // Always call useAuth - ClerkProvider should always be present now
+  // If Clerk key is missing, auth won't work but useAuth can still be called
   const { getToken } = useAuth();
 
   useEffect(() => {
     const interceptor = api.interceptors.request.use(async (config) => {
-      const token = await getToken();
+      try {
+        const token = await getToken();
 
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+      } catch {
+        // If token retrieval fails, continue without auth
+        // This can happen if user is not signed in or Clerk key is invalid
       }
 
       return config;
     });
 
     // cleanup: remove interceptor when component unmounts
-
     return () => {
       api.interceptors.request.eject(interceptor);
     };

@@ -69,27 +69,22 @@ class ErrorBoundary extends Component<
 export default function RootLayout() {
   console.log("App initializing...");
   console.log("Clerk Key:", clerkPublishableKey ? "Set" : "Missing - App may not work");
-  console.log("API URL from env:", process.env.EXPO_PUBLIC_API_URL || "Not set");
+  console.log("API URL from env:", process.env.EXPO_PUBLIC_API_URL || "https://www.hxnbuildingdepot.ca/api");
   
-  // If Clerk key is missing, still render the app but without Clerk
+  // Always wrap with ClerkProvider, even if key is missing
+  // This ensures useAuth can be called safely, but auth won't work without a key
+  // Use a dummy key if none is provided to prevent errors
+  const safeClerkKey = clerkPublishableKey || "pk_test_dummy_key_for_development";
+  
   if (!clerkPublishableKey) {
     console.warn("⚠️ Clerk publishable key is missing! Authentication will not work.");
     console.warn("Set EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env file");
-    
-    // Render app without Clerk (products will still load)
-    return (
-      <ErrorBoundary>
-        <QueryClientProvider client={queryClient}>
-          <Stack screenOptions={{ headerShown: false }} />
-        </QueryClientProvider>
-      </ErrorBoundary>
-    );
   }
   
   return (
     <ErrorBoundary>
       <ClerkProvider 
-        publishableKey={clerkPublishableKey}
+        publishableKey={safeClerkKey}
         tokenCache={tokenCache}
         afterSignInUrl="/(tabs)"
         afterSignUpUrl="/(tabs)"

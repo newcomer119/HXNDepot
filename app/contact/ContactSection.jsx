@@ -45,7 +45,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <p className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: colors.green }}>Email Inquiry</p>
-                  <p className="text-2xl font-black" style={{ color: colors.green }}>info@hxnbuildingdepot.caa</p>
+                  <p className="text-2xl font-black" style={{ color: colors.green }}>info@hxnbuildingdepot.ca</p>
                 </div>
               </div>
 
