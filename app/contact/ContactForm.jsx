@@ -68,7 +68,7 @@ export default function ContactForm() {
         from_email: formData.email,
         phone: formData.phone || "Not provided",
         message: formData.message,
-        to_email: "infohxnbuildingdepot.ca" // Your receiving email
+        to_email: "info@hxnbuildingdepot.caa" // Your receiving email
       };
 
       // Send email using EmailJS

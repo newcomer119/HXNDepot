@@ -133,7 +133,7 @@ const Policies = () => {
                       <li>Our responsibility is limited to ensuring the consignment is handed over to the courier or postal service within 0 to 7 days of order and payment, or as per the mutually agreed schedule at the time of order placement.</li>
                       <li>All orders will be delivered to the shipping address provided by the buyer at the time of registration.</li>
                       <li>Order and delivery confirmations will be sent to the buyer via the email address submitted during registration.</li>
-                      <li>For any issues or support regarding our services, customers can contact us at +1 (519) 706-6111 or email infohxnbuildingdepot.ca.</li>
+                      <li>For any issues or support regarding our services, customers can contact us at +1 (519) 706-6111 or email info@hxnbuildingdepot.caa.</li>
                     </ul>
                   </div>
                 </div>
@@ -238,7 +238,7 @@ const Policies = () => {
                         <h3 className="font-semibold text-gray-900 mb-2">Contact Information</h3>
                         <p className="text-gray-600">For any privacy-related concerns, complaints, or requests, customers may contact our support team at:</p>
                         <ul className="list-disc pl-6 mt-2 space-y-1 text-gray-600">
-                          <li>📧 Email: infohxnbuildingdepot.ca</li>
+                          <li>📧 Email: info@hxnbuildingdepot.caa</li>
                           <li>📞 Phone: +1 (519) 706-6111</li>
                         </ul>
                       </div>

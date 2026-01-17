@@ -21,7 +21,7 @@ const ShippingAndDelivery = () => {
                 <p>Our responsibility is limited to ensuring the consignment is handed over to the courier or postal service within 0 to 7 days of order and payment, or as per the mutually agreed schedule at the time of order placement.</p>
                 <p>All orders will be delivered to the shipping address provided by the buyer at the time of registration.</p>
                 <p>Order and delivery confirmations will be sent to the buyer via the email address submitted during registration.</p>
-                <p>For any issues or support regarding our services, customers can contact us at +1 (519) 706-6111 or email infohxnbuildingdepot.ca.</p>
+                <p>For any issues or support regarding our services, customers can contact us at +1 (519) 706-6111 or email info@hxnbuildingdepot.caa.</p>
               </section>
             </div>
           </div>
