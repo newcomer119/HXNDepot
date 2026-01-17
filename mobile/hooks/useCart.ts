@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApi } from "@/lib/api";
 import { Cart, CartItem } from "@/types";
 
+type CartData = Pick<Cart, 'items'>;
+
 interface UseCartOptions {
   enabled?: boolean;
 }
@@ -18,24 +20,26 @@ const useCart = (options: UseCartOptions = {}) => {
     refetch,
   } = useQuery({
     queryKey: ["cart"],
-    queryFn: async () => {
+    queryFn: async (): Promise<CartData> => {
       const { data } = await api.get<{ success: boolean; cartItems: CartItem[] }>("/cart/get");
       if (data.success && data.cartItems) {
         // Transform cartItems to Cart format
         return {
           items: data.cartItems,
-        } as Cart;
+        };
       }
-      return { items: [] } as Cart;
+      return { items: [] };
     },
     enabled, // Only fetch when enabled is true
     staleTime: 2 * 60 * 1000, // 2 minutes
   });
 
-  const cart = cartData || { items: [] };
+  // Ensure cart always has items as an array
+  const cart = cartData?.items ? cartData : { items: [] };
+  const cartItems = Array.isArray(cart.items) ? cart.items : [];
 
   const addToCartMutation = useMutation({
-    mutationFn: async ({ productId, quantity = 1 }: { productId: string; quantity?: number }) => {
+    mutationFn: async ({ productId, quantity = 1 }: { productId: string; quantity?: number }): Promise<CartData> => {
       // Get current cart
       const { data: cartData } = await api.get<{ success: boolean; cartItems: CartItem[] }>("/cart/get");
       const currentCart = cartData.cartItems || [];
@@ -59,7 +63,7 @@ const useCart = (options: UseCartOptions = {}) => {
       
       // Update cart
       await api.post("/cart/update", { cartData: cartItemsObj });
-      return { items: [] } as Cart;
+      return { items: [] };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
@@ -70,7 +74,7 @@ const useCart = (options: UseCartOptions = {}) => {
   });
 
   const updateQuantityMutation = useMutation({
-    mutationFn: async ({ productId, quantity }: { productId: string; quantity: number }) => {
+    mutationFn: async ({ productId, quantity }: { productId: string; quantity: number }): Promise<CartData> => {
       // Get current cart
       const { data: cartData } = await api.get<{ success: boolean; cartItems: CartItem[] }>("/cart/get");
       const currentCart = cartData.cartItems || [];
@@ -88,7 +92,7 @@ const useCart = (options: UseCartOptions = {}) => {
       
       // Update cart
       await api.post("/cart/update", { cartData: cartItemsObj });
-      return { items: [] } as Cart;
+      return { items: [] };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
@@ -99,7 +103,7 @@ const useCart = (options: UseCartOptions = {}) => {
   });
 
   const removeFromCartMutation = useMutation({
-    mutationFn: async (productId: string) => {
+    mutationFn: async (productId: string): Promise<CartData> => {
       // Get current cart
       const { data: cartData } = await api.get<{ success: boolean; cartItems: CartItem[] }>("/cart/get");
       const currentCart = cartData.cartItems || [];
@@ -115,7 +119,7 @@ const useCart = (options: UseCartOptions = {}) => {
       
       // Update cart
       await api.post("/cart/update", { cartData: cartItemsObj });
-      return { items: [] } as Cart;
+      return { items: [] };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
@@ -126,10 +130,10 @@ const useCart = (options: UseCartOptions = {}) => {
   });
 
   const clearCartMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (): Promise<CartData> => {
       // Clear cart
       await api.post("/cart/update", { cartData: {} });
-      return { items: [] } as Cart;
+      return { items: [] };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
@@ -140,12 +144,12 @@ const useCart = (options: UseCartOptions = {}) => {
   });
 
   const cartTotal =
-    cart?.items.reduce((sum, item) => sum + (item.product.offerPrice || item.product.price) * item.quantity, 0) ?? 0;
+    cartItems.reduce((sum, item) => sum + (item.product?.offerPrice || item.product?.price || 0) * (item.quantity || 0), 0);
 
-  const cartItemCount = cart?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
+  const cartItemCount = cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
 
   return {
-    cart,
+    cart: { ...cart, items: cartItems },
     isLoading,
     isError,
     cartTotal,

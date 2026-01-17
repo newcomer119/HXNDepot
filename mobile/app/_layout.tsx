@@ -56,7 +56,7 @@ class ErrorBoundary extends Component<
             Check the console for more details
           </Text>
           <Text style={{ fontSize: 10, color: "#ccc", marginTop: 10, textAlign: "center" }}>
-            API URL: {process.env.EXPO_PUBLIC_API_URL || "Not set"}
+            API URL: {process.env.EXPO_PUBLIC_API_URL || "https://www.hxnbuildingdepot.ca/api"}
           </Text>
         </View>
       );

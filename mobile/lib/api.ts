@@ -79,14 +79,15 @@ const getLocalIP = () => {
 
 // Use the hosted website URL for API calls
 const getApiUrl = () => {
-  // Check for environment variable first (manual override for local development)
-  if (process.env.EXPO_PUBLIC_API_URL) {
+  // Always use the hosted production URL
+  const productionUrl = "https://www.hxnbuildingdepot.ca/api";
+  
+  // Check for environment variable for local development override
+  if (process.env.EXPO_PUBLIC_API_URL && process.env.EXPO_PUBLIC_API_URL !== productionUrl) {
     console.log("Using API URL from environment:", process.env.EXPO_PUBLIC_API_URL);
     return process.env.EXPO_PUBLIC_API_URL;
   }
   
-  // Use the hosted production URL
-  const productionUrl = "https://www.hxnbuildingdepot.ca/api";
   console.log("✅ Using hosted API URL:", productionUrl);
   return productionUrl;
 };
