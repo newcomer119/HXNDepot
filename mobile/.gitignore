@@ -33,6 +33,9 @@ yarn-error.*
 # local env files
 .env*.local
 
+# npmrc (but we want to commit .npmrc for EAS builds)
+# .npmrc
+
 # typescript
 *.tsbuildinfo
 
