@@ -71,16 +71,28 @@ export default function RootLayout() {
   console.log("Clerk Key:", clerkPublishableKey ? "Set" : "Missing - App may not work");
   console.log("API URL from env:", process.env.EXPO_PUBLIC_API_URL || "Not set");
   
+  // If Clerk key is missing, still render the app but without Clerk
   if (!clerkPublishableKey) {
     console.warn("⚠️ Clerk publishable key is missing! Authentication will not work.");
     console.warn("Set EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env file");
+    
+    // Render app without Clerk (products will still load)
+    return (
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <Stack screenOptions={{ headerShown: false }} />
+        </QueryClientProvider>
+      </ErrorBoundary>
+    );
   }
   
   return (
     <ErrorBoundary>
       <ClerkProvider 
-        publishableKey={clerkPublishableKey || ""}
+        publishableKey={clerkPublishableKey}
         tokenCache={tokenCache}
+        afterSignInUrl="/(tabs)"
+        afterSignUpUrl="/(tabs)"
       >
         <QueryClientProvider client={queryClient}>
           <Stack screenOptions={{ headerShown: false }} />

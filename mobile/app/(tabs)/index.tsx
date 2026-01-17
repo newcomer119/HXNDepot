@@ -1,59 +1,19 @@
 import ProductsGrid from "@/components/ProductsGrid";
 import SafeScreen from "@/components/SafeScreen";
 import useProducts from "@/hooks/useProducts";
+import useAllProducts from "@/hooks/useAllProducts";
 
 import { Ionicons } from "@expo/vector-icons";
 import { useMemo, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, Modal } from "react-native";
 
-// Category structure matching the website
-const categoryStructure = {
-  "Bathroom Products": [
-    "Toilets",
-    "Floating Vanities",
-    "Free Standing Vanities",
-    "Plain & LED Mirrors",
-    "Faucets",
-    "Towel Bar Sets",
-    "Free Standing Tubs",
-    "Tub Faucets",
-    "Shower Glass",
-    "Shower Drains",
-    "Shower Faucets",
-    "Tile Edges",
-  ],
-  Floorings: [
-    "Solid/HardWood Floorings",
-    "Engineering Wood Floorings",
-    "Vinyl Floorings",
-    "Laminate Floorings",
-  ],
-  Tiles: ["Porcelain Tiles", "Mosaic Tiles"],
-  Kitchens: [
-    "Melamine Cabinets",
-    "MDF Laminates Cabinets",
-    "MDF Painted Cabinets",
-    "Solid Wood Painted Cabinets",
-  ],
-  Countertops: [
-    "Quartz Countertop",
-    "Granite Countertop",
-    "Porcelain Countertop",
-  ],
-  Lightning: [
-    "Potlights",
-    "Chandeliers",
-    "Lamps",
-    "Vanity Lights",
-    "LED Mirrors",
-    "Island Lights",
-  ],
-};
-
 const ShopScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  // Fetch ALL products first to extract categories
+  const { allProducts, isLoading: isLoadingAllProducts } = useAllProducts();
 
   const { 
     products, 
@@ -67,21 +27,63 @@ const ShopScreen = () => {
     search: searchQuery.trim() || undefined,
   });
 
-  // Get categories that have products
+  // Extract all unique categories from ALL products
   const categoriesWithProducts = useMemo(() => {
-    if (!products) return new Set<string>();
-    return new Set(products.map((p) => p.category).filter(Boolean));
-  }, [products]);
+    if (!allProducts || allProducts.length === 0) {
+      console.log("⚠️ No products loaded yet");
+      return new Set<string>();
+    }
+    const categories = allProducts
+      .map((p) => p.category)
+      .filter(Boolean) as string[];
+    const uniqueCategories = new Set(categories);
+    console.log("✅ Loaded", allProducts.length, "products");
+    console.log("✅ Found", uniqueCategories.size, "unique categories");
+    console.log("Sample categories:", Array.from(uniqueCategories).slice(0, 10));
+    return uniqueCategories;
+  }, [allProducts]);
 
-  // Filter main categories to only show those that have products
-  const mainCategories = useMemo(() => {
-    return Object.keys(categoryStructure).filter((mainCat) => {
-      return categoryStructure[mainCat as keyof typeof categoryStructure].some((subCat) => {
-        const fullCategory = `${mainCat} - ${subCat}`;
-        return categoriesWithProducts.has(fullCategory);
-      });
+  // Build dynamic category structure from actual products
+  const dynamicCategoryStructure = useMemo(() => {
+    const structure: Record<string, Set<string>> = {};
+    
+    // Parse categories from products
+    categoriesWithProducts.forEach((fullCategory) => {
+      if (fullCategory.includes(" - ")) {
+        const [mainCat, ...subCatParts] = fullCategory.split(" - ");
+        const subCat = subCatParts.join(" - "); // Handle subcategories with " - " in name
+        
+        if (!structure[mainCat]) {
+          structure[mainCat] = new Set<string>();
+        }
+        structure[mainCat].add(subCat);
+      } else {
+        // Handle categories without " - " separator (standalone categories)
+        if (!structure[fullCategory]) {
+          structure[fullCategory] = new Set<string>();
+        }
+      }
     });
+    
+    // Convert Sets to Arrays
+    const result: Record<string, string[]> = {};
+    Object.keys(structure).forEach((mainCat) => {
+      result[mainCat] = Array.from(structure[mainCat]).sort();
+    });
+    
+    // Debug: Log the structure
+    console.log("📁 Category structure:", Object.keys(result));
+    Object.keys(result).forEach((mainCat) => {
+      console.log(`  ${mainCat}:`, result[mainCat]);
+    });
+    
+    return result;
   }, [categoriesWithProducts]);
+
+  // Get main categories - only show those that have products
+  const mainCategories = useMemo(() => {
+    return Object.keys(dynamicCategoryStructure).sort();
+  }, [dynamicCategoryStructure]);
 
   // Products are already filtered by the API, no need for client-side filtering
   // This reduces computation and improves performance
@@ -229,13 +231,12 @@ const ShopScreen = () => {
                 </View>
               </View>
               <ScrollView className="max-h-[400px]">
-                {openDropdown && categoryStructure[openDropdown as keyof typeof categoryStructure].map((subcategory) => {
+                {openDropdown && dynamicCategoryStructure[openDropdown]?.map((subcategory) => {
                   const fullCategory = `${openDropdown} - ${subcategory}`;
                   const hasProducts = categoriesWithProducts.has(fullCategory);
                   const isSelected = selectedCategory === fullCategory;
 
-                  if (!hasProducts) return null;
-
+                  // Show all subcategories that exist in products
                   return (
                     <TouchableOpacity
                       key={subcategory}

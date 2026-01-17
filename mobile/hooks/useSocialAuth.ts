@@ -1,6 +1,7 @@
 import { useSSO } from "@clerk/clerk-expo";
 import { useState } from "react";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
+import * as Linking from "expo-linking";
 
 function useSocialAuth() {
   const [loadingStrategy, setLoadingStrategy] = useState<string | null>(null);
@@ -10,14 +11,27 @@ function useSocialAuth() {
     setLoadingStrategy(strategy);
 
     try {
-      const { createdSessionId, setActive } = await startSSOFlow({ strategy });
+      // For web, use redirect URL
+      const redirectUrl = Platform.OS === "web" 
+        ? `${Linking.createURL("/sso-callback")}`
+        : undefined;
+
+      const { createdSessionId, setActive } = await startSSOFlow({ 
+        strategy,
+        redirectUrl,
+      });
+      
       if (createdSessionId && setActive) {
         await setActive({ session: createdSessionId });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log("💥 Error in social auth:", error);
       const provider = strategy === "oauth_google" ? "Google" : "Apple";
-      Alert.alert("Error", `Failed to sign in with ${provider}. Please try again.`);
+      
+      // Don't show error if user cancelled
+      if (error?.status !== "user_cancelled") {
+        Alert.alert("Error", `Failed to sign in with ${provider}. Please try again.`);
+      }
     } finally {
       setLoadingStrategy(null);
     }

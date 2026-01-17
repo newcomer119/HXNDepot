@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ShoppingCart, Plus, Minus, ChevronDown, Eye, X } from "lucide-react";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const colors = {
   green: "#005a2b",
@@ -25,63 +26,78 @@ export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [openDropdown, setOpenDropdown] = useState(null);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
+  const [allProducts, setAllProducts] = useState([]);
+  const [isLoadingAllProducts, setIsLoadingAllProducts] = useState(true);
 
-  // Define category structure with main categories and subcategories
-  const categoryStructure = {
-    "Bathroom Products": [
-      "Toilets",
-      "Floating Vanities",
-      "Free Standing Vanities",
-      "Plain & LED Mirrors",
-      "Faucets",
-      "Towel Bar Sets",
-      "Free Standing Tubs",
-      "Tub Faucets",
-      "Shower Glass",
-      "Shower Drains",
-      "Shower Faucets",
-      "Tile Edges",
-    ],
-    Floorings: [
-      "Solid/HardWood Floorings",
-      "Engineering Wood Floorings",
-      "Vinyl Floorings",
-      "Laminate Floorings",
-    ],
-    Tiles: ["Porcelain Tiles", "Mosaic Tiles"],
-    Kitchens: [
-      "Melamine Cabinets",
-      "MDF Laminates Cabinets",
-      "MDF Painted Cabinets",
-      "Solid Wood Painted Cabinets",
-    ],
-    Countertops: [
-      "Quartz Countertop",
-      "Granite Countertop",
-      "Porcelain Countertop",
-    ],
-    Lightning: [
-      "Potlights",
-      "Chandeliers",
-      "Lamps",
-      "Vanity Lights",
-      "LED Mirrors",
-      "Island Lights",
-    ],
-  };
+  // Fetch ALL products first to extract categories
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      setIsLoadingAllProducts(true);
+      try {
+        const { data } = await axios.get("/api/product/list?page=1&limit=10000");
+        if (data.success && data.products) {
+          setAllProducts(data.products);
+          console.log("✅ Loaded", data.products.length, "products for category extraction");
+        }
+      } catch (error) {
+        console.error("Error fetching all products:", error);
+        // Fallback to current products
+        setAllProducts(products);
+      }
+      setIsLoadingAllProducts(false);
+    };
+    fetchAllProducts();
+  }, []);
 
-  // Get categories that have products
-  const categoriesWithProducts = new Set(
-    products.map((p) => p.category).filter(Boolean)
-  );
+  // Extract all unique categories from ALL products
+  const categoriesWithProducts = useMemo(() => {
+    const productsToUse = allProducts.length > 0 ? allProducts : products;
+    const categories = productsToUse
+      .map((p) => p.category)
+      .filter(Boolean);
+    const uniqueCategories = new Set(categories);
+    console.log("✅ Found", uniqueCategories.size, "unique categories from", productsToUse.length, "products");
+    return uniqueCategories;
+  }, [allProducts, products]);
 
-  // Filter main categories to only show those that have products
-  const mainCategories = Object.keys(categoryStructure).filter((mainCat) => {
-    return categoryStructure[mainCat].some((subCat) => {
-      const fullCategory = `${mainCat} - ${subCat}`;
-      return categoriesWithProducts.has(fullCategory);
+  // Build dynamic category structure from actual products
+  const dynamicCategoryStructure = useMemo(() => {
+    const structure = {};
+    
+    // Parse categories from products
+    categoriesWithProducts.forEach((fullCategory) => {
+      if (fullCategory.includes(" - ")) {
+        const [mainCat, ...subCatParts] = fullCategory.split(" - ");
+        const subCat = subCatParts.join(" - "); // Handle subcategories with " - " in name
+        
+        if (!structure[mainCat]) {
+          structure[mainCat] = new Set();
+        }
+        structure[mainCat].add(subCat);
+      } else {
+        // Handle categories without " - " separator (standalone categories)
+        if (!structure[fullCategory]) {
+          structure[fullCategory] = new Set();
+        }
+      }
     });
-  });
+    
+    // Convert Sets to Arrays and sort
+    const result = {};
+    Object.keys(structure).forEach((mainCat) => {
+      result[mainCat] = Array.from(structure[mainCat]).sort();
+    });
+    
+    console.log("📁 Category structure:", Object.keys(result));
+    Object.keys(result).forEach((mainCat) => {
+      console.log(`  ${mainCat}:`, result[mainCat]);
+    });
+    
+    return result;
+  }, [categoriesWithProducts]);
+
+  // Get main categories - only show those that have products
+  const mainCategories = Object.keys(dynamicCategoryStructure).sort();
 
   // Filter products
   const filteredProducts = products.filter((product) => {
@@ -221,7 +237,7 @@ export default function ProductsPage() {
 
               {/* Main Category Dropdowns */}
               {mainCategories.map((mainCategory) => {
-                const subcategories = categoryStructure[mainCategory];
+                const subcategories = dynamicCategoryStructure[mainCategory] || [];
                 const isOpen = openDropdown === mainCategory;
                 const hasSelectedSubcategory = selectedCategory.startsWith(
                   mainCategory + " - "
@@ -269,14 +285,14 @@ export default function ProductsPage() {
                             categoriesWithProducts.has(fullCategory);
                           const isSelected = selectedCategory === fullCategory;
 
-                          if (!hasProducts) return null;
-
+                          // Show ALL subcategories, not just ones with products
                           return (
                             <button
                               key={subcategory}
-                              onClick={() => handleCategorySelect(fullCategory)}
-                              className={`w-full text-left px-6 py-3 text-sm font-black uppercase tracking-widest transition-all border-b last:border-b-0 ${
-                                isSelected ? "text-white" : "hover:bg-slate-50"
+                              onClick={() => hasProducts ? handleCategorySelect(fullCategory) : null}
+                              disabled={!hasProducts}
+                              className={`w-full text-left px-6 py-3 text-sm font-black uppercase tracking-widest transition-all border-b last:border-b-0 flex items-center justify-between ${
+                                isSelected ? "text-white" : hasProducts ? "hover:bg-slate-50" : "opacity-50 cursor-not-allowed"
                               }`}
                               style={
                                 isSelected
@@ -291,7 +307,10 @@ export default function ProductsPage() {
                                     }
                               }
                             >
-                              {subcategory}
+                              <span>{subcategory}</span>
+                              {!hasProducts && (
+                                <span className="text-xs font-normal ml-2 opacity-75">(No products)</span>
+                              )}
                             </button>
                           );
                         })}
