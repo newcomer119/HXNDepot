@@ -9,7 +9,7 @@ const ContactScreen = () => {
   };
 
   const handleEmail = () => {
-    Linking.openURL("mailto:sagarsuryasetia@hxngroup.com");
+    Linking.openURL("mailto:infohxnbuildingdepot.ca");
   };
 
   const handleMap = () => {
@@ -102,7 +102,7 @@ const ContactScreen = () => {
                 </View>
                 <View className="flex-1">
                   <Text className="text-text-primary text-lg font-black mb-2">Email</Text>
-                  <Text className="text-text-secondary text-base">sagarsuryasetia@hxngroup.com</Text>
+                  <Text className="text-text-secondary text-base">infohxnbuildingdepot.ca</Text>
                   <Text className="text-primary text-sm font-semibold mt-2">Tap to send email</Text>
                 </View>
               </View>
