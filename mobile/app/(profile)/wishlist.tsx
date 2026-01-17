@@ -24,16 +24,13 @@ function WishlistScreen() {
     ]);
   };
 
-  const handleAddToCart = (productId: string, productName: string) => {
-    addToCart(
-      { productId, quantity: 1 },
-      {
-        onSuccess: () => Alert.alert("Success", `${productName} added to cart!`),
-        onError: (error: any) => {
-          Alert.alert("Error", error?.response?.data?.error || "Failed to add to cart");
-        },
-      }
-    );
+  const handleAddToCart = async (productId: string, productName: string) => {
+    try {
+      addToCart({ productId, quantity: 1 });
+      Alert.alert("Success", `${productName} added to cart!`);
+    } catch (error: any) {
+      Alert.alert("Error", error?.response?.data?.error || "Failed to add to cart");
+    }
   };
 
   if (isLoading) return <LoadingUI />;
@@ -81,13 +78,14 @@ function WishlistScreen() {
                 key={item._id}
                 className="bg-surface rounded-3xl overflow-hidden mb-3"
                 activeOpacity={0.8}
-                // onPress={() => router.push(`/product/${item._id}`)}
+                onPress={() => router.push(`/product/${item._id}`)}
               >
                 <View className="flex-row p-4">
                   <Image
-                    source={item.images[0]}
+                    source={item.images?.[0] || item.image?.[0] || "https://via.placeholder.com/96"}
                     className="rounded-2xl bg-background-lighter"
                     style={{ width: 96, height: 96, borderRadius: 8 }}
+                    contentFit="cover"
                   />
 
                   <View className="flex-1 ml-4">
@@ -95,14 +93,14 @@ function WishlistScreen() {
                       {item.name}
                     </Text>
                     <Text className="text-primary font-bold text-xl mb-2">
-                      ${item.price.toFixed(2)}
+                      ₹{item.offerPrice ? item.offerPrice.toLocaleString() : item.price.toLocaleString()}
                     </Text>
 
-                    {item.stock > 0 ? (
+                    {(item.stock === undefined || item.stock > 0) ? (
                       <View className="flex-row items-center">
                         <View className="w-2 h-2 bg-green-500 rounded-full mr-2" />
                         <Text className="text-green-500 text-sm font-semibold">
-                          {item.stock} in stock
+                          {item.stock ? `${item.stock} in stock` : "In stock"}
                         </Text>
                       </View>
                     ) : (
@@ -122,7 +120,7 @@ function WishlistScreen() {
                     <Ionicons name="trash-outline" size={20} color="#EF4444" />
                   </TouchableOpacity>
                 </View>
-                {item.stock > 0 && (
+                {(item.stock === undefined || item.stock > 0) && (
                   <View className="px-4 pb-4">
                     <TouchableOpacity
                       className="bg-primary rounded-xl py-3 items-center"

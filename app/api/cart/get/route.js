@@ -23,15 +23,48 @@ export async function GET(request) {
         const user = await User.findById(userId)
 
         if (!user) {
-            return NextResponse.json({ 
+            const response = NextResponse.json({ 
                 success: false, 
                 message: "User not found" 
             }, { status: 404 });
+            return addCorsHeaders(response, request);
         }
 
         const {cartItems} = user
+        
+        // Convert cartItems object to array and populate product details
+        const cartItemsArray = [];
+        if (cartItems && typeof cartItems === 'object' && Object.keys(cartItems).length > 0) {
+            const Product = (await import("@/models/Product")).default;
+            
+            for (const [key, value] of Object.entries(cartItems)) {
+                // Extract productId from key (format: "productId" or "productId_color")
+                const productId = key.split('_')[0];
+                
+                try {
+                    const product = await Product.findById(productId).lean();
+                    if (product) {
+                        cartItemsArray.push({
+                            _id: key,
+                            product: {
+                                _id: product._id,
+                                name: product.name,
+                                price: product.offerPrice || product.price,
+                                offerPrice: product.offerPrice,
+                                images: product.images || product.image || [],
+                                description: product.description,
+                                stock: product.stock,
+                            },
+                            quantity: value?.quantity || 1,
+                        });
+                    }
+                } catch (err) {
+                    console.error(`Error fetching product ${productId}:`, err);
+                }
+            }
+        }
 
-        const response = NextResponse.json({ success: true, cartItems})
+        const response = NextResponse.json({ success: true, cartItems: cartItemsArray })
         return addCorsHeaders(response, request)
 
     }catch(error){

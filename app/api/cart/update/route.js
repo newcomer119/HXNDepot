@@ -11,20 +11,40 @@ export async function OPTIONS(request) {
 export async function POST(request) {
     try{
         const { userId} = getAuth(request);
+        
+        if (!userId) {
+            const response = NextResponse.json({ 
+                success: false, 
+                message: "User not authenticated" 
+            }, { status: 401 });
+            return addCorsHeaders(response, request);
+        }
+
         const { cartData } = await request.json()
 
         await connectDb()
         const user = await User.findById(userId)
 
-        user.cartItems = cartData
+        if (!user) {
+            const response = NextResponse.json({ 
+                success: false, 
+                message: "User not found" 
+            }, { status: 404 });
+            return addCorsHeaders(response, request);
+        }
+
+        user.cartItems = cartData || {}
         await user.save()
 
         const response = NextResponse.json({ success : true})
         return addCorsHeaders(response, request)
 
-
     }catch(error){
-        const response = NextResponse.json({ success: false, message : error.message})
+        console.error("Error updating cart:", error);
+        const response = NextResponse.json({ 
+            success: false, 
+            message: error.message || "Failed to update cart"
+        }, { status: 500 });
         return addCorsHeaders(response, request)
     }
 }

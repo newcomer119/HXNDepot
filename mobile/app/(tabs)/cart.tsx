@@ -130,7 +130,7 @@ const CartScreen = () => {
                 {/* product image */}
                 <View className="relative">
                   <Image
-                    source={item.product.images[0]}
+                    source={item.product.images?.[0] || item.product.image?.[0] || "https://via.placeholder.com/112"}
                     className="bg-background-lighter"
                     contentFit="cover"
                     style={{ width: 112, height: 112, borderRadius: 16 }}
@@ -150,10 +150,10 @@ const CartScreen = () => {
                     </Text>
                     <View className="flex-row items-center mt-2">
                       <Text className="text-primary font-bold text-2xl">
-                        ₹{(item.product.price * item.quantity).toLocaleString()}
+                        ₹{((item.product.offerPrice || item.product.price) * item.quantity).toLocaleString()}
                       </Text>
                       <Text className="text-text-secondary text-sm ml-2">
-                        ₹{item.product.price.toLocaleString()} each
+                        ₹{(item.product.offerPrice || item.product.price).toLocaleString()} each
                       </Text>
                     </View>
                   </View>

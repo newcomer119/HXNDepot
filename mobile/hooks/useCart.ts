@@ -36,12 +36,33 @@ const useCart = (options: UseCartOptions = {}) => {
 
   const addToCartMutation = useMutation({
     mutationFn: async ({ productId, quantity = 1 }: { productId: string; quantity?: number }) => {
-      const { data } = await api.post<{ cart: Cart }>("/cart", { productId, quantity });
-      return data.cart;
+      // Get current cart
+      const { data: cartData } = await api.get<{ success: boolean; cartItems: CartItem[] }>("/cart/get");
+      const currentCart = cartData.cartItems || [];
+      
+      // Find existing item
+      const existingItem = currentCart.find(item => item.product._id === productId);
+      const cartKey = productId;
+      
+      // Update cart object
+      const cartItemsObj: any = {};
+      currentCart.forEach(item => {
+        const key = item._id.includes('_') ? item._id : item.product._id;
+        cartItemsObj[key] = { quantity: item.quantity };
+      });
+      
+      if (existingItem) {
+        cartItemsObj[cartKey] = { quantity: (existingItem.quantity || 0) + quantity };
+      } else {
+        cartItemsObj[cartKey] = { quantity };
+      }
+      
+      // Update cart
+      await api.post("/cart/update", { cartData: cartItemsObj });
+      return { items: [] } as Cart;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-      // Auto-enable cart query after first mutation
       if (!enabled) {
         refetch();
       }
@@ -50,12 +71,27 @@ const useCart = (options: UseCartOptions = {}) => {
 
   const updateQuantityMutation = useMutation({
     mutationFn: async ({ productId, quantity }: { productId: string; quantity: number }) => {
-      const { data } = await api.put<{ cart: Cart }>(`/cart/${productId}`, { quantity });
-      return data.cart;
+      // Get current cart
+      const { data: cartData } = await api.get<{ success: boolean; cartItems: CartItem[] }>("/cart/get");
+      const currentCart = cartData.cartItems || [];
+      
+      // Update cart object
+      const cartItemsObj: any = {};
+      currentCart.forEach(item => {
+        const key = item._id.includes('_') ? item._id : item.product._id;
+        if (item.product._id === productId) {
+          cartItemsObj[key] = { quantity };
+        } else {
+          cartItemsObj[key] = { quantity: item.quantity };
+        }
+      });
+      
+      // Update cart
+      await api.post("/cart/update", { cartData: cartItemsObj });
+      return { items: [] } as Cart;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-      // Auto-enable cart query after first mutation
       if (!enabled) {
         refetch();
       }
@@ -64,12 +100,25 @@ const useCart = (options: UseCartOptions = {}) => {
 
   const removeFromCartMutation = useMutation({
     mutationFn: async (productId: string) => {
-      const { data } = await api.delete<{ cart: Cart }>(`/cart/${productId}`);
-      return data.cart;
+      // Get current cart
+      const { data: cartData } = await api.get<{ success: boolean; cartItems: CartItem[] }>("/cart/get");
+      const currentCart = cartData.cartItems || [];
+      
+      // Remove item from cart object
+      const cartItemsObj: any = {};
+      currentCart.forEach(item => {
+        const key = item._id.includes('_') ? item._id : item.product._id;
+        if (item.product._id !== productId) {
+          cartItemsObj[key] = { quantity: item.quantity };
+        }
+      });
+      
+      // Update cart
+      await api.post("/cart/update", { cartData: cartItemsObj });
+      return { items: [] } as Cart;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-      // Auto-enable cart query after first mutation
       if (!enabled) {
         refetch();
       }
@@ -78,12 +127,12 @@ const useCart = (options: UseCartOptions = {}) => {
 
   const clearCartMutation = useMutation({
     mutationFn: async () => {
-      const { data } = await api.delete<{ cart: Cart }>("/cart");
-      return data.cart;
+      // Clear cart
+      await api.post("/cart/update", { cartData: {} });
+      return { items: [] } as Cart;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-      // Auto-enable cart query after first mutation
       if (!enabled) {
         refetch();
       }
@@ -91,7 +140,7 @@ const useCart = (options: UseCartOptions = {}) => {
   });
 
   const cartTotal =
-    cart?.items.reduce((sum, item) => sum + item.product.price * item.quantity, 0) ?? 0;
+    cart?.items.reduce((sum, item) => sum + (item.product.offerPrice || item.product.price) * item.quantity, 0) ?? 0;
 
   const cartItemCount = cart?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
 
