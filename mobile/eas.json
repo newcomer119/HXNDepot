@@ -23,6 +23,9 @@
       "android": {
         "buildType": "apk",
         "node": "20.11.0"
+      },
+      "env": {
+        "npm_config_legacy_peer_deps": "true"
       }
     }
   },

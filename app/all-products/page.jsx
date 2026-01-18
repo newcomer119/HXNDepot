@@ -99,10 +99,23 @@ export default function ProductsPage() {
   // Get main categories - only show those that have products
   const mainCategories = Object.keys(dynamicCategoryStructure).sort();
 
-  // Filter products
-  const filteredProducts = products.filter((product) => {
-    const matchesCategory =
-      selectedCategory === "all" || product.category === selectedCategory;
+  // Filter products - use allProducts if available, otherwise fallback to products
+  const productsToFilter = allProducts.length > 0 ? allProducts : products;
+  const filteredProducts = productsToFilter.filter((product) => {
+    let matchesCategory = selectedCategory === "all";
+    
+    if (!matchesCategory && product.category) {
+      // Support both exact match and main category match
+      if (selectedCategory.includes(" - ")) {
+        // Exact match for full category (e.g., "Electronics - Headphones")
+        matchesCategory = product.category === selectedCategory;
+      } else {
+        // Main category match (e.g., "Electronics" matches "Electronics - Headphones")
+        matchesCategory = product.category.startsWith(selectedCategory + " - ") || 
+                        product.category === selectedCategory;
+      }
+    }
+    
     const matchesSearch =
       !searchQuery ||
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

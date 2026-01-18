@@ -28,7 +28,8 @@ export const AppContextProvider = (props) => {
   const fetchProductData = async () => {
     setIsLoading(true);
     try {
-      const { data } = await axios.get("/api/product/list");
+      // Fetch all products with a high limit to get all products
+      const { data } = await axios.get("/api/product/list?page=1&limit=10000");
       if (data.success) {
         // Merge hardcoded products with API products (API products take priority if same _id)
         const apiProducts = data.products || [];
@@ -42,6 +43,7 @@ export const AppContextProvider = (props) => {
         ];
         
         setProducts(combined);
+        console.log("✅ Loaded", combined.length, "products in AppContext");
       } else {
         // If API fails, use hardcoded products
         setProducts(hardcodedProducts);

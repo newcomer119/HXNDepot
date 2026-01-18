@@ -13,10 +13,16 @@ const HomeProducts = () => {
 
   // Filter products based on selected category
   const filteredProducts = products.filter(product => {
+    if (!product.category) return false;
+    
     if (selectedCategory === "3d-printed") {
-      return product.category === "Accessories";
+      // Match "Accessories" category or any category starting with "Accessories - "
+      return product.category === "Accessories" || 
+             product.category.startsWith("Accessories - ");
     } else {
-      return product.category === "Organics by Filament Freaks";
+      // Match "Organics by Filament Freaks" category or any category starting with it
+      return product.category === "Organics by Filament Freaks" || 
+             product.category.startsWith("Organics by Filament Freaks - ");
     }
   });
 
@@ -56,9 +62,8 @@ const HomeProducts = () => {
               ></div>
             ))
           : filteredProducts
-              .slice(0, 10)
               .map((product, index) => (
-                <ProductCard key={index} product={product} />
+                <ProductCard key={product._id || index} product={product} />
               ))}
       </div>
       {filteredProducts.length === 0 && !isLoading && (
@@ -71,7 +76,7 @@ const HomeProducts = () => {
           </p>
         </div>
       )}
-      {filteredProducts.length > 10 && (
+      {filteredProducts.length > 0 && (
         <button
           onClick={handleSeeMore}
           className="px-12 py-2.5 border rounded text-gray-500/70 hover:bg-slate-50/90 transition"
