@@ -14,7 +14,7 @@ const Footer = () => {
     <div className="flex md:flex-row flex-col-reverse items-center justify-between text-left w-full px-10 py-4" style={{ borderTop: `1px solid ${colors.gold}40` }}>
       <div className="flex items-center gap-4">
         <p className="py-4 text-center text-xs md:text-sm" style={{ color: colors.green + 'CC' }}>
-          Copyright 2025 Filament Freaks All Right Reserved.
+          Copyright 2025  All Right Reserved.
         </p>
       </div>
       <div className="flex items-center gap-3">
