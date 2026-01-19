@@ -54,12 +54,28 @@ const ProductsGrid = ({
     );
   };
 
+  const handleProductPress = (productId: string) => {
+    try {
+      router.push(`/product/${productId}`);
+    } catch (error: any) {
+      console.error("Navigation error:", error);
+    }
+  };
+
+  const handleContactPress = () => {
+    try {
+      router.push("/(tabs)/contact");
+    } catch (error: any) {
+      console.error("Navigation error:", error);
+    }
+  };
+
   const renderProduct = ({ item: product }: { item: Product }) => (
     <TouchableOpacity
       className="bg-surface-light border-2 border-gold/20 rounded-3xl overflow-hidden mb-3 shadow-lg"
       style={{ width: "48%" }}
       activeOpacity={0.8}
-      onPress={() => router.push(`/product/${product._id}`)}
+      onPress={() => handleProductPress(product._id)}
     >
       <View className="relative">
         <Image
@@ -77,7 +93,10 @@ const ProductsGrid = ({
               : "bg-white/95 border-gold/30"
           }`}
           activeOpacity={0.7}
-          onPress={() => toggleWishlist(product._id)}
+          onPress={(e) => {
+            e.stopPropagation();
+            toggleWishlist(product._id);
+          }}
           disabled={isAddingToWishlist || isRemovingFromWishlist}
         >
           {isAddingToWishlist || isRemovingFromWishlist ? (
@@ -117,7 +136,7 @@ const ProductsGrid = ({
               activeOpacity={0.7}
               onPress={(e) => {
                 e.stopPropagation();
-                router.push("/(tabs)/contact");
+                handleContactPress();
               }}
             >
               <Text className="text-white text-xs font-black uppercase tracking-wide">Contact Store</Text>

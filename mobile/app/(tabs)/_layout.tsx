@@ -9,7 +9,19 @@ const TabsLayout = () => {
   const { isSignedIn, isLoaded } = useAuth();
   const insets = useSafeAreaInsets();
 
-  if (!isLoaded) return null; // for a better ux
+  // Always render Tabs to ensure navigation context is available
+  // Even when loading, we need the navigation context for child components
+  if (!isLoaded) {
+    return (
+      <Tabs screenOptions={{ headerShown: false }}>
+        <Tabs.Screen name="index" options={{ href: null }} />
+        <Tabs.Screen name="cart" options={{ href: null }} />
+        <Tabs.Screen name="profile" options={{ href: null }} />
+        <Tabs.Screen name="contact" options={{ href: null }} />
+      </Tabs>
+    );
+  }
+  
   if (!isSignedIn) return <Redirect href={"/(auth)"} />;
 
   return (
