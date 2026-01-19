@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ChevronDown, ArrowRight, Menu, X, CheckCircle, Store, TrendingUp, Eye, Users, Zap, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ArrowRight, Menu, X, CheckCircle, Store, TrendingUp, Eye, Users, Zap, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SellerRegistrationModal from "@/components/SellerRegistrationModal";
@@ -528,6 +528,43 @@ export default function Home() {
       </section>
 
       <ContactSection />
+
+      {/* Floating Get Quote Button */}
+      <a
+        href="mailto:info@hxnbuildingdepot.ca?subject=Quote Request"
+        className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center justify-center gap-2 px-3 py-6 rounded-l-xl shadow-xl transition-all duration-300 hover:translate-x-[-3px] group cursor-pointer border-l-2 border-t-2 border-b-2"
+        style={{ 
+          backgroundColor: colors.green,
+          borderColor: colors.gold
+        }}
+        aria-label="Get Quote"
+      >
+        <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: colors.gold }}>
+          <MessageCircle className="w-4 h-4 group-hover:scale-110 transition-transform" style={{ color: colors.green }} />
+        </div>
+        <div className="flex flex-col items-center gap-0.5">
+          <span 
+            className="font-black text-[10px] tracking-wider uppercase leading-tight" 
+            style={{ 
+              fontFamily: "var(--font-montserrat)", 
+              color: colors.white,
+              letterSpacing: '0.1em'
+            }}
+          >
+            Get
+          </span>
+          <span 
+            className="font-black text-[10px] tracking-wider uppercase leading-tight" 
+            style={{ 
+              fontFamily: "var(--font-montserrat)", 
+              color: colors.gold,
+              letterSpacing: '0.1em'
+            }}
+          >
+            Quote
+          </span>
+        </div>
+      </a>
 
       <Footer />
     </div>
