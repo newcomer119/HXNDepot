@@ -2,7 +2,7 @@ import useCart from "@/hooks/useCart";
 import useWishlist from "@/hooks/useWishlist";
 import { Product } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import {
   View,
   Text,
@@ -31,6 +31,8 @@ const ProductsGrid = ({
   isFetchingNextPage = false,
   onLoadMore 
 }: ProductsGridProps) => {
+  const router = useRouter();
+  
   // Lazy load wishlist - only load when user interacts with wishlist
   const { isInWishlist, toggleWishlist, isAddingToWishlist, isRemovingFromWishlist } =
     useWishlist();
