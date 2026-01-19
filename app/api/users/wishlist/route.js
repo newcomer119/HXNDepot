@@ -34,6 +34,16 @@ export async function GET(request) {
 
         // Get wishlist product IDs and fetch full product details
         const wishlistIds = user.wishlist || [];
+        
+        // Handle empty wishlist
+        if (wishlistIds.length === 0) {
+            const response = NextResponse.json({ 
+                success: true, 
+                wishlist: [] 
+            });
+            return addCorsHeaders(response, request);
+        }
+        
         const products = await Product.find({ _id: { $in: wishlistIds } });
 
         const response = NextResponse.json({ 
@@ -91,7 +101,11 @@ export async function POST(request) {
             user.wishlist = [];
         }
         
-        if (!user.wishlist.includes(productId)) {
+        // Convert to string for comparison
+        const productIdStr = productId.toString();
+        const wishlistIds = user.wishlist.map(id => id.toString());
+        
+        if (!wishlistIds.includes(productIdStr)) {
             user.wishlist.push(productId);
             await user.save();
         }

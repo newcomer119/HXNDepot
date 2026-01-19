@@ -136,13 +136,13 @@ const ShopScreen = () => {
               }}
               className={`mr-3 px-5 py-3 rounded-xl border-2 ${
                 selectedCategory === "all"
-                  ? "bg-primary border-gold"
-                  : "bg-surface-light border-surface-dark"
+                  ? "bg-gold border-gold shadow-lg"
+                  : "bg-surface-light border-gold/30"
               }`}
             >
               <Text
                 className={`text-sm font-black uppercase tracking-wide ${
-                  selectedCategory === "all" ? "text-white" : "text-primary"
+                  selectedCategory === "all" ? "text-primary" : "text-primary"
                 }`}
               >
                 All
@@ -175,13 +175,13 @@ const ShopScreen = () => {
                     }}
                     className={`px-5 py-3 rounded-xl border-2 flex-row items-center ${
                       hasSelectedSubcategory || isMainCategorySelected
-                        ? "bg-primary border-gold"
-                        : "bg-surface-light border-surface-dark"
+                        ? "bg-gold border-gold shadow-lg"
+                        : "bg-surface-light border-gold/30"
                     }`}
                   >
                     <Text
                       className={`text-sm font-black uppercase tracking-wide ${
-                        hasSelectedSubcategory || isMainCategorySelected ? "text-white" : "text-primary"
+                        hasSelectedSubcategory || isMainCategorySelected ? "text-primary" : "text-primary"
                       }`}
                       numberOfLines={1}
                       style={{ maxWidth: 120 }}
@@ -191,7 +191,7 @@ const ShopScreen = () => {
                     <Ionicons
                       name={isOpen ? "chevron-up" : "chevron-down"}
                       size={16}
-                      color={hasSelectedSubcategory || isMainCategorySelected ? "#FFFFFF" : "#005a2b"}
+                      color={hasSelectedSubcategory || isMainCategorySelected ? "#005a2b" : "#005a2b"}
                       style={{ marginLeft: 4 }}
                     />
                   </TouchableOpacity>
@@ -244,13 +244,13 @@ const ShopScreen = () => {
                         setSelectedCategory(fullCategory);
                         setOpenDropdown(null);
                       }}
-                      className={`px-5 py-4 border-b border-surface-dark ${
-                        isSelected ? "bg-primary" : "bg-white"
+                      className={`px-5 py-4 border-b border-gold/20 ${
+                        isSelected ? "bg-gold" : "bg-white"
                       }`}
                     >
                       <Text
                         className={`text-sm font-black uppercase tracking-wide ${
-                          isSelected ? "text-white" : "text-primary"
+                          isSelected ? "text-primary" : "text-primary"
                         }`}
                       >
                         {subcategory}

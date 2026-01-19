@@ -33,10 +33,14 @@ export async function DELETE(request, { params }) {
         }
 
         // Remove product from wishlist
-        if (user.wishlist) {
-            user.wishlist = user.wishlist.filter(id => id.toString() !== productId);
-            await user.save();
+        if (!user.wishlist) {
+            user.wishlist = [];
         }
+        
+        // Convert to string for comparison
+        const productIdStr = productId.toString();
+        user.wishlist = user.wishlist.filter(id => id.toString() !== productIdStr);
+        await user.save();
 
         const response = NextResponse.json({ 
             success: true, 

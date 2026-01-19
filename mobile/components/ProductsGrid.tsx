@@ -54,7 +54,7 @@ const ProductsGrid = ({
 
   const renderProduct = ({ item: product }: { item: Product }) => (
     <TouchableOpacity
-      className="bg-surface-light border border-surface-dark rounded-3xl overflow-hidden mb-3 shadow-sm"
+      className="bg-surface-light border-2 border-gold/20 rounded-3xl overflow-hidden mb-3 shadow-lg"
       style={{ width: "48%" }}
       activeOpacity={0.8}
       onPress={() => router.push(`/product/${product._id}`)}
@@ -69,7 +69,11 @@ const ProductsGrid = ({
         />
 
         <TouchableOpacity
-          className="absolute top-3 right-3 bg-white/90 backdrop-blur-xl p-2 rounded-full shadow-md"
+          className={`absolute top-3 right-3 backdrop-blur-xl p-2.5 rounded-full shadow-lg border-2 ${
+            isInWishlist(product._id) 
+              ? "bg-gold border-gold" 
+              : "bg-white/95 border-gold/30"
+          }`}
           activeOpacity={0.7}
           onPress={() => toggleWishlist(product._id)}
           disabled={isAddingToWishlist || isRemovingFromWishlist}
@@ -80,7 +84,7 @@ const ProductsGrid = ({
             <Ionicons
               name={isInWishlist(product._id) ? "heart" : "heart-outline"}
               size={18}
-              color={isInWishlist(product._id) ? "#d4af37" : "#005a2b"}
+              color={isInWishlist(product._id) ? "#005a2b" : "#005a2b"}
             />
           )}
         </TouchableOpacity>
@@ -93,9 +97,9 @@ const ProductsGrid = ({
         </Text>
 
         {(product.averageRating !== undefined || product.totalReviews !== undefined) && (
-          <View className="flex-row items-center mb-2">
+          <View className="flex-row items-center mb-2 bg-gold/10 px-2 py-1 rounded-full self-start">
             <Ionicons name="star" size={12} color="#FFC107" />
-            <Text className="text-text-primary text-xs font-semibold ml-1">
+            <Text className="text-primary text-xs font-black ml-1">
               {product.averageRating?.toFixed(1) || "0.0"}
             </Text>
             <Text className="text-text-secondary text-xs ml-1">
@@ -107,24 +111,37 @@ const ProductsGrid = ({
         <View className="flex-row items-center justify-between">
           {product.offerPrice === 0 || product.price === 0 ? (
             <TouchableOpacity
-              className="bg-primary px-3 py-1.5 rounded-lg"
+              className="bg-primary border-2 border-gold px-4 py-2 rounded-xl"
               activeOpacity={0.7}
               onPress={(e) => {
                 e.stopPropagation();
                 router.push("/(tabs)/contact");
               }}
             >
-              <Text className="text-white text-xs font-bold">Contact Store</Text>
+              <Text className="text-white text-xs font-black uppercase tracking-wide">Contact Store</Text>
             </TouchableOpacity>
           ) : (
-            <Text className="text-primary font-bold text-lg">
-              ₹{(product.offerPrice || product.price).toLocaleString()}
-            </Text>
+            <View className="flex-1">
+              {product.offerPrice && product.offerPrice < product.price ? (
+                <View>
+                  <Text className="text-text-secondary text-xs line-through">
+                    ₹{product.price.toLocaleString()}
+                  </Text>
+                  <Text className="text-primary font-black text-lg">
+                    ₹{product.offerPrice.toLocaleString()}
+                  </Text>
+                </View>
+              ) : (
+                <Text className="text-primary font-black text-lg">
+                  ₹{(product.offerPrice || product.price).toLocaleString()}
+                </Text>
+              )}
+            </View>
           )}
 
           {product.offerPrice !== 0 && product.price !== 0 && (
             <TouchableOpacity
-              className="bg-gold rounded-full w-8 h-8 items-center justify-center shadow-sm"
+              className="bg-gold border-2 border-gold rounded-full w-10 h-10 items-center justify-center shadow-lg"
               activeOpacity={0.7}
               onPress={(e) => {
                 e.stopPropagation();
@@ -135,7 +152,7 @@ const ProductsGrid = ({
               {isAddingToCart ? (
                 <ActivityIndicator size="small" color="#005a2b" />
               ) : (
-                <Ionicons name="add" size={18} color="#005a2b" />
+                <Ionicons name="add" size={20} color="#005a2b" />
               )}
             </TouchableOpacity>
           )}
@@ -183,9 +200,9 @@ const ProductsGrid = ({
               <View className="py-4 items-center">
                 <TouchableOpacity
                   onPress={onLoadMore}
-                  className="bg-primary px-6 py-2 rounded-lg"
+                  className="bg-gold border-2 border-gold px-8 py-3 rounded-xl shadow-lg"
                 >
-                  <Text className="text-white font-semibold">Load More</Text>
+                  <Text className="text-primary font-black uppercase tracking-wide">Load More</Text>
                 </TouchableOpacity>
               </View>
             );
