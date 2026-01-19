@@ -13,15 +13,13 @@ const ShippingAndDelivery = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-8">Shipping & Delivery</h1>
             <div className="space-y-6 text-gray-700">
               <section>
-                <p>For international orders, shipments are dispatched and delivered via authorized international courier services and/or international speed post services only.</p>
-                <p>For domestic orders, shipments are dispatched using registered domestic courier partners and/or speed post services exclusively.</p>
-                <p>Delivery is expected within 0 to 7 days, or as per the delivery date agreed upon during order confirmation.</p>
-                <p>Delivery timelines are subject to the operational norms of the designated courier or postal service provider.</p>
-                <p>FILAMENT FREAKS shall not be held liable for any delays in delivery caused by courier agencies or postal authorities.</p>
-                <p>Our responsibility is limited to ensuring the consignment is handed over to the courier or postal service within 0 to 7 days of order and payment, or as per the mutually agreed schedule at the time of order placement.</p>
-                <p>All orders will be delivered to the shipping address provided by the buyer at the time of registration.</p>
-                <p>Order and delivery confirmations will be sent to the buyer via the email address submitted during registration.</p>
-                <p>For any issues or support regarding our services, customers can contact us at +1 (519) 706-6111 or email info@hxnbuildingdepot.ca.</p>
+                <p className="text-gray-600 mb-4">
+                  For any questions about shipping and delivery, please contact us:
+                </p>
+                <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                  <p className="text-gray-600">📧 Email: info@hxnbuildingdepot.ca</p>
+                  <p className="text-gray-600">📞 Phone: +1 (519) 706-6111</p>
+                </div>
               </section>
             </div>
           </div>
@@ -32,4 +30,4 @@ const ShippingAndDelivery = () => {
   );
 };
 
-export default ShippingAndDelivery; 
+export default ShippingAndDelivery;

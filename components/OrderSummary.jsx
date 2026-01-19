@@ -105,7 +105,7 @@ const OrderSummary = () => {
       const product = products.find(p => p._id === productId);
       if (!product) continue;
       const lineTotal = (product.offerPrice || 0) * cartItem.quantity;
-      if (product.category === "Organics by Filament Freaks") {
+      if (product.category && product.category.includes("Building Materials")) {
         organicGross += lineTotal;
       } else {
         otherGross += lineTotal;

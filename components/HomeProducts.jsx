@@ -20,9 +20,10 @@ const HomeProducts = () => {
       return product.category === "Accessories" || 
              product.category.startsWith("Accessories - ");
     } else {
-      // Match "Organics by Filament Freaks" category or any category starting with it
-      return product.category === "Organics by Filament Freaks" || 
-             product.category.startsWith("Organics by Filament Freaks - ");
+      // Match building materials categories (excluding Accessories)
+      return product.category && 
+             product.category !== "Accessories" && 
+             !product.category.startsWith("Accessories - ");
     }
   });
 
@@ -49,7 +50,7 @@ const HomeProducts = () => {
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            Organic By FilamentFreaks
+            Building Materials
           </button>
         </div>
       </div>

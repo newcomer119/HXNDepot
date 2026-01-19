@@ -72,8 +72,8 @@ export async function POST(request) {
             }, { status: 400 });
         }
 
-        // For Organics category, require at least one color (fragrance)
-        if (category === "Organics by Filament Freaks" && (!colors || colors.length === 0)) {
+        // For categories that require colors, require at least one color
+        if (category && category.includes("Building Materials") && (!colors || colors.length === 0)) {
             console.log("Organics category requires at least one fragrance"); // Debug log
             return NextResponse.json({ 
                 success: false, 

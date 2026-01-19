@@ -78,7 +78,7 @@ export async function POST(request) {
             const product = await Product.findById(productId);
             if (!product) continue;
             const lineTotal = (product.offerPrice || 0) * item.quantity;
-            if (product.category === "Organics by Filament Freaks") {
+            if (product.category && product.category.includes("Building Materials")) {
                 organicGross += lineTotal;
             } else {
                 otherGross += lineTotal;
