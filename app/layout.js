@@ -33,6 +33,9 @@ const lora = Lora({
 export const metadata = {
   title: "HXN Building Depot",
   description: "Online Store For Real Estate Construction Materials ",
+  verification: {
+    google: "at9UpR9Rirz65A1F9yaUTAfbOutbk0bSxtk29eis29k",
+  },
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
@@ -53,6 +56,7 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en">
         <head>
+          <meta name="google-site-verification" content="at9UpR9Rirz65A1F9yaUTAfbOutbk0bSxtk29eis29k" />
           <link rel="icon" href="/favicon.ico" sizes="any" />
           <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
           <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />

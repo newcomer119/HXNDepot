@@ -8,7 +8,7 @@ import { useAppContext } from "@/context/AppContext";
 import { useCart } from "@/context/CartContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { ShoppingCart, Plus, Minus, ChevronDown, Eye, X } from "lucide-react";
+import { ShoppingCart, Plus, Minus, ChevronDown, Eye, X, ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -190,15 +190,14 @@ export default function ProductsPage() {
               className="text-5xl md:text-7xl font-black mb-8 leading-tight"
               style={{ fontFamily: "var(--font-montserrat)" }}
             >
-              <span style={{ color: colors.green }}>Premium </span>
-              <span style={{ color: colors.gold }}>Products</span>
+              <span style={{ color: colors.green }}>Partner </span>
+              <span style={{ color: colors.gold }}>Stores</span>
             </h1>
             <p
               className="text-lg md:text-xl font-bold leading-relaxed"
               style={{ color: colors.green }}
             >
-              Elevate your architectural vision with our world class collections
-              and fixtures.
+              Discover quality products from our trusted partner stores and explore their collections.
             </p>
           </motion.div>
         </div>
@@ -337,8 +336,176 @@ export default function ProductsPage() {
         </div>
       </section>
 
+      {/* Partner Stores Section */}
+      <section className="py-16 bg-gradient-to-b from-white to-slate-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2
+              className="text-3xl md:text-4xl font-black mb-4"
+              style={{ 
+                color: colors.green,
+                fontFamily: "var(--font-montserrat)" 
+              }}
+            >
+              Our Trusted Partners
+            </h2>
+            <p
+              className="text-lg text-slate-600 max-w-2xl mx-auto"
+              style={{ fontFamily: "var(--font-montserrat)" }}
+            >
+              Explore products from our partner stores and discover their unique collections
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {/* Vidar Flooring Partner */}
+            <motion.a
+              href="https://vidarflooring.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+            >
+              <div className="relative aspect-video overflow-hidden bg-slate-100">
+                <Image
+                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80"
+                  alt="Vidar Flooring"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+              </div>
+              <div className="p-6">
+                <h3
+                  className="text-xl font-black mb-2"
+                  style={{ 
+                    color: colors.green,
+                    fontFamily: "var(--font-montserrat)" 
+                  }}
+                >
+                  Vidar Flooring
+                </h3>
+                <p className="text-slate-600 mb-4" style={{ fontFamily: "var(--font-montserrat)" }}>
+                  Premium engineered hardwood flooring with warmth and heart. Explore their collection of quality flooring solutions.
+                </p>
+                <div className="flex items-center gap-2 text-sm font-bold" style={{ color: colors.gold }}>
+                  <span>Visit Store</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+            </motion.a>
+
+            {/* Additional Partner 1 */}
+            <motion.a
+              href="https://example-partner1.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+            >
+              <div className="relative aspect-video overflow-hidden bg-slate-100">
+                <Image
+                  src="https://images.unsplash.com/photo-1615971677499-5467cbab01c0?w=800&q=80"
+                  alt="Premium Tiles Partner"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+              </div>
+              <div className="p-6">
+                <h3
+                  className="text-xl font-black mb-2"
+                  style={{ 
+                    color: colors.green,
+                    fontFamily: "var(--font-montserrat)" 
+                  }}
+                >
+                  Premium Tiles Collection
+                </h3>
+                <p className="text-slate-600 mb-4" style={{ fontFamily: "var(--font-montserrat)" }}>
+                  Discover exquisite tile collections for your home and commercial spaces. Quality craftsmanship meets modern design.
+                </p>
+                <div className="flex items-center gap-2 text-sm font-bold" style={{ color: colors.gold }}>
+                  <span>Visit Store</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+            </motion.a>
+
+            {/* Additional Partner 2 */}
+            <motion.a
+              href="https://example-partner2.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+            >
+              <div className="relative aspect-video overflow-hidden bg-slate-100">
+                <Image
+                  src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80"
+                  alt="Bathroom Fixtures Partner"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+              </div>
+              <div className="p-6">
+                <h3
+                  className="text-xl font-black mb-2"
+                  style={{ 
+                    color: colors.green,
+                    fontFamily: "var(--font-montserrat)" 
+                  }}
+                >
+                  Luxury Bathroom Fixtures
+                </h3>
+                <p className="text-slate-600 mb-4" style={{ fontFamily: "var(--font-montserrat)" }}>
+                  Transform your bathroom with elegant vanities and modern fixtures. Premium quality for your home.
+                </p>
+                <div className="flex items-center gap-2 text-sm font-bold" style={{ color: colors.gold }}>
+                  <span>Visit Store</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+            </motion.a>
+          </div>
+        </div>
+      </section>
+
+      {/* Products Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2
+              className="text-3xl md:text-4xl font-black mb-4"
+              style={{ 
+                color: colors.green,
+                fontFamily: "var(--font-montserrat)" 
+              }}
+            >
+              Products from Our Partners
+            </h2>
+          </motion.div>
+
           {isLoading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {[...Array(8)].map((_, i) => (
