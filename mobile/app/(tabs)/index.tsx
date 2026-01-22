@@ -103,8 +103,8 @@ const ShopScreen = () => {
               <Text className="text-text-secondary text-sm mt-1">Premium Surfaces & Fixtures</Text>
             </View>
 
-            <TouchableOpacity className="bg-surface/50 p-3 rounded-full" activeOpacity={0.7}>
-              <Ionicons name="options-outline" size={22} color={"#fff"} />
+            <TouchableOpacity className="p-3 rounded-full" style={{ backgroundColor: "rgba(255,255,255,0.5)" }} activeOpacity={0.7}>
+              <Ionicons name="options-outline" size={22} color={"#005a2b"} />
             </TouchableOpacity>
           </View>
 
@@ -128,39 +128,42 @@ const ShopScreen = () => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 10 }}
           >
-            {/* All Products Button */}
+            {/* All Products Button - inline styles to avoid NativeWind/navigation-context crash on native */}
             <TouchableOpacity
               onPress={() => {
                 setSelectedCategory("all");
                 setOpenDropdown(null);
               }}
-              className={`mr-3 px-5 py-3 rounded-xl border-2 ${
-                selectedCategory === "all"
-                  ? "bg-gold border-gold shadow-lg"
-                  : "bg-surface-light border-gold/30"
-              }`}
+              className="mr-3 px-5 py-3 rounded-xl flex-row items-center"
+              style={{
+                borderWidth: 2,
+                borderColor: selectedCategory === "all" ? "#d4af37" : "rgba(212,175,55,0.3)",
+                backgroundColor: selectedCategory === "all" ? "#d4af37" : "#F9FAFB",
+                ...(selectedCategory === "all" && {
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.15,
+                  shadowRadius: 8,
+                  elevation: 8,
+                }),
+              }}
             >
-              <Text
-                className={`text-sm font-black uppercase tracking-wide ${
-                  selectedCategory === "all" ? "text-primary" : "text-primary"
-                }`}
-              >
+              <Text className="text-sm font-black uppercase tracking-wide" style={{ color: "#005a2b" }}>
                 All
               </Text>
             </TouchableOpacity>
 
-            {/* Main Category Buttons */}
+            {/* Main Category Buttons - inline styles to avoid NativeWind/navigation-context crash on native */}
             {mainCategories.map((mainCategory) => {
               const hasSelectedSubcategory = selectedCategory.startsWith(mainCategory + " - ");
               const isMainCategorySelected = selectedCategory === mainCategory;
               const isOpen = openDropdown === mainCategory;
-              
+              const isSelected = hasSelectedSubcategory || isMainCategorySelected;
+
               return (
                 <View key={mainCategory} className="mr-3">
                   <TouchableOpacity
                     onPress={() => {
-                      // If clicking the same main category, toggle dropdown
-                      // If clicking a different main category, select it and show all subcategories
                       if (isMainCategorySelected) {
                         setOpenDropdown(isOpen ? null : mainCategory);
                       } else {
@@ -169,29 +172,34 @@ const ShopScreen = () => {
                       }
                     }}
                     onLongPress={() => {
-                      // Long press to select main category and show all its products
                       setSelectedCategory(mainCategory);
                       setOpenDropdown(null);
                     }}
-                    className={`px-5 py-3 rounded-xl border-2 flex-row items-center ${
-                      hasSelectedSubcategory || isMainCategorySelected
-                        ? "bg-gold border-gold shadow-lg"
-                        : "bg-surface-light border-gold/30"
-                    }`}
+                    className="px-5 py-3 rounded-xl flex-row items-center"
+                    style={{
+                      borderWidth: 2,
+                      borderColor: isSelected ? "#d4af37" : "rgba(212,175,55,0.3)",
+                      backgroundColor: isSelected ? "#d4af37" : "#F9FAFB",
+                      ...(isSelected && {
+                        shadowColor: "#000",
+                        shadowOffset: { width: 0, height: 4 },
+                        shadowOpacity: 0.15,
+                        shadowRadius: 8,
+                        elevation: 8,
+                      }),
+                    }}
                   >
                     <Text
-                      className={`text-sm font-black uppercase tracking-wide ${
-                        hasSelectedSubcategory || isMainCategorySelected ? "text-primary" : "text-primary"
-                      }`}
+                      className="text-sm font-black uppercase tracking-wide"
+                      style={{ color: "#005a2b", maxWidth: 120 }}
                       numberOfLines={1}
-                      style={{ maxWidth: 120 }}
                     >
                       {mainCategory}
                     </Text>
                     <Ionicons
                       name={isOpen ? "chevron-up" : "chevron-down"}
                       size={16}
-                      color={hasSelectedSubcategory || isMainCategorySelected ? "#005a2b" : "#005a2b"}
+                      color="#005a2b"
                       style={{ marginLeft: 4 }}
                     />
                   </TouchableOpacity>
@@ -209,15 +217,24 @@ const ShopScreen = () => {
           onRequestClose={() => setOpenDropdown(null)}
         >
           <TouchableOpacity
-            className="flex-1 bg-black/50 justify-center items-center px-6"
+            className="flex-1 justify-center items-center px-6"
+            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
             activeOpacity={1}
             onPress={() => setOpenDropdown(null)}
           >
             <View
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-sm max-h-[70%]"
-              style={{ borderWidth: 2, borderColor: "#d4af37" }}
+              className="bg-white rounded-2xl w-full max-w-sm max-h-[70%]"
+              style={{
+                borderWidth: 2,
+                borderColor: "#d4af37",
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.25,
+                shadowRadius: 16,
+                elevation: 16,
+              }}
             >
-              <View className="p-4 border-b-2 border-surface-dark">
+              <View className="p-4" style={{ borderBottomWidth: 2, borderBottomColor: "#E5E7EB" }}>
                 <View className="flex-row items-center justify-between">
                   <Text className="text-primary text-lg font-black uppercase tracking-wide">
                     {openDropdown}
@@ -233,10 +250,8 @@ const ShopScreen = () => {
               <ScrollView className="max-h-[400px]">
                 {openDropdown && dynamicCategoryStructure[openDropdown]?.map((subcategory) => {
                   const fullCategory = `${openDropdown} - ${subcategory}`;
-                  const hasProducts = categoriesWithProducts.has(fullCategory);
                   const isSelected = selectedCategory === fullCategory;
 
-                  // Show all subcategories that exist in products
                   return (
                     <TouchableOpacity
                       key={subcategory}
@@ -244,15 +259,14 @@ const ShopScreen = () => {
                         setSelectedCategory(fullCategory);
                         setOpenDropdown(null);
                       }}
-                      className={`px-5 py-4 border-b border-gold/20 ${
-                        isSelected ? "bg-gold" : "bg-white"
-                      }`}
+                      className="px-5 py-4"
+                      style={{
+                        borderBottomWidth: 1,
+                        borderBottomColor: "rgba(212,175,55,0.2)",
+                        backgroundColor: isSelected ? "#d4af37" : "#fff",
+                      }}
                     >
-                      <Text
-                        className={`text-sm font-black uppercase tracking-wide ${
-                          isSelected ? "text-primary" : "text-primary"
-                        }`}
-                      >
+                      <Text className="text-sm font-black uppercase tracking-wide" style={{ color: "#005a2b" }}>
                         {subcategory}
                       </Text>
                     </TouchableOpacity>
