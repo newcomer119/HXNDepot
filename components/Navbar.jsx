@@ -43,95 +43,106 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center group">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/98 backdrop-blur-lg border-b border-slate-200/50 shadow-md">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
+        {/* Mobile Menu Button - Top Right */}
+        <div className="flex items-center justify-end pt-0.5 pb-0 lg:hidden">
+          <button
+            className="p-1.5 rounded-md hover:bg-slate-50 transition-colors"
+            style={{ color: colors.green }}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5 md:w-6 md:h-6" /> : <Menu className="w-5 h-5 md:w-6 md:h-6" />}
+          </button>
+        </div>
+
+        {/* Logo Section - Centered */}
+        <div className="flex items-center justify-center py-0">
+          <Link href="/" className="flex items-center group relative">
             <Image
               src="/android-chrome-192x192.png"
               alt="HXN Building Depot"
               width={80}
               height={80}
-              className="w-16 h-16 md:w-20 md:h-20"
+              className="w-16 h-16 md:w-20 md:h-20 transition-all duration-300 group-hover:scale-105 drop-shadow-sm"
+              priority
             />
           </Link>
+        </div>
 
-          <div className="hidden lg:flex items-center gap-8 flex-1 justify-center">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-sm font-black transition-all flex items-center gap-1 hover:opacity-70 relative py-1 whitespace-nowrap"
-                style={{ 
-                  color: isActiveLink(link.href) ? colors.gold : colors.green,
-                  fontFamily: "var(--font-montserrat)"
-                }}
-              >
-                {link.name}
-                {isActiveLink(link.href) && (
-                  <motion.div 
-                    layoutId="activeNav"
-                    className="absolute bottom-0 left-0 right-0 h-0.5"
-                    style={{ backgroundColor: colors.gold }}
+        {/* Navigation Links Row - Includes Nav Links, Account, and Project Enquiry */}
+        <div className="hidden lg:flex items-center justify-center gap-3 md:gap-4 pb-1">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className="px-3 py-1.5 text-xs md:text-sm font-bold transition-all duration-200 relative group/item whitespace-nowrap rounded-md hover:bg-slate-50"
+              style={{ 
+                color: isActiveLink(link.href) ? colors.gold : colors.green,
+                fontFamily: "var(--font-montserrat)"
+              }}
+            >
+              <span className="relative z-10">{link.name}</span>
+              {isActiveLink(link.href) && (
+                <motion.div 
+                  layoutId="activeNav"
+                  className="absolute inset-0 rounded-md"
+                  style={{ 
+                    backgroundColor: `${colors.gold}15`,
+                    borderBottom: `2px solid ${colors.gold}`
+                  }}
+                />
+              )}
+            </Link>
+          ))}
+          {isSeller && (
+            <Link
+              href="/seller"
+              className="px-3 py-1.5 text-xs md:text-sm font-bold transition-all duration-200 rounded-md hover:bg-slate-50 whitespace-nowrap"
+              style={{ 
+                color: colors.green,
+                fontFamily: "var(--font-montserrat)"
+              }}
+            >
+              Seller Dashboard
+            </Link>
+          )}
+          
+          {/* Account/UserButton */}
+          <div className="flex items-center justify-center">
+            {user ? (
+              <UserButton>
+                <UserButton.MenuItems>
+                  <UserButton.Action
+                    label={`Cart ${cartCount > 0 ? `(${cartCount})` : ''}`}
+                    labelIcon={<ShoppingCart className="w-4 h-4" />}
+                    onClick={() => setCartOpen(true)}
                   />
-                )}
-              </Link>
-            ))}
-            {isSeller && (
-              <Link
-                href="/seller"
-                className="text-sm font-black transition-all hover:opacity-70 whitespace-nowrap"
-                style={{ 
-                  color: colors.green,
-                  fontFamily: "var(--font-montserrat)"
-                }}
+                </UserButton.MenuItems>
+              </UserButton>
+            ) : (
+              <button
+                onClick={openSignIn}
+                className="px-3 py-1.5 text-xs md:text-sm font-bold transition-all duration-200 rounded-md hover:bg-slate-50 whitespace-nowrap"
+                style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}
               >
-                Seller Dashboard
-              </Link>
+                Account
+              </button>
             )}
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="flex items-center justify-center min-w-[40px] h-10">
-              {user ? (
-                <UserButton>
-                  <UserButton.MenuItems>
-                    <UserButton.Action
-                      label={`Cart ${cartCount > 0 ? `(${cartCount})` : ''}`}
-                      labelIcon={<ShoppingCart className="w-4 h-4" />}
-                      onClick={() => setCartOpen(true)}
-                    />
-                  </UserButton.MenuItems>
-                </UserButton>
-              ) : (
-                <button
-                  onClick={openSignIn}
-                  className="text-sm font-black transition-all hover:opacity-70 whitespace-nowrap"
-                  style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}
-                >
-                  Account
-                </button>
-              )}
-            </div>
-
-            <div className="hidden lg:block flex-shrink-0">
-              <Link
-                href="/#contact"
-                className="px-6 py-3 text-white text-xs font-black uppercase tracking-widest transition-all duration-300 rounded shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap"
-                style={{ backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }}
-              >
-                Project Enquiry
-              </Link>
-            </div>
-
-            <button
-              className="lg:hidden p-2 flex-shrink-0"
-              style={{ color: colors.green }}
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+          {/* Project Enquiry Button */}
+          <Link
+            href="/#contact"
+            className="px-3 md:px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all duration-300 rounded-md shadow-sm hover:shadow-md hover:scale-105 active:scale-95 whitespace-nowrap"
+            style={{ 
+              backgroundColor: colors.green, 
+              color: colors.white,
+              fontFamily: "var(--font-montserrat)"
+            }}
+          >
+            Project Enquiry
+          </Link>
         </div>
       </div>
 
@@ -141,38 +152,42 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="lg:hidden bg-white border-t border-slate-100 py-6 px-6"
+            className="lg:hidden bg-white border-t border-slate-200 py-6 px-6"
           >
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="block py-3 font-black text-sm uppercase tracking-widest"
-                style={{ 
-                  color: isActiveLink(link.href) ? colors.gold : colors.green,
-                  fontFamily: "var(--font-montserrat)"
-                }}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.name}
-              </Link>
-            ))}
-            {isSeller && (
-              <Link
-                href="/seller"
-                className="block py-3 font-black text-sm uppercase tracking-widest"
-                style={{ 
-                  color: colors.green,
-                  fontFamily: "var(--font-montserrat)"
-                }}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Seller Dashboard
-              </Link>
-            )}
+            {/* Mobile Navigation Links */}
+            <div className="space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="block py-3 px-4 font-bold text-sm rounded-md text-center transition-colors"
+                  style={{ 
+                    color: isActiveLink(link.href) ? colors.gold : colors.green,
+                    backgroundColor: isActiveLink(link.href) ? `${colors.gold}10` : 'transparent',
+                    fontFamily: "var(--font-montserrat)"
+                  }}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.name}
+                </Link>
+              ))}
+              {isSeller && (
+                <Link
+                  href="/seller"
+                  className="block py-3 px-4 font-bold text-sm rounded-md text-center transition-colors hover:bg-slate-50"
+                  style={{ 
+                    color: colors.green,
+                    fontFamily: "var(--font-montserrat)"
+                  }}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Seller Dashboard
+                </Link>
+              )}
+            </div>
             <Link
               href="/#contact"
-              className="mt-4 block px-6 py-3 text-white text-xs font-black text-center uppercase tracking-widest rounded shadow-md"
+              className="mt-4 block px-6 py-3 text-white text-xs font-black text-center uppercase tracking-wider rounded-md shadow-sm"
               style={{ backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }}
               onClick={() => setMobileMenuOpen(false)}
             >
