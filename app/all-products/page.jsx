@@ -49,6 +49,43 @@ export default function ProductsPage() {
     fetchAllProducts();
   }, []);
 
+  // Scroll to products section on mount or when hash is present
+  useEffect(() => {
+    const scrollToProducts = () => {
+      const productsSection = document.getElementById('products-section');
+      if (productsSection) {
+        const offset = 100; // Offset for navbar
+        const elementPosition = productsSection.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    };
+
+    // Check if there's a hash in the URL
+    if (window.location.hash === '#products') {
+      // Small delay to ensure page is fully rendered
+      setTimeout(scrollToProducts, 500);
+    } else if (window.location.hash && window.location.hash !== '#products') {
+      // Handle other hash links
+      setTimeout(() => {
+        const element = document.querySelector(window.location.hash);
+        if (element) {
+          const offset = 100;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 500);
+    }
+  }, []);
+
   // Extract all unique categories from ALL products
   const categoriesWithProducts = useMemo(() => {
     const productsToUse = allProducts.length > 0 ? allProducts : products;
@@ -172,38 +209,349 @@ export default function ProductsPage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6">
+        </div>
+      </section>
+
+      {/* Partner Stores Section */}
+      <section className="relative py-20 bg-gradient-to-b from-white via-slate-50/50 to-white overflow-hidden">
+        {/* Decorative Background Elements */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: colors.gold }} />
+          <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: colors.green }} />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center max-w-3xl mx-auto"
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
           >
-            <span
-              className="text-sm font-black tracking-[0.4em] uppercase mb-4 block"
-              style={{
-                color: colors.gold,
-                fontFamily: "var(--font-montserrat)",
+            <div className="inline-flex items-center justify-center gap-3 mb-6">
+              <div className="w-12 h-px" style={{ backgroundColor: colors.gold }} />
+              <span
+                className="text-xs font-black tracking-[0.3em] uppercase px-4 py-2 rounded-full border-2"
+                style={{ 
+                  color: colors.gold,
+                  borderColor: colors.gold,
+                  fontFamily: "var(--font-montserrat)",
+                  backgroundColor: `${colors.goldLight}20`
+                }}
+              >
+                Trusted Partners
+              </span>
+              <div className="w-12 h-px" style={{ backgroundColor: colors.gold }} />
+            </div>
+            <h2
+              className="text-4xl md:text-5xl font-black mb-6 leading-tight"
+              style={{ 
+                color: colors.green,
+                fontFamily: "var(--font-montserrat)" 
               }}
             >
-              Our Collection
-            </span>
-            <h1
-              className="text-5xl md:text-7xl font-black mb-8 leading-tight"
-              style={{ fontFamily: "var(--font-montserrat)" }}
+              Our Trusted Partners
+            </h2>
+            <div className="w-24 h-1 mx-auto rounded-full" style={{ backgroundColor: colors.gold }} />
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {/* Vidar Flooring Partner */}
+            <motion.a
+              href="https://vidarflooring.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+              className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden border border-slate-100 hover:border-transparent"
+              style={{
+                boxShadow: "0 10px 40px -10px rgba(0, 0, 0, 0.1)"
+              }}
             >
-              <span style={{ color: colors.green }}>Partner </span>
-              <span style={{ color: colors.gold }}>Stores</span>
-            </h1>
+              {/* Partner Badge */}
+              <div className="absolute top-4 right-4 z-20">
+                <div 
+                  className="px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider shadow-lg"
+                  style={{ 
+                    backgroundColor: colors.gold,
+                    color: colors.white,
+                    fontFamily: "var(--font-montserrat)"
+                  }}
+                >
+                  Partner
+                </div>
+              </div>
+
+              {/* Decorative Corner */}
+              <div 
+                className="absolute top-0 left-0 w-24 h-24 opacity-10 group-hover:opacity-20 transition-opacity"
+                style={{
+                  background: `linear-gradient(135deg, ${colors.gold} 0%, transparent 70%)`
+                }}
+              />
+
+              <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
+                <Image
+                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80"
+                  alt="Vidar Flooring"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                
+                {/* Shine Effect on Hover */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              </div>
+
+              <div className="p-8 relative">
+                <div className="mb-4">
+                  <h3
+                    className="text-2xl font-black mb-3 group-hover:scale-105 transition-transform inline-block"
+                    style={{ 
+                      color: colors.green,
+                      fontFamily: "var(--font-montserrat)" 
+                    }}
+                  >
+                    Vidar Flooring
+                  </h3>
+                  <div className="w-16 h-0.5 rounded-full mb-4" style={{ backgroundColor: colors.gold }} />
+                </div>
+                
+                <p className="text-slate-600 mb-6 leading-relaxed text-sm" style={{ fontFamily: "var(--font-montserrat)" }}>
+                  Premium engineered hardwood flooring with warmth and heart. Explore their collection of quality flooring solutions.
+                </p>
+                
+                <div 
+                  className="inline-flex items-center gap-3 px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 group-hover:gap-4 group-hover:shadow-lg"
+                  style={{ 
+                    color: colors.white,
+                    backgroundColor: colors.green,
+                    fontFamily: "var(--font-montserrat)"
+                  }}
+                >
+                  <span>Visit Store</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+
+              {/* Hover Border Effect */}
+              <div 
+                className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{
+                  boxShadow: `0 0 0 2px ${colors.gold}40, 0 0 40px ${colors.gold}20`
+                }}
+              />
+            </motion.a>
+
+            {/* Additional Partner 1 */}
+            <motion.a
+              href="https://example-partner1.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden border border-slate-100 hover:border-transparent"
+              style={{
+                boxShadow: "0 10px 40px -10px rgba(0, 0, 0, 0.1)"
+              }}
+            >
+              {/* Partner Badge */}
+              <div className="absolute top-4 right-4 z-20">
+                <div 
+                  className="px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider shadow-lg"
+                  style={{ 
+                    backgroundColor: colors.gold,
+                    color: colors.white,
+                    fontFamily: "var(--font-montserrat)"
+                  }}
+                >
+                  Partner
+                </div>
+              </div>
+
+              {/* Decorative Corner */}
+              <div 
+                className="absolute top-0 left-0 w-24 h-24 opacity-10 group-hover:opacity-20 transition-opacity"
+                style={{
+                  background: `linear-gradient(135deg, ${colors.gold} 0%, transparent 70%)`
+                }}
+              />
+
+              <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
+                <Image
+                  src="https://images.unsplash.com/photo-1615971677499-5467cbab01c0?w=800&q=80"
+                  alt="Premium Tiles Partner"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                
+                {/* Shine Effect on Hover */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              </div>
+
+              <div className="p-8 relative">
+                <div className="mb-4">
+                  <h3
+                    className="text-2xl font-black mb-3 group-hover:scale-105 transition-transform inline-block"
+                    style={{ 
+                      color: colors.green,
+                      fontFamily: "var(--font-montserrat)" 
+                    }}
+                  >
+                    Premium Tiles Collection
+                  </h3>
+                  <div className="w-16 h-0.5 rounded-full mb-4" style={{ backgroundColor: colors.gold }} />
+                </div>
+                
+                <p className="text-slate-600 mb-6 leading-relaxed text-sm" style={{ fontFamily: "var(--font-montserrat)" }}>
+                  Discover exquisite tile collections for your home and commercial spaces. Quality craftsmanship meets modern design.
+                </p>
+                
+                <div 
+                  className="inline-flex items-center gap-3 px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 group-hover:gap-4 group-hover:shadow-lg"
+                  style={{ 
+                    color: colors.white,
+                    backgroundColor: colors.green,
+                    fontFamily: "var(--font-montserrat)"
+                  }}
+                >
+                  <span>Visit Store</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+
+              {/* Hover Border Effect */}
+              <div 
+                className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{
+                  boxShadow: `0 0 0 2px ${colors.gold}40, 0 0 40px ${colors.gold}20`
+                }}
+              />
+            </motion.a>
+
+            {/* Additional Partner 2 */}
+            <motion.a
+              href="https://example-partner2.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden border border-slate-100 hover:border-transparent"
+              style={{
+                boxShadow: "0 10px 40px -10px rgba(0, 0, 0, 0.1)"
+              }}
+            >
+              {/* Partner Badge */}
+              <div className="absolute top-4 right-4 z-20">
+                <div 
+                  className="px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider shadow-lg"
+                  style={{ 
+                    backgroundColor: colors.gold,
+                    color: colors.white,
+                    fontFamily: "var(--font-montserrat)"
+                  }}
+                >
+                  Partner
+                </div>
+              </div>
+
+              {/* Decorative Corner */}
+              <div 
+                className="absolute top-0 left-0 w-24 h-24 opacity-10 group-hover:opacity-20 transition-opacity"
+                style={{
+                  background: `linear-gradient(135deg, ${colors.gold} 0%, transparent 70%)`
+                }}
+              />
+
+              <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
+                <Image
+                  src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80"
+                  alt="Bathroom Fixtures Partner"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                
+                {/* Shine Effect on Hover */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              </div>
+
+              <div className="p-8 relative">
+                <div className="mb-4">
+                  <h3
+                    className="text-2xl font-black mb-3 group-hover:scale-105 transition-transform inline-block"
+                    style={{ 
+                      color: colors.green,
+                      fontFamily: "var(--font-montserrat)" 
+                    }}
+                  >
+                    Luxury Bathroom Fixtures
+                  </h3>
+                  <div className="w-16 h-0.5 rounded-full mb-4" style={{ backgroundColor: colors.gold }} />
+                </div>
+                
+                <p className="text-slate-600 mb-6 leading-relaxed text-sm" style={{ fontFamily: "var(--font-montserrat)" }}>
+                  Transform your bathroom with elegant vanities and modern fixtures. Premium quality for your home.
+                </p>
+                
+                <div 
+                  className="inline-flex items-center gap-3 px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 group-hover:gap-4 group-hover:shadow-lg"
+                  style={{ 
+                    color: colors.white,
+                    backgroundColor: colors.green,
+                    fontFamily: "var(--font-montserrat)"
+                  }}
+                >
+                  <span>Visit Store</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+
+              {/* Hover Border Effect */}
+              <div 
+                className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{
+                  boxShadow: `0 0 0 2px ${colors.gold}40, 0 0 40px ${colors.gold}20`
+                }}
+              />
+            </motion.a>
+          </div>
+        </div>
+      </section>
+
+      {/* Description Section */}
+      <section className="relative py-12 bg-white">
+        <div className="max-w-4xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center"
+          >
             <p
-              className="text-lg md:text-xl font-bold leading-relaxed"
-              style={{ color: colors.green }}
+              className="text-lg md:text-xl font-bold leading-relaxed max-w-3xl mx-auto mb-4"
+              style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}
             >
               Discover quality products from our trusted partner stores and explore their collections.
             </p>
+            <div className="flex items-center justify-center gap-2 mt-6">
+              <div className="w-8 h-px" style={{ backgroundColor: colors.gold }} />
+              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: colors.gold }} />
+              <div className="w-8 h-px" style={{ backgroundColor: colors.gold }} />
+            </div>
           </motion.div>
         </div>
       </section>
 
-      <section className="py-12 bg-white border-y border-slate-100">
+      <section id="products-section" className="py-12 bg-white border-y border-slate-100 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row gap-6 items-center justify-between mb-8">
             {/* Search */}
@@ -336,176 +684,9 @@ export default function ProductsPage() {
         </div>
       </section>
 
-      {/* Partner Stores Section */}
-      <section className="py-16 bg-gradient-to-b from-white to-slate-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2
-              className="text-3xl md:text-4xl font-black mb-4"
-              style={{ 
-                color: colors.green,
-                fontFamily: "var(--font-montserrat)" 
-              }}
-            >
-              Our Trusted Partners
-            </h2>
-            <p
-              className="text-lg text-slate-600 max-w-2xl mx-auto"
-              style={{ fontFamily: "var(--font-montserrat)" }}
-            >
-              Explore products from our partner stores and discover their unique collections
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {/* Vidar Flooring Partner */}
-            <motion.a
-              href="https://vidarflooring.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
-            >
-              <div className="relative aspect-video overflow-hidden bg-slate-100">
-                <Image
-                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80"
-                  alt="Vidar Flooring"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-              </div>
-              <div className="p-6">
-                <h3
-                  className="text-xl font-black mb-2"
-                  style={{ 
-                    color: colors.green,
-                    fontFamily: "var(--font-montserrat)" 
-                  }}
-                >
-                  Vidar Flooring
-                </h3>
-                <p className="text-slate-600 mb-4" style={{ fontFamily: "var(--font-montserrat)" }}>
-                  Premium engineered hardwood flooring with warmth and heart. Explore their collection of quality flooring solutions.
-                </p>
-                <div className="flex items-center gap-2 text-sm font-bold" style={{ color: colors.gold }}>
-                  <span>Visit Store</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            </motion.a>
-
-            {/* Additional Partner 1 */}
-            <motion.a
-              href="https://example-partner1.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
-            >
-              <div className="relative aspect-video overflow-hidden bg-slate-100">
-                <Image
-                  src="https://images.unsplash.com/photo-1615971677499-5467cbab01c0?w=800&q=80"
-                  alt="Premium Tiles Partner"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-              </div>
-              <div className="p-6">
-                <h3
-                  className="text-xl font-black mb-2"
-                  style={{ 
-                    color: colors.green,
-                    fontFamily: "var(--font-montserrat)" 
-                  }}
-                >
-                  Premium Tiles Collection
-                </h3>
-                <p className="text-slate-600 mb-4" style={{ fontFamily: "var(--font-montserrat)" }}>
-                  Discover exquisite tile collections for your home and commercial spaces. Quality craftsmanship meets modern design.
-                </p>
-                <div className="flex items-center gap-2 text-sm font-bold" style={{ color: colors.gold }}>
-                  <span>Visit Store</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            </motion.a>
-
-            {/* Additional Partner 2 */}
-            <motion.a
-              href="https://example-partner2.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
-            >
-              <div className="relative aspect-video overflow-hidden bg-slate-100">
-                <Image
-                  src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80"
-                  alt="Bathroom Fixtures Partner"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-              </div>
-              <div className="p-6">
-                <h3
-                  className="text-xl font-black mb-2"
-                  style={{ 
-                    color: colors.green,
-                    fontFamily: "var(--font-montserrat)" 
-                  }}
-                >
-                  Luxury Bathroom Fixtures
-                </h3>
-                <p className="text-slate-600 mb-4" style={{ fontFamily: "var(--font-montserrat)" }}>
-                  Transform your bathroom with elegant vanities and modern fixtures. Premium quality for your home.
-                </p>
-                <div className="flex items-center gap-2 text-sm font-bold" style={{ color: colors.gold }}>
-                  <span>Visit Store</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            </motion.a>
-          </div>
-        </div>
-      </section>
-
       {/* Products Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2
-              className="text-3xl md:text-4xl font-black mb-4"
-              style={{ 
-                color: colors.green,
-                fontFamily: "var(--font-montserrat)" 
-              }}
-            >
-              Products from Our Partners
-            </h2>
-          </motion.div>
-
           {isLoading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {[...Array(8)].map((_, i) => (

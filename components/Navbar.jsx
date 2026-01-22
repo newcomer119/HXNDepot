@@ -13,7 +13,7 @@ import { useClerk, UserButton, useUser } from "@clerk/nextjs";
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "About Us", href: "/about" },
-  { name: "Products", href: "/all-products" },
+  { name: "Products", href: "/all-products#products" },
   { name: "Collections", href: "/#products" },
   { name: "View in Your Room", href: "/view-in-room" },
   { name: "Contact Us", href: "/#contact" },
