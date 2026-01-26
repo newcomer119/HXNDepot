@@ -60,11 +60,11 @@ export default function Navbar() {
         <div className="flex items-center justify-center py-0">
           <Link href="/" className="flex items-center group relative">
             <Image
-              src="/android-chrome-512x512.png"
+              src="/android-chrome-192x192.png"
               alt="HXN Building Depot"
-              width={96}
-              height={96}
-              className="w-20 h-20 md:w-24 md:h-24 transition-all duration-300 group-hover:scale-105 drop-shadow-sm"
+              width={112}
+              height={112}
+              className="w-24 h-24 md:w-28 md:h-28 transition-all duration-300 group-hover:scale-105 drop-shadow-sm"
               priority
             />
           </Link>
