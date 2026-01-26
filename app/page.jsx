@@ -531,7 +531,9 @@ export default function Home() {
 
       {/* Floating Get Quote Button */}
       <a
-        href="mailto:info@hxnbuildingdepot.ca?subject=Quote Request"
+        href="https://wa.me/14373511733"
+        target="_blank"
+        rel="noopener noreferrer"
         className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center justify-center gap-2 px-3 py-6 rounded-l-xl shadow-xl transition-all duration-300 hover:translate-x-[-3px] group cursor-pointer border-l-2 border-t-2 border-b-2"
         style={{ 
           backgroundColor: colors.green,

@@ -60,11 +60,11 @@ export default function Navbar() {
         <div className="flex items-center justify-center py-0">
           <Link href="/" className="flex items-center group relative">
             <Image
-              src="/android-chrome-192x192.png"
+              src="/android-chrome-512x512.png"
               alt="HXN Building Depot"
-              width={80}
-              height={80}
-              className="w-16 h-16 md:w-20 md:h-20 transition-all duration-300 group-hover:scale-105 drop-shadow-sm"
+              width={96}
+              height={96}
+              className="w-20 h-20 md:w-24 md:h-24 transition-all duration-300 group-hover:scale-105 drop-shadow-sm"
               priority
             />
           </Link>
@@ -132,8 +132,10 @@ export default function Navbar() {
           </div>
 
           {/* Project Enquiry Button */}
-          <Link
-            href="/#contact"
+          <a
+            href="https://wa.me/14373511733"
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-3 md:px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all duration-300 rounded-md shadow-sm hover:shadow-md hover:scale-105 active:scale-95 whitespace-nowrap"
             style={{ 
               backgroundColor: colors.green, 
@@ -142,7 +144,7 @@ export default function Navbar() {
             }}
           >
             Project Enquiry
-          </Link>
+          </a>
         </div>
       </div>
 
@@ -185,14 +187,16 @@ export default function Navbar() {
                 </Link>
               )}
             </div>
-            <Link
-              href="/#contact"
+            <a
+              href="https://wa.me/14373511733"
+              target="_blank"
+              rel="noopener noreferrer"
               className="mt-4 block px-6 py-3 text-white text-xs font-black text-center uppercase tracking-wider rounded-md shadow-sm"
               style={{ backgroundColor: colors.green, fontFamily: "var(--font-montserrat)" }}
               onClick={() => setMobileMenuOpen(false)}
             >
               Project Enquiry
-            </Link>
+            </a>
           </motion.div>
         )}
       </AnimatePresence>
