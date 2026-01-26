@@ -166,7 +166,7 @@ export default function Home() {
         onClose={() => setIsSellerModalOpen(false)} 
       />
 
-      <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-white">
+      <section className="relative min-h-screen flex items-center pt-32 overflow-hidden bg-white">
         {/* Background Image Slider */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-100/20 via-white/70 to-white/85 opacity-50 z-10" />

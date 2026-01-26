@@ -16,7 +16,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <Navbar />
-      <div className="flex flex-col md:flex-row w-full px-4 md:px-16 lg:px-32 pt-12 gap-8 flex-1">
+      <div className="flex flex-col md:flex-row w-full px-4 md:px-16 lg:px-32 pt-32 gap-8 flex-1">
         {/* Contact Form */}
         <div className="flex-1 max-w-xl">
           <h2 className="text-3xl font-semibold mb-2" style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}>Contact Us</h2>

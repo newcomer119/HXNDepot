@@ -50,7 +50,7 @@ const AddAddress = () => {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-white pt-24 pb-20">
+            <div className="min-h-screen bg-white pt-40 pb-20">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex flex-col md:flex-row gap-12 items-start justify-between">
                         <form onSubmit={onSubmitHandler} className="w-full max-w-2xl">

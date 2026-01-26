@@ -43,7 +43,7 @@ export default function AboutPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 border-b-4" style={{ borderColor: colors.gold }}>
+      <section className="relative pt-40 pb-20 border-b-4" style={{ borderColor: colors.gold }}>
         <div className="max-w-6xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

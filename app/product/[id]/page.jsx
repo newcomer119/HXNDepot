@@ -198,7 +198,7 @@ export default function Product() {
         </motion.div>
       )}
 
-      <div className="pt-24 pb-20">
+      <div className="pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-6">
           {/* Back Button */}
           <button
