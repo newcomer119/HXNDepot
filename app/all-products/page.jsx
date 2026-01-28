@@ -8,7 +8,7 @@ import { useAppContext } from "@/context/AppContext";
 import { useCart } from "@/context/CartContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { ShoppingCart, Plus, Minus, ChevronDown, Eye, X, ArrowRight } from "lucide-react";
+import { ShoppingCart, Plus, Minus, ChevronDown, Eye, X, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -19,6 +19,69 @@ const colors = {
   white: "#ffffff",
 };
 
+const partners = [
+  {
+    name: "Vidar Design Flooring",
+    url: "https://vidarflooring.com",
+    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80",
+    description: "Premium engineered hardwood flooring solutions combining exceptional craftsmanship with timeless elegance for both residential and commercial applications."
+  },
+  {
+    name: "Oakel City Canada Ltd.",
+    url: "https://oakelcity.com",
+    image: "https://images.unsplash.com/photo-1615971677499-5467cbab01c0?w=800&q=80",
+    description: "A leading Canadian supplier of premium flooring solutions, offering an extensive range of high-quality products tailored for modern interior design."
+  },
+  {
+    name: "Canadian Standard",
+    url: "https://canadianstandardflooring.com",
+    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80",
+    description: "A trusted industry leader in Canadian flooring, setting the standard for quality and innovation in flooring solutions nationwide."
+  },
+  {
+    name: "Evergreen Building Materials Ltd.",
+    url: "https://evergreenlbm.com",
+    image: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=800&q=80",
+    description: "Sustainable building materials and eco-friendly flooring options that seamlessly blend environmental responsibility with superior performance and durability."
+  },
+  {
+    name: "Weiss Flooring",
+    url: "https://weisscommercialflooring.com",
+    image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&q=80",
+    description: "Specialized commercial flooring experts delivering durable, stylish solutions engineered for high-traffic environments and demanding applications."
+  },
+  {
+    name: "Woden Flooring",
+    url: "https://wodenflooring.com",
+    image: "https://images.unsplash.com/photo-1600607688908-df9c8040b7e0?w=800&q=80",
+    description: "Master craftsmen specializing in premium hardwood flooring, creating beautiful and enduring solutions for the most discerning clientele."
+  },
+  {
+    name: "Tosca Floors",
+    url: "https://tosca-floors.com",
+    image: "https://images.unsplash.com/photo-1600607688969-a5fcd52667cc?w=800&q=80",
+    description: "European-inspired flooring designs that harmoniously blend classic elegance with contemporary functionality for sophisticated interior spaces."
+  },
+  {
+    name: "Golden Choice Flooring Inc.",
+    url: "https://goldenchoiceflooring.ca",
+    image: "https://images.unsplash.com/photo-1600607689042-6a1c0a54d0a3?w=800&q=80",
+    description: "Your premier choice for premium flooring solutions, delivering exceptional value and uncompromising quality across a comprehensive product portfolio."
+  },
+  {
+    name: "Toucan Quality Flooring",
+    url: "https://toucanflooring.com",
+    image: "https://images.unsplash.com/photo-1600607688270-0b5b0b5b5b5b?w=800&q=80",
+    description: "Quality-driven flooring specialists dedicated to providing superior products and exceptional customer service with every project."
+  },
+  {
+    name: "Pangol Flooring Inc.",
+    url: "https://pangolflooring.com",
+    image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80",
+    description: "Innovative flooring solutions featuring avant-garde designs and premium materials, perfect for contemporary and modern architectural spaces."
+  }
+];
+
 export default function ProductsPage() {
   const { products, isLoading, addToCart, currency } = useAppContext();
   const { updateQuantity, cart } = useCart();
@@ -28,6 +91,28 @@ export default function ProductsPage() {
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const [allProducts, setAllProducts] = useState([]);
   const [isLoadingAllProducts, setIsLoadingAllProducts] = useState(true);
+  const [currentPartnerIndex, setCurrentPartnerIndex] = useState(0);
+  const [cardsPerSlide, setCardsPerSlide] = useState(1);
+
+  // Calculate cards per slide based on screen size
+  useEffect(() => {
+    const updateCardsPerSlide = () => {
+      if (typeof window === 'undefined') return;
+      if (window.innerWidth >= 1280) {
+        setCardsPerSlide(4);
+      } else if (window.innerWidth >= 1024) {
+        setCardsPerSlide(3);
+      } else if (window.innerWidth >= 768) {
+        setCardsPerSlide(2);
+      } else {
+        setCardsPerSlide(1);
+      }
+    };
+
+    updateCardsPerSlide();
+    window.addEventListener('resize', updateCardsPerSlide);
+    return () => window.removeEventListener('resize', updateCardsPerSlide);
+  }, []);
 
   // Fetch ALL products first to extract categories
   useEffect(() => {
@@ -213,9 +298,9 @@ export default function ProductsPage() {
       </section>
 
       {/* Partner Stores Section */}
-      <section className="relative py-20 bg-gradient-to-b from-white via-slate-50/50 to-white overflow-hidden">
+      <section className="relative py-24 bg-gradient-to-b from-white via-slate-50/30 to-white overflow-hidden">
         {/* Decorative Background Elements */}
-        <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 opacity-[0.03]">
           <div className="absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: colors.gold }} />
           <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: colors.green }} />
         </div>
@@ -244,284 +329,199 @@ export default function ProductsPage() {
               <div className="w-12 h-px" style={{ backgroundColor: colors.gold }} />
             </div>
             <h2
-              className="text-4xl md:text-5xl font-black mb-6 leading-tight"
+              className="text-4xl md:text-5xl font-black mb-4 leading-tight"
               style={{ 
                 color: colors.green,
                 fontFamily: "var(--font-montserrat)" 
               }}
             >
-              Our Trusted Partners
+              Our Trusted Flooring Partners
             </h2>
+            <p 
+              className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mb-6 leading-relaxed"
+              style={{ fontFamily: "var(--font-montserrat)" }}
+            >
+              We collaborate with industry-leading flooring manufacturers and suppliers to bring you premium quality products and exceptional service.
+            </p>
             <div className="w-24 h-1 mx-auto rounded-full" style={{ backgroundColor: colors.gold }} />
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {/* Vidar Flooring Partner */}
-            <motion.a
-              href="https://vidarflooring.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1, duration: 0.5 }}
-              className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden border border-slate-100 hover:border-transparent"
-              style={{
-                boxShadow: "0 10px 40px -10px rgba(0, 0, 0, 0.1)"
-              }}
-            >
-              {/* Partner Badge */}
-              <div className="absolute top-4 right-4 z-20">
-                <div 
-                  className="px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider shadow-lg"
-                  style={{ 
-                    backgroundColor: colors.gold,
-                    color: colors.white,
-                    fontFamily: "var(--font-montserrat)"
+          {/* Partners Slider */}
+          <div className="relative mb-20">
+            {/* Navigation Controls */}
+            <div className="flex items-center justify-between mb-6">
+              {/* Pagination Dots */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {Array.from({ length: Math.ceil(partners.length / cardsPerSlide) }).map((_, slideIndex) => {
+                  const isActive = Math.floor(currentPartnerIndex / cardsPerSlide) === slideIndex;
+                  return (
+                    <button
+                      key={slideIndex}
+                      onClick={() => {
+                        setCurrentPartnerIndex(slideIndex * cardsPerSlide);
+                      }}
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        isActive ? 'w-8' : 'w-2'
+                      }`}
+                      style={{
+                        backgroundColor: isActive ? colors.gold : colors.goldLight,
+                        opacity: isActive ? 1 : 0.5
+                      }}
+                      aria-label={`Go to slide ${slideIndex + 1}`}
+                    />
+                  );
+                })}
+              </div>
+              
+              {/* Navigation Arrows */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => {
+                    const newIndex = Math.max(0, currentPartnerIndex - cardsPerSlide);
+                    setCurrentPartnerIndex(newIndex);
                   }}
-                >
-                  Partner
-                </div>
-              </div>
-
-              {/* Decorative Corner */}
-              <div 
-                className="absolute top-0 left-0 w-24 h-24 opacity-10 group-hover:opacity-20 transition-opacity"
-                style={{
-                  background: `linear-gradient(135deg, ${colors.gold} 0%, transparent 70%)`
-                }}
-              />
-
-              <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
-                <Image
-                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80"
-                  alt="Vidar Flooring"
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                
-                {/* Shine Effect on Hover */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-              </div>
-
-              <div className="p-8 relative">
-                <div className="mb-4">
-                  <h3
-                    className="text-2xl font-black mb-3 group-hover:scale-105 transition-transform inline-block"
-                    style={{ 
-                      color: colors.green,
-                      fontFamily: "var(--font-montserrat)" 
-                    }}
-                  >
-                    Vidar Flooring
-                  </h3>
-                  <div className="w-16 h-0.5 rounded-full mb-4" style={{ backgroundColor: colors.gold }} />
-                </div>
-                
-                <p className="text-slate-600 mb-6 leading-relaxed text-sm" style={{ fontFamily: "var(--font-montserrat)" }}>
-                  Premium engineered hardwood flooring with warmth and heart. Explore their collection of quality flooring solutions.
-                </p>
-                
-                <div 
-                  className="inline-flex items-center gap-3 px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 group-hover:gap-4 group-hover:shadow-lg"
-                  style={{ 
-                    color: colors.white,
+                  disabled={currentPartnerIndex === 0}
+                  className={`p-3 rounded-full transition-all duration-300 ${
+                    currentPartnerIndex > 0
+                      ? 'hover:scale-110 hover:shadow-lg cursor-pointer' 
+                      : 'opacity-30 cursor-not-allowed'
+                  }`}
+                  style={{
                     backgroundColor: colors.green,
-                    fontFamily: "var(--font-montserrat)"
+                    color: colors.white
                   }}
+                  aria-label="Previous partners"
                 >
-                  <span>Visit Store</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-
-              {/* Hover Border Effect */}
-              <div 
-                className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{
-                  boxShadow: `0 0 0 2px ${colors.gold}40, 0 0 40px ${colors.gold}20`
-                }}
-              />
-            </motion.a>
-
-            {/* Additional Partner 1 */}
-            <motion.a
-              href="https://example-partner1.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden border border-slate-100 hover:border-transparent"
-              style={{
-                boxShadow: "0 10px 40px -10px rgba(0, 0, 0, 0.1)"
-              }}
-            >
-              {/* Partner Badge */}
-              <div className="absolute top-4 right-4 z-20">
-                <div 
-                  className="px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider shadow-lg"
-                  style={{ 
-                    backgroundColor: colors.gold,
-                    color: colors.white,
-                    fontFamily: "var(--font-montserrat)"
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => {
+                    const maxIndex = Math.max(0, partners.length - cardsPerSlide);
+                    const newIndex = Math.min(maxIndex, currentPartnerIndex + cardsPerSlide);
+                    setCurrentPartnerIndex(newIndex);
                   }}
-                >
-                  Partner
-                </div>
-              </div>
-
-              {/* Decorative Corner */}
-              <div 
-                className="absolute top-0 left-0 w-24 h-24 opacity-10 group-hover:opacity-20 transition-opacity"
-                style={{
-                  background: `linear-gradient(135deg, ${colors.gold} 0%, transparent 70%)`
-                }}
-              />
-
-              <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
-                <Image
-                  src="https://images.unsplash.com/photo-1615971677499-5467cbab01c0?w=800&q=80"
-                  alt="Premium Tiles Partner"
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                
-                {/* Shine Effect on Hover */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-              </div>
-
-              <div className="p-8 relative">
-                <div className="mb-4">
-                  <h3
-                    className="text-2xl font-black mb-3 group-hover:scale-105 transition-transform inline-block"
-                    style={{ 
-                      color: colors.green,
-                      fontFamily: "var(--font-montserrat)" 
-                    }}
-                  >
-                    Premium Tiles Collection
-                  </h3>
-                  <div className="w-16 h-0.5 rounded-full mb-4" style={{ backgroundColor: colors.gold }} />
-                </div>
-                
-                <p className="text-slate-600 mb-6 leading-relaxed text-sm" style={{ fontFamily: "var(--font-montserrat)" }}>
-                  Discover exquisite tile collections for your home and commercial spaces. Quality craftsmanship meets modern design.
-                </p>
-                
-                <div 
-                  className="inline-flex items-center gap-3 px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 group-hover:gap-4 group-hover:shadow-lg"
-                  style={{ 
-                    color: colors.white,
+                  disabled={currentPartnerIndex >= partners.length - cardsPerSlide}
+                  className={`p-3 rounded-full transition-all duration-300 ${
+                    currentPartnerIndex < partners.length - cardsPerSlide
+                      ? 'hover:scale-110 hover:shadow-lg cursor-pointer' 
+                      : 'opacity-30 cursor-not-allowed'
+                  }`}
+                  style={{
                     backgroundColor: colors.green,
-                    fontFamily: "var(--font-montserrat)"
+                    color: colors.white
                   }}
+                  aria-label="Next partners"
                 >
-                  <span>Visit Store</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
+                  <ChevronRight className="w-5 h-5" />
+                </button>
               </div>
+            </div>
 
-              {/* Hover Border Effect */}
-              <div 
-                className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{
-                  boxShadow: `0 0 0 2px ${colors.gold}40, 0 0 40px ${colors.gold}20`
+            {/* Slider Container */}
+            <div className="relative overflow-hidden">
+              <motion.div
+                className="flex gap-6 md:gap-8"
+                animate={{
+                  x: `-${(currentPartnerIndex / cardsPerSlide) * 100}%`
                 }}
-              />
-            </motion.a>
-
-            {/* Additional Partner 2 */}
-            <motion.a
-              href="https://example-partner2.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden border border-slate-100 hover:border-transparent"
-              style={{
-                boxShadow: "0 10px 40px -10px rgba(0, 0, 0, 0.1)"
-              }}
-            >
-              {/* Partner Badge */}
-              <div className="absolute top-4 right-4 z-20">
-                <div 
-                  className="px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider shadow-lg"
-                  style={{ 
-                    backgroundColor: colors.gold,
-                    color: colors.white,
-                    fontFamily: "var(--font-montserrat)"
-                  }}
-                >
-                  Partner
-                </div>
-              </div>
-
-              {/* Decorative Corner */}
-              <div 
-                className="absolute top-0 left-0 w-24 h-24 opacity-10 group-hover:opacity-20 transition-opacity"
-                style={{
-                  background: `linear-gradient(135deg, ${colors.gold} 0%, transparent 70%)`
+                transition={{
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 30
                 }}
-              />
-
-              <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
-                <Image
-                  src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80"
-                  alt="Bathroom Fixtures Partner"
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                
-                {/* Shine Effect on Hover */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-              </div>
-
-              <div className="p-8 relative">
-                <div className="mb-4">
-                  <h3
-                    className="text-2xl font-black mb-3 group-hover:scale-105 transition-transform inline-block"
-                    style={{ 
-                      color: colors.green,
-                      fontFamily: "var(--font-montserrat)" 
+              >
+                {partners.map((partner, index) => (
+                  <motion.a
+                    key={partner.name}
+                    href={partner.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-slate-200 hover:border-transparent flex-shrink-0"
+                    style={{
+                      width: `${100 / cardsPerSlide}%`,
+                      boxShadow: "0 4px 20px -4px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.06)"
                     }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
                   >
-                    Luxury Bathroom Fixtures
-                  </h3>
-                  <div className="w-16 h-0.5 rounded-full mb-4" style={{ backgroundColor: colors.gold }} />
-                </div>
-                
-                <p className="text-slate-600 mb-6 leading-relaxed text-sm" style={{ fontFamily: "var(--font-montserrat)" }}>
-                  Transform your bathroom with elegant vanities and modern fixtures. Premium quality for your home.
-                </p>
-                
-                <div 
-                  className="inline-flex items-center gap-3 px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 group-hover:gap-4 group-hover:shadow-lg"
-                  style={{ 
-                    color: colors.white,
-                    backgroundColor: colors.green,
-                    fontFamily: "var(--font-montserrat)"
-                  }}
-                >
-                  <span>Visit Store</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
+                    {/* Partner Badge */}
+                    <div className="absolute top-4 right-4 z-20">
+                      <div 
+                        className="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-lg"
+                        style={{ 
+                          backgroundColor: colors.gold,
+                          color: colors.white,
+                          fontFamily: "var(--font-montserrat)"
+                        }}
+                      >
+                        Partner
+                      </div>
+                    </div>
 
-              {/* Hover Border Effect */}
-              <div 
-                className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{
-                  boxShadow: `0 0 0 2px ${colors.gold}40, 0 0 40px ${colors.gold}20`
-                }}
-              />
-            </motion.a>
+                    {/* Decorative Corner */}
+                    <div 
+                      className="absolute top-0 left-0 w-20 h-20 opacity-10 group-hover:opacity-20 transition-opacity"
+                      style={{
+                        background: `linear-gradient(135deg, ${colors.gold} 0%, transparent 70%)`
+                      }}
+                    />
+
+                    <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
+                      <Image
+                        src={partner.image}
+                        alt={partner.name}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                      
+                      {/* Shine Effect on Hover */}
+                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                    </div>
+
+                    <div className="p-6 relative">
+                      <div className="mb-4">
+                        <h3
+                          className="text-lg md:text-xl font-black mb-2.5 group-hover:scale-105 transition-transform inline-block leading-tight"
+                          style={{ 
+                            color: colors.green,
+                            fontFamily: "var(--font-montserrat)" 
+                          }}
+                        >
+                          {partner.name}
+                        </h3>
+                        <div className="w-14 h-0.5 rounded-full mb-3" style={{ backgroundColor: colors.gold }} />
+                      </div>
+                      
+                      <p className="text-slate-600 mb-6 leading-relaxed text-xs md:text-sm line-clamp-3 min-h-[3.5rem]" style={{ fontFamily: "var(--font-montserrat)" }}>
+                        {partner.description}
+                      </p>
+                      
+                      <div 
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs transition-all duration-300 group-hover:gap-3 group-hover:shadow-lg group-hover:scale-105"
+                        style={{ 
+                          color: colors.white,
+                          backgroundColor: colors.green,
+                          fontFamily: "var(--font-montserrat)"
+                        }}
+                      >
+                        <span>Visit Website</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+
+                    {/* Hover Border Effect */}
+                    <div 
+                      className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                      style={{
+                        boxShadow: `0 0 0 2px ${colors.gold}40, 0 0 30px ${colors.gold}20`
+                      }}
+                    />
+                  </motion.a>
+                ))}
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -540,7 +540,7 @@ export default function ProductsPage() {
               className="text-lg md:text-xl font-bold leading-relaxed max-w-3xl mx-auto mb-4"
               style={{ color: colors.green, fontFamily: "var(--font-montserrat)" }}
             >
-              Discover quality products from our trusted partner stores and explore their collections.
+              Through strategic partnerships with industry leaders, we ensure access to the finest flooring products, expert guidance, and comprehensive solutions for every project requirement.
             </p>
             <div className="flex items-center justify-center gap-2 mt-6">
               <div className="w-8 h-px" style={{ backgroundColor: colors.gold }} />
