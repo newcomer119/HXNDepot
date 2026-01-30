@@ -67,7 +67,7 @@ export default function Navbar() {
               className="w-24 h-24 md:w-28 md:h-28 transition-all duration-300 group-hover:scale-105 drop-shadow-sm"
               priority
             />
-          </Link>
+          </Link>a
         </div>
 
         {/* Navigation Links Row - Includes Nav Links, Account, and Project Enquiry */}

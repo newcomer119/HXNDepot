@@ -17,6 +17,10 @@ const ContactScreen = () => {
     Linking.openURL(`https://maps.google.com/?q=${encodeURIComponent(address)}`);
   };
 
+  const handleWhatsApp = () => {
+    Linking.openURL("https://wa.me/14373511733");
+  };
+
   return (
     <SafeScreen>
       <ScrollView
@@ -107,12 +111,37 @@ const ContactScreen = () => {
                 </View>
               </View>
             </TouchableOpacity>
+
+            {/* WhatsApp Card */}
+            <TouchableOpacity
+              className="bg-surface-light border-2 border-surface-dark rounded-2xl p-6"
+              activeOpacity={0.7}
+              onPress={handleWhatsApp}
+            >
+              <View className="flex-row items-start">
+                <View className="bg-primary/10 p-3 rounded-full mr-4">
+                  <Ionicons name="logo-whatsapp" size={24} color="#25D366" />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-text-primary text-lg font-black mb-2">WhatsApp</Text>
+                  <Text className="text-text-secondary text-base">Project Enquiry & Quick Chat</Text>
+                  <Text className="text-primary text-sm font-semibold mt-2">Tap to open WhatsApp</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           </View>
 
           {/* Social Media Section */}
           <View className="mb-8">
-            <Text className="text-text-primary text-2xl font-black mb-4">Follow Us</Text>
-            <View className="flex-row gap-4">
+            <Text className="text-text-primary text-2xl font-black mb-4">Follow Us & Chat</Text>
+            <View className="flex-row gap-4 flex-wrap">
+              <TouchableOpacity
+                className="bg-[#25D366] rounded-full w-14 h-14 items-center justify-center"
+                activeOpacity={0.7}
+                onPress={handleWhatsApp}
+              >
+                <Ionicons name="logo-whatsapp" size={26} color="#FFFFFF" />
+              </TouchableOpacity>
               <TouchableOpacity
                 className="bg-primary rounded-full w-14 h-14 items-center justify-center"
                 activeOpacity={0.7}

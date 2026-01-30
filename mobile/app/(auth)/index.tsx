@@ -81,8 +81,13 @@ const AuthScreen = () => {
         >
           <View className="flex-1 justify-center px-6 py-8 bg-background">
             {/* HXN LOGO/BRANDING */}
-            <View className="items-center mb-8">
-              <Text className="text-primary text-3xl font-black tracking-tight mb-2 text-center">
+            <View className="items-center mb-6">
+              <Image
+                source={require("../../assets/images/logo.png")}
+                className="w-36 h-36"
+                resizeMode="contain"
+              />
+              <Text className="text-primary text-2xl font-black tracking-tight mt-4 mb-1 text-center">
                 HXN BUILDING DEPOT
               </Text>
               <Text className="text-text-secondary text-xs italic tracking-widest text-center">
@@ -94,7 +99,7 @@ const AuthScreen = () => {
             <View className="items-center mb-6">
               <Image
                 source={require("../../assets/images/auth-image.png")}
-                className="w-64 h-64"
+                className="w-48 h-48"
                 resizeMode="contain"
               />
             </View>
