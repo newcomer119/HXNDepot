@@ -60,7 +60,7 @@ export default function Navbar() {
         {/* Logo Section - Centered (right edge clipped to hide stray character) */}
         <div className="flex items-center justify-center py-0">
           <Link href="/" className="flex items-center group relative">
-            <div className="w-[5.25rem] h-24 md:w-[6.25rem] md:h-28 overflow-hidden flex items-center justify-center">
+            <div className="w-[5.75rem] h-24 md:w-[6.75rem] md:h-28 overflow-hidden flex items-center justify-center">
               <Image
                 src="/android-chrome-192x192.png"
                 alt="HXN Building Depot"
