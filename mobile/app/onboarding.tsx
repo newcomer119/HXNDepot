@@ -40,11 +40,11 @@ const slides = [
   },
   {
     id: "3",
-    title: "Flexible Financing",
-    subtitle: "We Offer Financing",
-    description: "Make your dream project affordable. We offer flexible financing options so you can get the quality you want with payments that work for you.",
-    icon: "card-outline",
-    image: { uri: "https://images.unsplash.com/photo-1600596542815-ffad4c1549a9?w=800&q=85" },
+    title: "Full Assistance",
+    subtitle: "From Buying to Setup",
+    description: "We offer complete support from purchase to installation. Our team guides you through selection, delivery, and setting up so your project is done right.",
+    icon: "construct-outline",
+    image: { uri: "https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=800&q=85" },
     bg: "#005a2b",
   },
   {
