@@ -17,6 +17,7 @@ const TabsLayout = () => {
         <Tabs.Screen name="index" options={{ href: null }} />
         <Tabs.Screen name="cart" options={{ href: null }} />
         <Tabs.Screen name="profile" options={{ href: null }} />
+        <Tabs.Screen name="freelancers" options={{ href: null }} />
         <Tabs.Screen name="contact" options={{ href: null }} />
       </Tabs>
     );
@@ -75,6 +76,12 @@ const TabsLayout = () => {
         options={{
           title: "Profile",
           tabBarIcon: ({ color, size }) => <Ionicons name="person" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="freelancers"
+        options={{
+          href: null, // Hide from tab bar - access via Profile > Find a Pro
         }}
       />
       <Tabs.Screen

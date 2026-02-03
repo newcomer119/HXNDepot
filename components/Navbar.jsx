@@ -15,6 +15,7 @@ const navLinks = [
   { name: "About Us", href: "/about" },
   { name: "Products", href: "/all-products#products" },
   { name: "Collections", href: "/#products" },
+  { name: "Find a Pro", href: "/freelancers" },
   { name: "View in Your Room", href: "/view-in-room" },
   { name: "Contact Us", href: "/#contact" },
 ];
@@ -56,18 +57,20 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Logo Section - Centered */}
+        {/* Logo Section - Centered (right edge clipped to hide stray character) */}
         <div className="flex items-center justify-center py-0">
           <Link href="/" className="flex items-center group relative">
-            <Image
-              src="/android-chrome-192x192.png"
-              alt="HXN Building Depot"
-              width={112}
-              height={112}
-              className="w-24 h-24 md:w-28 md:h-28 transition-all duration-300 group-hover:scale-105 drop-shadow-sm"
-              priority
-            />
-          </Link>a
+            <div className="w-[5.25rem] h-24 md:w-[6.25rem] md:h-28 overflow-hidden flex items-center justify-center">
+              <Image
+                src="/android-chrome-192x192.png"
+                alt="HXN Building Depot"
+                width={112}
+                height={112}
+                className="w-24 h-24 md:w-28 md:h-28 transition-all duration-300 group-hover:scale-105 drop-shadow-sm object-cover object-left"
+                priority
+              />
+            </div>
+          </Link>
         </div>
 
         {/* Navigation Links Row - Includes Nav Links, Account, and Project Enquiry */}

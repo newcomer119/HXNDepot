@@ -11,7 +11,8 @@ const MENU_ITEMS = [
   { id: 2, icon: "list-outline", title: "Orders", color: "#10B981", action: "/orders" },
   { id: 3, icon: "location-outline", title: "Addresses", color: "#F59E0B", action: "/addresses" },
   { id: 4, icon: "heart-outline", title: "Wishlist", color: "#EF4444", action: "/wishlist" },
-  { id: 5, icon: "call-outline", title: "Contact Us", color: "#005a2b", action: "/(tabs)/contact" },
+  { id: 5, icon: "briefcase-outline", title: "Find a Pro", color: "#005a2b", action: "/(tabs)/freelancers" },
+  { id: 6, icon: "call-outline", title: "Contact Us", color: "#005a2b", action: "/(tabs)/contact" },
 ] as const;
 
 const ProfileScreen = () => {
